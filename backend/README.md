@@ -1,66 +1,157 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+-- Tạo cơ sở dữ liệu
+CREATE DATABASE IF NOT EXISTS e_learning_db;
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+-- Sử dụng cơ sở dữ liệu
+USE e_learning_db;
 
-## About Laravel
+-- Tạo bảng Users
+CREATE TABLE IF NOT EXISTS Users (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    username VARCHAR(255) UNIQUE NOT NULL,
+    name VARCHAR(255) NOT NULL,
+    email VARCHAR(255) UNIQUE NOT NULL,
+    password VARCHAR(255) NOT NULL,
+    phone VARCHAR(20),
+    invite_code VARCHAR(50),
+    avatar VARCHAR(255),
+    gender ENUM('male', 'female', 'other'),
+    dob DATE,
+    address VARCHAR(255),
+    school VARCHAR(255),
+    class VARCHAR(50),
+    test_class VARCHAR(50),
+    grade INT,
+    lastLoginAt TIMESTAMP,
+    google_id VARCHAR(255)
+);
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+-- Tạo bảng Subjects
+CREATE TABLE IF NOT EXISTS Subjects (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(255) NOT NULL,
+    slug VARCHAR(255) UNIQUE NOT NULL,
+    grade INT
+);
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+-- Tạo bảng Chapters
+CREATE TABLE IF NOT EXISTS Chapters (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(255) NOT NULL,
+    subject_id INT,
+    FOREIGN KEY (subject_id) REFERENCES Subjects(id)
+);
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+-- Tạo bảng Lessons
+CREATE TABLE IF NOT EXISTS Lessons (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(255) NOT NULL,
+    chap_id INT,
+    content TEXT,
+    view_count INT DEFAULT 0,
+    type VARCHAR(50),
+    subject_id INT,
+    likes INT DEFAULT 0,
+    FOREIGN KEY (chap_id) REFERENCES Chapters(id),
+    FOREIGN KEY (subject_id) REFERENCES Subjects(id)
+);
 
-## Learning Laravel
+-- Tạo bảng Questions
+CREATE TABLE IF NOT EXISTS Questions (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    question TEXT NOT NULL,
+    answer_1 TEXT,
+    answer_2 TEXT,
+    answer_3 TEXT,
+    answer_4 TEXT,
+    answer_correct INT,
+    answer_detail TEXT,
+    subject_id INT,
+    lesson_id INT,
+    level INT,
+    FOREIGN KEY (subject_id) REFERENCES Subjects(id),
+    FOREIGN KEY (lesson_id) REFERENCES Lessons(id)
+);
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+-- Tạo bảng Exams
+CREATE TABLE IF NOT EXISTS Exams (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(255) NOT NULL,
+    slug VARCHAR(255) UNIQUE NOT NULL,
+    time INT,
+    questions TEXT,
+    join_count INT DEFAULT 0,
+    complete_count INT DEFAULT 0,
+    subject_id INT,
+    FOREIGN KEY (subject_id) REFERENCES Subjects(id)
+);
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+-- Tạo bảng Practices
+CREATE TABLE IF NOT EXISTS Practices (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(255) NOT NULL,
+    questions TEXT,
+    slug VARCHAR(255) UNIQUE NOT NULL
+);
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+-- Tạo bảng Topics
+CREATE TABLE IF NOT EXISTS Topics (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    title VARCHAR(255) NOT NULL,
+    slug VARCHAR(255) UNIQUE NOT NULL,
+    content TEXT,
+    author INT
+);
 
-## Laravel Sponsors
+-- Tạo bảng Topic Comments
+CREATE TABLE IF NOT EXISTS Topic_Comments (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    topic_id INT,
+    author INT,
+    content TEXT,
+    likes INT DEFAULT 0,
+    FOREIGN KEY (topic_id) REFERENCES Topics(id)
+);
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+-- Tạo bảng User Targets
+CREATE TABLE IF NOT EXISTS User_Targets (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    user_id INT,
+    hour_per_day INT,
+    target_score INT,
+    subject_id INT,
+    stage VARCHAR(50),
+    FOREIGN KEY (user_id) REFERENCES Users(id),
+    FOREIGN KEY (subject_id) REFERENCES Subjects(id)
+);
 
-### Premium Partners
+-- Tạo bảng Arenas
+CREATE TABLE IF NOT EXISTS Arenas (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(255) NOT NULL,
+    author INT,
+    users TEXT,
+    max_users INT,
+    time INT,
+    questions TEXT,
+    start_at DATETIME,
+    type VARCHAR(50),
+    password VARCHAR(255)
+);
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[WebReinvent](https://webreinvent.com/)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Jump24](https://jump24.co.uk)**
-- **[Redberry](https://redberry.international/laravel/)**
-- **[Active Logic](https://activelogic.com)**
-- **[byte5](https://byte5.de)**
-- **[OP.GG](https://op.gg)**
+-- Tạo bảng Histories
+CREATE TABLE IF NOT EXISTS Histories (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    user_id INT,
+    model VARCHAR(255),
+    foreign_id INT,
+    result VARCHAR(50),
+    note TEXT,
+    FOREIGN KEY (user_id) REFERENCES Users(id)
+);
 
-## Contributing
-
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
-
-## Code of Conduct
-
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
-
-## Security Vulnerabilities
-
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
-
-## License
-
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+-- Tạo bảng Statistics
+CREATE TABLE IF NOT EXISTS Statistics (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    user_id INT,
+    FOREIGN KEY (user_id) REFERENCES Users(id)
+);

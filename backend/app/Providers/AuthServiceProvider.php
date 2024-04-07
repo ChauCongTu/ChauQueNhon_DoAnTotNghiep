@@ -6,7 +6,7 @@ use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\ServiceProvider;
 use Laravel\Passport\Passport;
 
-class AppServiceProvider extends ServiceProvider
+class AuthServiceProvider extends ServiceProvider
 {
     /**
      * Register any application services.
@@ -21,8 +21,9 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        Passport::tokensExpireIn(now()->addDays(7));
-        Passport::refreshTokensExpireIn(now()->addDays(30));
-        Passport::personalAccessTokensExpireIn(now()->addMonths(6));
+        Passport::useClientModel(\App\Models\Client::class);
+        // Gate::before(function ($user, $ability) {
+        //     return $user->hasRole('super admin') ? true : null;
+        // });
     }
 }
