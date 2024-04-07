@@ -3,6 +3,7 @@
 use App\Helpers\Common;
 use App\Http\Controllers\Api\V1\AuthController;
 use App\Http\Controllers\Api\V1\ProfileController;
+use App\Http\Controllers\Api\V1\SubjectController;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -40,10 +41,19 @@ Route::prefix('/v1')->group(function(){
     Route::post('/reset', [AuthController::class, 'reset'])->name('reset');
 
     // Profile Routing
-    Route::prefix('/profile')->name('/profile.')->group(function(){
+    Route::prefix('/profile')->name('profiles.')->group(function(){
         Route::post('/update', [ProfileController::class, 'update'])->middleware('auth:api')->name('update');
         Route::post('/avatar', [ProfileController::class, 'avatar'])->middleware('auth:api')->name('avatar');
         Route::get('/list', [ProfileController::class, 'list'])->middleware('auth:api')->name('list');
         Route::get('/{username}', [ProfileController::class, 'index'])->middleware('auth:api')->name('index');
+    });
+
+    // Subject Routing
+    Route::prefix('/subject')->name('subjects.')->group(function(){
+        Route::get('/', [SubjectController::class, 'index'])->middleware(['auth:api'])->name('index');
+        Route::post('/', [SubjectController::class, 'store'])->middleware(['auth:api'])->name('store');
+        Route::put('/{id}', [SubjectController::class, 'update'])->middleware(['auth:api'])->name('update');
+        Route::delete('/{id}', [SubjectController::class, 'destroy'])->middleware(['auth:api'])->name('destroy');
+        Route::get('/{id}', [SubjectController::class, 'detail'])->middleware(['auth:api'])->name('detail');
     });
 })->name('api_v1.');

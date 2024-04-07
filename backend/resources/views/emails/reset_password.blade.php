@@ -23,7 +23,8 @@
         }
 
         .logo {
-            text-align: center;
+            display: flex;
+            justify-content: center;
             margin-bottom: 20px;
         }
 
@@ -60,7 +61,7 @@
 <body>
     <div class="container">
         <div class="logo">
-            <img src="{{ env('APP_URL') }}/images/logo.png" alt="Luyện thi GoUni">
+            <img src="https://cdn.discordapp.com/attachments/1100753623849377835/1226526118157352960/logo.png?ex=66251676&is=6612a176&hm=7c0991e55081e469401566a0387e3bb43e24d416ed5e8fce51d3ef840ccea672&" alt="Luyện thi GoUni">
         </div>
         <h1>Lấy lại mật khẩu</h1>
         <p>Xin chào,</p>
