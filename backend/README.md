@@ -65,9 +65,10 @@ CREATE TABLE IF NOT EXISTS Questions (
     answer_4 TEXT,
     answer_correct INT,
     answer_detail TEXT,
+       level INT,
     subject_id INT,
-    lesson_id INT,
-    level INT,
+    chaper_id INT,
+ 
     FOREIGN KEY (subject_id) REFERENCES Subjects(id),
     FOREIGN KEY (lesson_id) REFERENCES Lessons(id)
 );
@@ -90,7 +91,12 @@ CREATE TABLE IF NOT EXISTS Practices (
     id INT AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(255) NOT NULL,
     questions TEXT,
-    slug VARCHAR(255) UNIQUE NOT NULL
+    slug VARCHAR(255) UNIQUE NOT NULL,
+     subject_id INT,
+    chaper_id INT,
+ 
+    FOREIGN KEY (subject_id) REFERENCES Subjects(id),
+    FOREIGN KEY (lesson_id) REFERENCES Lessons(id)
 );
 
 -- Tạo bảng Topics
@@ -109,6 +115,7 @@ CREATE TABLE IF NOT EXISTS Topic_Comments (
     author INT,
     content TEXT,
     likes INT DEFAULT 0,
+    FOREIGN KEY (author) REFERENCES users(id) 
     FOREIGN KEY (topic_id) REFERENCES Topics(id)
 );
 
@@ -153,5 +160,8 @@ CREATE TABLE IF NOT EXISTS Histories (
 CREATE TABLE IF NOT EXISTS Statistics (
     id INT AUTO_INCREMENT PRIMARY KEY,
     user_id INT,
+    time_online INT,
+    exams VARCHAR(1000),
+    day_stats TIMESTAMP,
     FOREIGN KEY (user_id) REFERENCES Users(id)
 );
