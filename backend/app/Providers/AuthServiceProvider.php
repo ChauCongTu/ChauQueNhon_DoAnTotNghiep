@@ -22,8 +22,8 @@ class AuthServiceProvider extends ServiceProvider
     public function boot(): void
     {
         Passport::useClientModel(\App\Models\Client::class);
-        // Gate::before(function ($user, $ability) {
-        //     return $user->hasRole('super admin') ? true : null;
-        // });
+        Gate::before(function ($user, $ability) {
+            return $user->hasRole('super admin') ? true : null;
+        });
     }
 }

@@ -26,4 +26,4 @@ Route::get('/profile', function(){
         'Lấy thông tin người dùng thành công.',
         Auth::user()
     );
-})->middleware(['auth:api', 'can:create subje']);
+})->middleware(['auth:api', 'can:create subject']);
