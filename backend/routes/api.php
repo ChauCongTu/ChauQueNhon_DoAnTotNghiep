@@ -1,6 +1,7 @@
 <?php
 
 use App\Helpers\Common;
+use App\Http\Controllers\Api\V1\AuthController;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -27,3 +28,12 @@ Route::get('/profile', function(){
         Auth::user()
     );
 })->middleware(['auth:api', 'can:create subject']);
+
+Route::prefix('/v1')->group(function(){
+    Route::post('/sign-up', [AuthController::class, 'signUp'])->name('sign_up');
+    Route::post('/sign-in', [AuthController::class, 'signIn'])->name('sign_in');
+    Route::get('/google-sign-in', [AuthController::class, 'googleSignIn'])->name('google_sign_in');
+    Route::get('/google-callback', [AuthController::class, 'handleGoogleSignIn'])->name('handle_google_sign_in');
+    Route::post('/forgot', [AuthController::class, 'forgot'])->name('forgot');
+    Route::post('/reset', [AuthController::class, 'reset'])->name('reset');
+})->name('api_v1.');
