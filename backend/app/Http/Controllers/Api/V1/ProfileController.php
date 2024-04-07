@@ -45,4 +45,38 @@ class ProfileController extends Controller
         // Trả về response thành công
         return Common::response(200, 'Avatar changed successfully', ['avatar' => $user->avatar]);
     }
+    /**
+     * Get a list of users.
+     *
+     * This function retrieves a list of users based on the provided request parameters.
+     *
+     * @param Request $request The HTTP request object containing any parameters for filtering the user list.
+     *   - $request->input('page'): (int) The page number for paginated results.
+     *   - $request->input('perPage'): (int) The maximum number of users to retrieve per page.
+     *   - $request->input('sort'): (string) The field to sort the results by.
+     *   - $request->input('order'): (string) The order in which to sort the results ('asc' or 'desc').
+     *
+     * @return \Illuminate\Http\JsonResponse Returns a JSON response containing the list of users.
+     */
+    public function list(Request $request)
+    {
+        // Retrieve request parameters
+        $page = $request->input('page', 1);
+        $perPage = $request->input('perPage', 10);
+        $sort = $request->input('sort', 'id');
+        $order = $request->input('order', 'asc');
+
+        // Query users
+        $users = User::orderBy($sort, $order)->paginate($perPage, ['*'], 'page', $page);
+
+        return Common::response(200, 'Lấy danh sách người dùng thành công', $users);
+    }
+    public function index(string $username = null)
+    {
+        $user = User::where('username', $username)->first();
+        if ($user) {
+            return Common::response(200, 'Lấy thông tin người dùng thành công.', $user);
+        }
+        return Common::response(404, 'Không tìm thấy người dùng có username là ' . $username);
+    }
 }

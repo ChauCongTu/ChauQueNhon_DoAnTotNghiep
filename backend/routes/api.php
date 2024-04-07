@@ -42,6 +42,8 @@ Route::prefix('/v1')->group(function(){
     // Profile Routing
     Route::prefix('/profile')->name('/profile.')->group(function(){
         Route::post('/update', [ProfileController::class, 'update'])->middleware('auth:api')->name('update');
-        Route::post('/avatar', [ProfileController::class, 'avatar'])->middleware('auth:api')->name('update');
+        Route::post('/avatar', [ProfileController::class, 'avatar'])->middleware('auth:api')->name('avatar');
+        Route::get('/list', [ProfileController::class, 'list'])->middleware('auth:api')->name('list');
+        Route::get('/{username}', [ProfileController::class, 'index'])->middleware('auth:api')->name('index');
     });
 })->name('api_v1.');
