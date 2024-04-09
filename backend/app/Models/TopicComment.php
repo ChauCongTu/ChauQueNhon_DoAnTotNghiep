@@ -12,6 +12,7 @@ class TopicComment extends Model
         'topic_id',
         'author',
         'content',
+        'attachment',
         'likes',
     ];
 

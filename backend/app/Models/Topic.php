@@ -12,6 +12,7 @@ class Topic extends Model
         'title',
         'slug',
         'content',
+        'attachment',
         'author',
     ];
 
