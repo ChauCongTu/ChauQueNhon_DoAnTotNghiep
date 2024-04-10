@@ -6,6 +6,7 @@ use App\Helpers\Common;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Lesson\StoreLessonRequest;
 use App\Http\Requests\Lesson\UpdateLessonRequest;
+use App\Http\Requests\QueryRequest;
 use App\Models\Lesson;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -13,17 +14,33 @@ use Illuminate\Support\Str;
 
 class LessonController extends Controller
 {
-    public function index(Request $request)
+    public function index(QueryRequest $request)
     {
+        $with = $request->input('with', []);
+        $filterBy = $request->input('filter', null);
+        $value = $request->input('value', null);
+        $condition = $request->input('condition', null);
         $page = $request->input('page', 1);
-        $perPage = $request->input('perPage', 10);
+        $perPage = $request->input('perPage', 0);
         $sort = $request->input('sort', 'created_at');
         $order = $request->input('order', 'desc');
 
-        $lessons = Lesson::orderBy($sort, $order)->paginate($perPage, ['*'], 'page', $page);
-        foreach ($lessons as $lesson) {
-            $lesson['like_list'] = $lesson->likeLists();
+        $query = Lesson::query();
+        if ($filterBy && $value) {
+            $query = ($condition) ? $query->where($filterBy, $condition, $value) : $query->where($filterBy, $value);
         }
+
+        if (count($with) > 0) {
+            $query->with($with);
+        }
+
+        $query = $query->orderBy($sort, $order);
+        if ($perPage == 0) {
+            $lessons = $query->get();
+        } else {
+            $lessons = $query->paginate($perPage, ['*'], 'page', $page);
+        }
+
         return Common::response(200, 'Lấy danh sách bài học thành công', $lessons);
     }
 
@@ -70,16 +87,13 @@ class LessonController extends Controller
 
         $lessonData = $request->validated();
 
-        if (Lesson::where('name', $lessonData['name'])->where('id', '!=', $id)->doesntExist()) {
-            $lesson->name = $lessonData['name'];
-            $lesson->slug = Str::slug($lessonData['name']);
-            $lesson->content = $lessonData['content'];
-            $lesson->save();
-
-            return Common::response(200, "Cập nhật bài học thành công", $lesson);
+        if (isset($lessonData['title'])) {
+            $lessonData['slug'] = Str::slug($lessonData['title']);
         }
 
-        return Common::response(400, "Có lỗi xảy ra, vui lòng thử lại.");
+        $lesson->update($lessonData);
+
+        return Common::response(200, "Cập nhật bài học thành công", $lesson);
     }
 
     public function destroy(int $id)

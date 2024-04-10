@@ -5,6 +5,7 @@ use App\Http\Controllers\Api\V1\AuthController;
 use App\Http\Controllers\Api\V1\ChapterController;
 use App\Http\Controllers\Api\V1\LessonController;
 use App\Http\Controllers\Api\V1\ProfileController;
+use App\Http\Controllers\Api\V1\QuestionController;
 use App\Http\Controllers\Api\V1\SubjectController;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -76,6 +77,14 @@ Route::prefix('/v1')->group(function () {
         Route::put('/{id}', [LessonController::class, 'update'])->middleware(['auth:api'])->name('update');
         Route::delete('/{id}', [LessonController::class, 'destroy'])->middleware(['auth:api'])->name('destroy');
         Route::get('/{slug}', [LessonController::class, 'detail'])->middleware(['auth:api'])->name('detail');
+    });
+
+    Route::prefix('/question')->name('questions.')->group(function(){
+        Route::get('/', [QuestionController::class, 'index'])->middleware(['auth:api'])->name('index');
+        Route::post('/', [QuestionController::class, 'store'])->middleware(['auth:api'])->name('store');
+        Route::put('/{id}', [QuestionController::class, 'update'])->middleware(['auth:api'])->name('update');
+        Route::delete('/{id}', [QuestionController::class, 'destroy'])->middleware(['auth:api'])->name('destroy');
+        Route::get('/{slug}', [QuestionController::class, 'detail'])->middleware(['auth:api'])->name('detail');
     });
 
 })->name('api_v1.');

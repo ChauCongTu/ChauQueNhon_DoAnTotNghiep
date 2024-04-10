@@ -6,6 +6,7 @@ use App\Helpers\Common;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\ChangeAvatarRequest;
 use App\Http\Requests\Profile\UpdateProfileRequest;
+use App\Http\Requests\QueryRequest;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -45,29 +46,33 @@ class ProfileController extends Controller
         // Trả về response thành công
         return Common::response(200, 'Avatar changed successfully', ['avatar' => $user->avatar]);
     }
-    /**
-     * Get a list of users.
-     *
-     * This function retrieves a list of users based on the provided request parameters.
-     *
-     * @param Request $request The HTTP request object containing any parameters for filtering the user list.
-     *   - $request->input('page'): (int) The page number for paginated results.
-     *   - $request->input('perPage'): (int) The maximum number of users to retrieve per page.
-     *   - $request->input('sort'): (string) The field to sort the results by.
-     *   - $request->input('order'): (string) The order in which to sort the results ('asc' or 'desc').
-     *
-     * @return \Illuminate\Http\JsonResponse Returns a JSON response containing the list of users.
-     */
-    public function list(Request $request)
-    {
-        // Retrieve request parameters
-        $page = $request->input('page', 1);
-        $perPage = $request->input('perPage', 10);
-        $sort = $request->input('sort', 'id');
-        $order = $request->input('order', 'asc');
 
-        // Query users
-        $users = User::orderBy($sort, $order)->paginate($perPage, ['*'], 'page', $page);
+    public function list(QueryRequest $request)
+    {
+        $with = $request->input('with', []);
+        $filterBy = $request->input('filter', null);
+        $value = $request->input('value', null);
+        $condition = $request->input('condition', null);
+        $page = $request->input('page', 1);
+        $perPage = $request->input('perPage', 0);
+        $sort = $request->input('sort', 'created_at');
+        $order = $request->input('order', 'desc');
+
+        $query = User::query();
+        if ($filterBy && $value) {
+            $query = ($condition) ? $query->where($filterBy, $condition, $value) : $query->where($filterBy, $value);
+        }
+
+        if (count($with) > 0) {
+            $query->with($with);
+        }
+
+        $query = $query->orderBy($sort, $order);
+        if ($perPage == 0) {
+            $users = $query->get();
+        } else {
+            $users = $query->paginate($perPage, ['*'], 'page', $page);
+        }
 
         return Common::response(200, 'Lấy danh sách người dùng thành công', $users);
     }
