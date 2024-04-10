@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api\V1;
 
 use App\Helpers\Common;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Subject\QueryRequest;
 use App\Http\Requests\Subject\StoreSubjectRequest;
 use App\Http\Requests\Subject\UpdateSubjectRequest;
 use App\Models\Subject;
@@ -12,15 +13,22 @@ use Illuminate\Support\Str;
 
 class SubjectController extends Controller
 {
-    public function index(Request $request){
-         // Retrieve request parameters
-         $page = $request->input('page', 1);
-         $perPage = $request->input('perPage', 10);
-         $sort = $request->input('sort', 'created_at');
-         $order = $request->input('order', 'desc');
+    public function index(QueryRequest $request){
+        $relationship = $request->input('getWith', []);
+        $page = $request->input('page', 1);
+        $perPage = $request->input('perPage', 10);
+        $sort = $request->input('sort', 'created_at');
+        $order = $request->input('order', 'desc');
 
+        $query = Subject::query();
+        // dd(count($relationship));
+        if (count($relationship) > 0) {
+            foreach ($relationship as  $value) {
+                $query->with($value);
+            }
+        }
          // Query users
-         $subjects = Subject::orderBy($sort, $order)->paginate($perPage, ['*'], 'page', $page);
+         $subjects = $query->orderBy($sort, $order)->paginate($perPage, ['*'], 'page', $page);
 
          return Common::response(200, 'Lấy danh sách môn học thành công', $subjects);
     }

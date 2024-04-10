@@ -3,6 +3,7 @@
 use App\Helpers\Common;
 use App\Http\Controllers\Api\V1\AuthController;
 use App\Http\Controllers\Api\V1\ChapterController;
+use App\Http\Controllers\Api\V1\LessonController;
 use App\Http\Controllers\Api\V1\ProfileController;
 use App\Http\Controllers\Api\V1\SubjectController;
 use App\Models\User;
@@ -66,4 +67,15 @@ Route::prefix('/v1')->group(function () {
         Route::delete('/{id}', [ChapterController::class, 'destroy'])->middleware(['auth:api'])->name('destroy');
         Route::get('/{slug}', [ChapterController::class, 'detail'])->middleware(['auth:api'])->name('detail');
     });
+
+    // Lesson Routing
+    Route::prefix('/lesson')->name('lessons.')->group(function(){
+        Route::get('/', [LessonController::class, 'index'])->middleware(['auth:api'])->name('index');
+        Route::post('/', [LessonController::class, 'store'])->middleware(['auth:api'])->name('store');
+        Route::post('/{id}/like', [LessonController::class, 'handleLike'])->middleware(['auth:api'])->name('handle_like');
+        Route::put('/{id}', [LessonController::class, 'update'])->middleware(['auth:api'])->name('update');
+        Route::delete('/{id}', [LessonController::class, 'destroy'])->middleware(['auth:api'])->name('destroy');
+        Route::get('/{slug}', [LessonController::class, 'detail'])->middleware(['auth:api'])->name('detail');
+    });
+
 })->name('api_v1.');

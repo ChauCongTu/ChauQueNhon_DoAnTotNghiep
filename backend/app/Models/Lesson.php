@@ -10,6 +10,7 @@ class Lesson extends Model
     use HasFactory;
     protected $fillable = [
         'name',
+        'slug',
         'chap_id',
         'content',
         'view_count',
@@ -20,5 +21,11 @@ class Lesson extends Model
     public function chapter()
     {
         return $this->belongsTo(Chapter::class, 'chap_id');
+    }
+
+    public function likeLists (){
+        $userList = explode(',', $this->likes);
+        $userList = User::select('name', 'username')->whereIn('id', $userList)->get();
+        return $userList;
     }
 }

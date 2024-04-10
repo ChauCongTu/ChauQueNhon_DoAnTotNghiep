@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api\V1;
 
 use App\Helpers\Common;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Chapter\QueryRequest;
 use App\Http\Requests\Chapter\StoreChapterRequest;
 use App\Http\Requests\Chapter\UpdateChapterRequest;
 use App\Models\Chapter;
@@ -12,14 +13,23 @@ use Illuminate\Support\Str;
 
 class ChapterController extends Controller
 {
-    public function index(Request $request)
+    public function index(QueryRequest $request)
     {
+        $relationship = $request->input('getWith', []);
         $page = $request->input('page', 1);
         $perPage = $request->input('perPage', 10);
         $sort = $request->input('sort', 'created_at');
         $order = $request->input('order', 'desc');
 
-        $chapters = Chapter::orderBy($sort, $order)->paginate($perPage, ['*'], 'page', $page);
+        $chapterQuery = Chapter::query();
+        // dd(count($relationship));
+        if (count($relationship) > 0) {
+            foreach ($relationship as  $value) {
+                $chapterQuery->with($value);
+            }
+        }
+
+        $chapters = $chapterQuery->orderBy($sort, $order)->paginate($perPage, ['*'], 'page', $page);
 
         return Common::response(200, 'Lấy danh sách chương thành công', $chapters);
     }
@@ -27,7 +37,7 @@ class ChapterController extends Controller
     public function store(StoreChapterRequest $request)
     {
         $newChapter = $request->validated();
-        $newChapter['slug'] = Str::slug($newChapter['title']);
+        $newChapter['slug'] = Str::slug($newChapter['name']);
         $chapter = Chapter::create($newChapter);
 
         if ($chapter) {
@@ -47,9 +57,9 @@ class ChapterController extends Controller
 
         $chapterData = $request->validated();
 
-        if (Chapter::where('title', $chapterData['title'])->where('id', '!=', $id)->doesntExist()) {
-            $chapter->title = $chapterData['title'];
-            $chapter->slug = Str::slug($chapterData['title']);
+        if (Chapter::where('name', $chapterData['name'])->where('id', '!=', $id)->doesntExist()) {
+            $chapter->name = $chapterData['name'];
+            $chapter->slug = Str::slug($chapterData['name']);
             $chapter->content = $chapterData['content'];
             $chapter->save();
 
