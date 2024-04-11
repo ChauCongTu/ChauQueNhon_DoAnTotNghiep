@@ -16,7 +16,7 @@ return new class extends Migration
             $table->unsignedBigInteger('topic_id');
             $table->unsignedBigInteger('author');
             $table->text('content');
-            $table->integer('likes')->default(0);
+            $table->string('likes')->default('');
             $table->foreign('topic_id')->references('id')->on('topics')->onDelete('cascade');
             $table->foreign('author')->references('id')->on('users')->onDelete('cascade');
             $table->timestamps();

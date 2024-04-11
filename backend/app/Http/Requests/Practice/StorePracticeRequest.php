@@ -1,12 +1,12 @@
 <?php
 
-namespace App\Http\Requests\Subject;
+namespace App\Http\Requests\Practice;
 
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Exceptions\HttpResponseException;
 
-class UpdateSubjectRequest extends FormRequest
+class StorePracticeRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -24,15 +24,21 @@ class UpdateSubjectRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => 'required|max:255|unique:subjects,id,'. $this->route('id'),
-            'grade' => 'required|in:0,10,11,12'
+            'name' => 'required|min:5|max:255|unique:practices,name',
+            'questions' => 'required|array',
+            'subject_id' => 'required|numeric|exists:subjects,id',
+            'chapter_id' => 'numeric|exists:chapters,id',
+            'question_count' => 'required|numeric'
         ];
     }
 
     public function attributes(): array {
         return [
-            'name' => 'Tên môn học',
-            'grade' => 'Khối lớp'
+            'name' => 'Tên bộ câu hỏi',
+            'questions' => 'Câu hỏi',
+            'subject_id' => 'Môn học',
+            'chapter_id' => 'Chương',
+            'question_count' => 'Số lượng câu hỏi'
         ];
     }
 
@@ -40,9 +46,12 @@ class UpdateSubjectRequest extends FormRequest
     {
         return [
             'required' => ':attribute không được để trống',
+            'min' => ':attribute phải có ít nhất :min kí tự',
             'max' => ':attribute không được vượt quá :max kí tự',
             'unique' => ':attribute đã tồn tại',
-            'in' => ':attribute phải thuộc vào các giá trị sau: :values'
+            'array' => ':attribute phải là một mảng',
+            'numeric' => ':attribute phải là một số',
+            'exists' => ':attribute không tồn tại'
         ];
     }
 

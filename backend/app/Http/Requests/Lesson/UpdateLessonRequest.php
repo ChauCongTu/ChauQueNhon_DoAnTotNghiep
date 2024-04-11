@@ -24,7 +24,7 @@ class UpdateLessonRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => 'required|min:5|max:255|unique:lessons,name,'. $this->route('lesson'),
+            'name' => 'required|min:5|max:255|unique:lessons,name,'. $this->route('id'),
             'chap_id' => 'required|numeric|exists:chapters,id',
             'content' => 'required',
             'type' => 'required|in:lythuyet,giaibt',

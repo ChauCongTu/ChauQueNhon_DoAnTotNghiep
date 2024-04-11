@@ -41,6 +41,10 @@ class LessonController extends Controller
             $lessons = $query->paginate($perPage, ['*'], 'page', $page);
         }
 
+        foreach ($lessons as $lesson) {
+            $lesson['liked_list'] = $lesson->likeLists();
+        }
+
         return Common::response(200, 'Lấy danh sách bài học thành công', $lessons);
     }
 
@@ -110,6 +114,7 @@ class LessonController extends Controller
     public function detail(string $slug)
     {
         $lesson = Lesson::where('slug', $slug)->first();
+        $lesson['liked_list'] = $lesson->likeLists();
 
         if ($lesson) {
             return Common::response(200, "Lấy thông tin bài học thành công.", $lesson);

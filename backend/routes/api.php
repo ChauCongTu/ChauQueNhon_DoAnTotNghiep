@@ -4,6 +4,7 @@ use App\Helpers\Common;
 use App\Http\Controllers\Api\V1\AuthController;
 use App\Http\Controllers\Api\V1\ChapterController;
 use App\Http\Controllers\Api\V1\LessonController;
+use App\Http\Controllers\Api\V1\PracticeController;
 use App\Http\Controllers\Api\V1\ProfileController;
 use App\Http\Controllers\Api\V1\QuestionController;
 use App\Http\Controllers\Api\V1\SubjectController;
@@ -44,7 +45,7 @@ Route::prefix('/v1')->group(function () {
     Route::post('/reset', [AuthController::class, 'reset'])->name('reset');
 
     // Profile Routing
-    Route::prefix('/profile')->name('profiles.')->group(function () {
+    Route::prefix('/profiles')->name('profiles.')->group(function () {
         Route::post('/update', [ProfileController::class, 'update'])->middleware('auth:api')->name('update');
         Route::post('/avatar', [ProfileController::class, 'avatar'])->middleware('auth:api')->name('avatar');
         Route::get('/list', [ProfileController::class, 'list'])->middleware('auth:api')->name('list');
@@ -52,7 +53,7 @@ Route::prefix('/v1')->group(function () {
     });
 
     // Subject Routing
-    Route::prefix('/subject')->name('subjects.')->group(function () {
+    Route::prefix('/subjects')->name('subjects.')->group(function () {
         Route::get('/', [SubjectController::class, 'index'])->middleware(['auth:api'])->name('index');
         Route::post('/', [SubjectController::class, 'store'])->middleware(['auth:api'])->name('store');
         Route::put('/{id}', [SubjectController::class, 'update'])->middleware(['auth:api'])->name('update');
@@ -61,7 +62,7 @@ Route::prefix('/v1')->group(function () {
     });
 
     // Chapter Routing
-    Route::prefix('/chapter')->name('chapters.')->group(function () {
+    Route::prefix('/chapters')->name('chapters.')->group(function () {
         Route::get('/', [ChapterController::class, 'index'])->middleware(['auth:api'])->name('index');
         Route::post('/', [ChapterController::class, 'store'])->middleware(['auth:api'])->name('store');
         Route::put('/{id}', [ChapterController::class, 'update'])->middleware(['auth:api'])->name('update');
@@ -70,7 +71,7 @@ Route::prefix('/v1')->group(function () {
     });
 
     // Lesson Routing
-    Route::prefix('/lesson')->name('lessons.')->group(function(){
+    Route::prefix('/lessons')->name('lessons.')->group(function(){
         Route::get('/', [LessonController::class, 'index'])->middleware(['auth:api'])->name('index');
         Route::post('/', [LessonController::class, 'store'])->middleware(['auth:api'])->name('store');
         Route::post('/{id}/like', [LessonController::class, 'handleLike'])->middleware(['auth:api'])->name('handle_like');
@@ -79,12 +80,19 @@ Route::prefix('/v1')->group(function () {
         Route::get('/{slug}', [LessonController::class, 'detail'])->middleware(['auth:api'])->name('detail');
     });
 
-    Route::prefix('/question')->name('questions.')->group(function(){
+    Route::prefix('/questions')->name('questions.')->group(function(){
         Route::get('/', [QuestionController::class, 'index'])->middleware(['auth:api'])->name('index');
         Route::post('/', [QuestionController::class, 'store'])->middleware(['auth:api'])->name('store');
         Route::put('/{id}', [QuestionController::class, 'update'])->middleware(['auth:api'])->name('update');
         Route::delete('/{id}', [QuestionController::class, 'destroy'])->middleware(['auth:api'])->name('destroy');
         Route::get('/{slug}', [QuestionController::class, 'detail'])->middleware(['auth:api'])->name('detail');
+    });
+    Route::prefix('practices')->name('practices.')->group(function () {
+        Route::get('/', [PracticeController::class, 'index'])->name('index');
+        Route::post('/', [PracticeController::class, 'store'])->name('store');
+        Route::put('/{id}', [PracticeController::class, 'update'])->name('update');
+        Route::delete('/{id}', [PracticeController::class, 'destroy'])->name('destroy');
+        Route::get('/{id}', [PracticeController::class, 'detail'])->name('detail');
     });
 
 })->name('api_v1.');
