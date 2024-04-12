@@ -4,11 +4,14 @@ namespace App\Http\Controllers\Api\V1;
 
 use App\Helpers\Common;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Practice\GetResultRequest;
 use App\Http\Requests\QueryRequest;
 use App\Http\Requests\Practice\StorePracticeRequest;
 use App\Http\Requests\Practice\UpdatePracticeRequest;
+use App\Models\History;
 use App\Models\Practice;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 
 class PracticeController extends Controller
@@ -95,5 +98,38 @@ class PracticeController extends Controller
         return $practice
             ? Common::response(200, "Lấy thông tin bài tập thành công.", $practice)
             : Common::response(404, "Không tìm thấy bài tập này.");
+    }
+
+    public function result(int $id, GetResultRequest $request)
+    {
+        $result = [];
+        $data = $request->validated();
+        $questions = Practice::find($id)->questions();
+        $totalQuestions = $questions->count();
+        $scorePerQuestion = 10 / $totalQuestions;
+        $correct_count = 0;
+
+        foreach ($data['res'] as $key => $value) {
+            $question = $questions->find($key);
+            $isCorrect = $value == $question->answer_correct;
+            $correct_count += $isCorrect ? 1 : 0;
+            $score = $isCorrect ? $scorePerQuestion : 0;
+
+            $result[$key] = [
+                'question' => $question->question,
+                'your_answer' => $value,
+                'correct_answer' => $question->answer_correct,
+                'score' => $score,
+            ];
+        }
+
+        $total_score = $correct_count * $scorePerQuestion;
+
+        $result['correct_count'] = $correct_count;
+        $result['total_score'] = $total_score;
+        $user_id = Auth::id();
+        Common::saveHistory($user_id, 'Practice', $id, $result);
+
+        return Common::response(200, "Nộp bài thành công!", $result);
     }
 }

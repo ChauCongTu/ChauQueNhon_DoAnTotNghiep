@@ -88,11 +88,12 @@ Route::prefix('/v1')->group(function () {
         Route::get('/{slug}', [QuestionController::class, 'detail'])->middleware(['auth:api'])->name('detail');
     });
     Route::prefix('practices')->name('practices.')->group(function () {
-        Route::get('/', [PracticeController::class, 'index'])->name('index');
-        Route::post('/', [PracticeController::class, 'store'])->name('store');
-        Route::put('/{id}', [PracticeController::class, 'update'])->name('update');
-        Route::delete('/{id}', [PracticeController::class, 'destroy'])->name('destroy');
-        Route::get('/{id}', [PracticeController::class, 'detail'])->name('detail');
+        Route::get('/', [PracticeController::class, 'index'])->name('index')->middleware(['auth:api']);
+        Route::post('/', [PracticeController::class, 'store'])->name('store')->middleware(['auth:api']);
+        Route::post('/{id}', [PracticeController::class, 'result'])->name('result')->middleware(['auth:api']);
+        Route::put('/{id}', [PracticeController::class, 'update'])->name('update')->middleware(['auth:api']);
+        Route::delete('/{id}', [PracticeController::class, 'destroy'])->name('destroy')->middleware(['auth:api']);
+        Route::get('/{id}', [PracticeController::class, 'detail'])->name('detail')->middleware(['auth:api']);
     });
 
 })->name('api_v1.');
