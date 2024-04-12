@@ -218,6 +218,7 @@ class ArenaController extends Controller
     {
         $result = [];
         $data = $request->validated();
+        $result['time'] = $data['time'];
         $time = $data['time'] / 60;
         $arena = Arena::find($id);
 

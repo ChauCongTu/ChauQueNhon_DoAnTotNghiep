@@ -105,6 +105,7 @@ class PracticeController extends Controller
     {
         $result = [];
         $data = $request->validated();
+        $result['time'] = $data['time'];
         $questions = Practice::find($id)->questions();
         $totalQuestions = $questions->count();
         $scorePerQuestion = 10 / $totalQuestions;

@@ -10,8 +10,16 @@ class Statistic extends Model
     use HasFactory;
     protected $fillable = [
         'user_id',
-        'time_online',
-        'exams',
+        'total_time',
+        'total_exams',
+        'total_practices',
+        'total_arenas',
+        'done_exams',
+        'min_score',
+        'max_score',
+        'avg_score',
+        'late_submissions',
+        'accuracy',
         'day_stats',
     ];
 

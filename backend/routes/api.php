@@ -10,6 +10,7 @@ use App\Http\Controllers\Api\V1\PracticeController;
 use App\Http\Controllers\Api\V1\ProfileController;
 use App\Http\Controllers\Api\V1\QuestionController;
 use App\Http\Controllers\Api\V1\SubjectController;
+use App\Http\Controllers\Api\V1\TargetController;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -118,5 +119,11 @@ Route::prefix('/v1')->group(function () {
         Route::post('/{id}/leave', [ArenaController::class, 'leave'])->name('leave')->middleware(['auth:api']);
         Route::post('/{id}/start', [ArenaController::class, 'start'])->name('start')->middleware(['auth:api']);
         Route::post('/{id}/remain', [ArenaController::class, 'remain'])->name('remain')->middleware(['auth:api']);
+    });
+
+    Route::prefix('targets')->name('targets.')->group(function () {
+        Route::post('/', [TargetController::class, 'store'])->name('store')->middleware(['auth:api']);
+        Route::put('/{id}', [TargetController::class, 'update'])->name('update')->middleware(['auth:api']);
+        Route::delete('/{id}', [TargetController::class, 'destroy'])->name('destroy')->middleware(['auth:api']);
     });
 })->name('api_v1.');

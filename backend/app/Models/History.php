@@ -21,4 +21,9 @@ class History extends Model
     {
         return $this->belongsTo(User::class);
     }
+    public function scopeTodayByUser($query, $userId)
+    {
+        return $query->where('user_id', $userId)
+            ->whereDate('created_at', today());
+    }
 }

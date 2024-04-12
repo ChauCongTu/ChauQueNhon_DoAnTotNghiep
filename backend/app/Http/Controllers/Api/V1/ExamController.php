@@ -105,6 +105,7 @@ class ExamController extends Controller
     {
         $result = [];
         $data = $request->validated();
+        $result['time'] = $data['time'];
         $time = $data['time'] / 60;
         $exam = Exam::find($id);
         $questions = $exam->questions();
