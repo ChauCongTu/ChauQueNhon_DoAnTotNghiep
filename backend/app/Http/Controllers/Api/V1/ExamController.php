@@ -4,17 +4,16 @@ namespace App\Http\Controllers\Api\V1;
 
 use App\Helpers\Common;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Practice\GetResultRequest;
 use App\Http\Requests\QueryRequest;
-use App\Http\Requests\Practice\StorePracticeRequest;
-use App\Http\Requests\Practice\UpdatePracticeRequest;
-use App\Models\History;
-use App\Models\Practice;
+use App\Http\Requests\Exam\StoreExamRequest;
+use App\Http\Requests\Exam\UpdateExamRequest;
+use App\Http\Requests\Practice\GetResultRequest;
+use App\Models\Exam;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 
-class PracticeController extends Controller
+class ExamController extends Controller
 {
     public function index(QueryRequest $request)
     {
@@ -27,7 +26,7 @@ class PracticeController extends Controller
         $sort = $request->input('sort', 'created_at');
         $order = $request->input('order', 'desc');
 
-        $query = Practice::query();
+        $query = Exam::query();
         if ($filterBy && $value) {
             $query->where($filterBy, $condition ?? '=', $value);
         }
@@ -37,12 +36,12 @@ class PracticeController extends Controller
         }
 
         $query->orderBy($sort, $order);
-        $practices = $perPage == 0 ? $query->get() : $query->paginate($perPage, ['*'], 'page', $page);
+        $exams = $perPage == 0 ? $query->get() : $query->paginate($perPage, ['*'], 'page', $page);
 
-        return Common::response(200, 'Lấy danh sách bài tập thành công', $practices);
+        return Common::response(200, 'Lấy danh sách đề thi thành công', $exams);
     }
 
-    public function store(StorePracticeRequest $request)
+    public function store(StoreExamRequest $request)
     {
         $data = $request->validated();
         $data['questions'] = array_unique($data['questions']);
@@ -52,19 +51,19 @@ class PracticeController extends Controller
         $data['slug'] = Str::slug($data['name']);
         $data['questions'] = implode(',', $data['questions']);
 
-        $practice = Practice::create($data);
+        $exam = Exam::create($data);
 
-        return $practice
-            ? Common::response(201, "Tạo bài tập mới thành công.", $practice)
+        return $exam
+            ? Common::response(201, "Tạo đề thi mới thành công.", $exam)
             : Common::response(400, "Có lỗi xảy ra, vui lòng thử lại.");
     }
 
-    public function update(int $id, UpdatePracticeRequest $request)
+    public function update(int $id, UpdateExamRequest $request)
     {
-        $practice = Practice::find($id);
+        $exam = Exam::find($id);
 
-        if (!$practice) {
-            return Common::response(404, "Không tìm thấy bài tập.");
+        if (!$exam) {
+            return Common::response(404, "Không tìm thấy đề thi.");
         }
 
         $data = $request->validated();
@@ -75,17 +74,17 @@ class PracticeController extends Controller
         }
         $data['slug'] = Str::slug($data['name']);
         $data['questions'] = implode(',', $data['questions']);
-        Practice::where('id', $id)->update($data);
-        $practice = Practice::find($id);
+        Exam::where('id', $id)->update($data);
 
-        return Common::response(200, "Cập nhật bài tập thành công", $practice);
+        $exam = Exam::find($id);
+        return Common::response(200, "Cập nhật đề thi thành công", $exam);
     }
 
     public function destroy(int $id)
     {
         try {
-            Practice::destroy($id);
-            return Common::response(200, "Xóa bài tập thành công.");
+            Exam::destroy($id);
+            return Common::response(200, "Xóa đề thi thành công.");
         } catch (\Throwable $th) {
             return Common::response(400, "Có lỗi xảy ra, vui lòng thử lại.");
         }
@@ -93,18 +92,22 @@ class PracticeController extends Controller
 
     public function detail(string $slug)
     {
-        $practice = Practice::where('slug', $slug)->first();
-        $practice['question_list'] = $practice->questions();
-        return $practice
-            ? Common::response(200, "Lấy thông tin bài tập thành công.", $practice)
-            : Common::response(404, "Không tìm thấy bài tập này.");
+        $exam = Exam::where('slug', $slug)->first();
+        $exam['question_list'] = $exam->questions();
+
+        return $exam
+            ? Common::response(200, "Lấy thông tin đề thi thành công.", $exam)
+            : Common::response(404, "Không tìm thấy đề thi này.");
     }
 
     public function result(int $id, GetResultRequest $request)
     {
         $result = [];
         $data = $request->validated();
-        $questions = Practice::find($id)->questions();
+        $time = $data['time'] / 60;
+        $exam = Exam::find($id);
+        $questions = $exam->questions();
+
         $totalQuestions = $questions->count();
         $scorePerQuestion = 10 / $totalQuestions;
         $correct_count = 0;
@@ -128,8 +131,13 @@ class PracticeController extends Controller
         $result['correct_count'] = $correct_count;
         $result['total_score'] = $total_score;
         $user_id = Auth::id();
-        Common::saveHistory($user_id, 'Practice', $id, $result);
+        $result['late'] = ceil($time - $exam->time);
 
+        if ($result['late'] > 0) {
+            Common::saveHistory($user_id, 'Exam', $id, $result, "Nộp trễ " . $result['late'] .' phút.');
+            return Common::response(200, 'Bạn đã nộp muộn ' . ($result['late']) . ' phút.', $result);
+        }
+        Common::saveHistory($user_id, 'Exam', $id, $result);
         return Common::response(200, "Nộp bài thành công!", $result);
     }
 }
