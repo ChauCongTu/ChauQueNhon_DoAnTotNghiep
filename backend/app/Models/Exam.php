@@ -13,6 +13,7 @@ class Exam extends Model
         'slug',
         'time',
         'questions',
+        'question_count',
         'join_count',
         'complete_count',
         'subject_id',

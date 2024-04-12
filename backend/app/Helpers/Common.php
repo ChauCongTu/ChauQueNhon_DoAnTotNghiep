@@ -84,4 +84,89 @@ class Common
 
         return (bool)$history;
     }
+
+    /**
+     * Calculate the difference between two given date times and return the result in the appropriate unit based on the difference.
+     *
+     * @param string $startDateTime The starting date time.
+     * @param string|null $endDateTime The ending date time. Default is null, which means current date time (now).
+     * @param string|null $unit The unit for the result ('days', 'hours', or 'minutes'). Default is null, which means auto-detect.
+     * @return int|string The difference between the two date times in the specified unit, or a descriptive string if no unit is specified.
+     */
+    public static function timeDifference($startDateTime, $endDateTime = null, $unit = null)
+    {
+        $start = Carbon::parse($startDateTime);
+        $end = $endDateTime ? Carbon::parse($endDateTime) : Carbon::now();
+
+        if ($unit) {
+            switch ($unit) {
+                case 'days':
+                    return $end->diffInDays($start);
+                case 'hours':
+                    return $end->diffInHours($start);
+                case 'minutes':
+                    return $end->diffInMinutes($start);
+                default:
+                    return $end->diffInHours($start);
+            }
+        } else {
+            $difference = $end->diffInSeconds($start);
+            if ($difference > 60 * 60 * 24) {
+                return $end->diffInDays($start) . ' days';
+            } elseif ($difference > 60 * 60) {
+                return $end->diffInHours($start) . ' hours';
+            } else {
+                return $end->diffInMinutes($start) . ' minutes';
+            }
+        }
+    }
+    /**
+     * Chuyển đổi thời gian từ giờ hoặc phút sang giây hoặc ngược lại.
+     *
+     * @param int $time Thời gian cần chuyển đổi
+     * @param string $from Đơn vị thời gian đang ở (h: hours, m: minutes, s: seconds)
+     * @param string $to Đơn vị thời gian muốn chuyển đổi đến (h: hours, m: minutes, s: seconds)
+     * @return int Thời gian sau khi chuyển đổi
+     */
+    public static function convertTime(int $time, string $from, string $to): int
+    {
+        switch ($from) {
+            case 'h':
+                $time *= 3600; // 1 giờ = 3600 giây
+                break;
+            case 'm':
+                $time *= 60; // 1 phút = 60 giây
+                break;
+            default:
+                // Không cần thay đổi nếu là giây
+                break;
+        }
+
+        switch ($to) {
+            case 'h':
+                $time /= 3600; // 1 giờ = 3600 giây
+                break;
+            case 'm':
+                $time /= 60; // 1 phút = 60 giây
+                break;
+            default:
+                // Không cần thay đổi nếu là giây
+                break;
+        }
+
+        return (int) $time;
+    }
+
+    public static function stringToDatetime($dateTimeString)
+    {
+        return Carbon::parse($dateTimeString);
+    }
+    public static function stringToTimestamp($dateTimeString)
+    {
+        return Carbon::parse($dateTimeString)->timestamp;
+    }
+    public static function timestampToDatetime($timestamp)
+    {
+        return Carbon::createFromTimestamp($timestamp);
+    }
 }
