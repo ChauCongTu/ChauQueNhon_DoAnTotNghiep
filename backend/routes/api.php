@@ -113,7 +113,7 @@ Route::prefix('/v1')->group(function () {
         Route::put('/{id}', [ArenaController::class, 'update'])->name('update')->middleware(['auth:api']);
         Route::delete('/{id}', [ArenaController::class, 'destroy'])->name('destroy')->middleware(['auth:api']);
         Route::get('/{id}', [ArenaController::class, 'detail'])->name('detail')->middleware(['auth:api']);
-
+        Route::post('/{id}', [ArenaController::class, 'result'])->name('result')->middleware(['auth:api']);
         Route::post('/{id}/join', [ArenaController::class, 'join'])->name('join')->middleware(['auth:api']);
         Route::post('/{id}/leave', [ArenaController::class, 'leave'])->name('leave')->middleware(['auth:api']);
         Route::post('/{id}/start', [ArenaController::class, 'start'])->name('start')->middleware(['auth:api']);

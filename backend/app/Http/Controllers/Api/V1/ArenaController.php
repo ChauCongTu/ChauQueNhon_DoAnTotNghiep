@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\QueryRequest;
 use App\Http\Requests\Arena\StoreArenaRequest;
 use App\Http\Requests\Arena\UpdateArenaRequest;
+use App\Http\Requests\Practice\GetResultRequest;
 use App\Models\Arena;
 use Carbon\Carbon;
 use GuzzleHttp\Psr7\Response;
@@ -211,6 +212,52 @@ class ArenaController extends Controller
         $arena->save();
 
         return Common::response(200, 'Gia hạn thời gian thi thành công.');
+    }
+
+    public function result(int $id, GetResultRequest $request)
+    {
+        $result = [];
+        $data = $request->validated();
+        $time = $data['time'] / 60;
+        $arena = Arena::find($id);
+
+        if ($arena->status != 'started') {
+            return Common::response(400, 'Trạng thái hiện tại không thể nộp.');
+        }
+
+        $questions = $arena->questions();
+
+        $totalQuestions = $questions->count();
+        $scorePerQuestion = 10 / $totalQuestions;
+        $correct_count = 0;
+
+        foreach ($data['res'] as $key => $value) {
+            $question = $questions->find($key);
+            $isCorrect = $value == $question->answer_correct;
+            $correct_count += $isCorrect ? 1 : 0;
+            $score = $isCorrect ? $scorePerQuestion : 0;
+
+            $result[$key] = [
+                'question' => $question->question,
+                'your_answer' => $value,
+                'correct_answer' => $question->answer_correct,
+                'score' => $score,
+            ];
+        }
+
+        $total_score = $correct_count * $scorePerQuestion;
+
+        $result['correct_count'] = $correct_count;
+        $result['total_score'] = $total_score;
+        $user_id = Auth::id();
+        $result['late'] = ceil($time - $arena->time);
+
+        if ($result['late'] > 0) {
+            Common::saveHistory($user_id, 'Arena', $id, $result, "Nộp trễ " . $result['late'] . ' phút.');
+            return Common::response(200, 'Bạn đã nộp muộn ' . ($result['late']) . ' phút.', $result);
+        }
+        Common::saveHistory($user_id, 'Arena', $id, $result);
+        return Common::response(200, "Nộp bài thành công!", $result);
     }
 
 
