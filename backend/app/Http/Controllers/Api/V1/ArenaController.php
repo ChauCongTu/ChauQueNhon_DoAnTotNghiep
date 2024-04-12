@@ -8,8 +8,11 @@ use App\Http\Requests\QueryRequest;
 use App\Http\Requests\Arena\StoreArenaRequest;
 use App\Http\Requests\Arena\UpdateArenaRequest;
 use App\Models\Arena;
+use Carbon\Carbon;
+use GuzzleHttp\Psr7\Response;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Redis;
 use Illuminate\Support\Str;
 
 class ArenaController extends Controller
@@ -36,7 +39,9 @@ class ArenaController extends Controller
 
         $query->orderBy($sort, $order);
         $arenas = $perPage == 0 ? $query->get() : $query->paginate($perPage, ['*'], 'page', $page);
-
+        foreach ($arenas as $value) {
+            $value['is_joined'] = $this->is_joined($value->id, Auth::id());
+        }
         return Common::response(200, 'Lấy danh sách phòng thi thành công', $arenas);
     }
 
@@ -84,10 +89,141 @@ class ArenaController extends Controller
     {
         $arena = Arena::find($id);
         if ($arena) {
+            $arena['is_joined'] = $this->is_joined($id, Auth::id());
+            $arena['joined'] = $arena->joined();
             $arena['question_list'] = $arena->questions();
             return Common::response(200, "Lấy thông tin phòng thi thành công.", $arena);
         }
 
         return Common::response(404, "Không tìm thấy phòng thi này.");
+    }
+
+    public function join(int $id, Request $request)
+    {
+        $arena = Arena::find($id);
+
+        if ($arena) {
+            $password = $request->input('password', null);
+            $user_id = Auth::id();
+            $joined = $arena->joined();
+
+            if ($arena->status != 'pending') {
+                return Common::response(400, 'Phòng thi đã hết thời gian có thể tham gia.');
+            }
+
+            if ($this->is_joined($id, $user_id)) {
+                return Common::response(400, 'Bạn đã tham gia phòng thi này trước đó.');
+            }
+
+            if ($arena->password && $arena->password != $password) {
+                return Common::response(400, 'Mật khẩu không chính xác.');
+            }
+
+            if ($arena->max_users < count($joined)) {
+                return Common::response(400, 'Số lượng người tham gia đã tới giới hạn.');
+            }
+
+            $arena['users'] = $arena['users'] . ',' . $user_id;
+            $arena->save();
+
+            return Common::response(200, "Tham gia thành công.", $arena);
+        }
+        return Common::response(404, 'Không tìm thấy phòng thi này.');
+    }
+
+    public function leave(int $id)
+    {
+        $arena = Arena::find($id);
+
+        if (!$arena) {
+            return Common::response(404, 'Không tìm thấy phòng thi này.');
+        }
+
+        $user_id = Auth::id();
+
+        if (!$this->is_joined($id, $user_id)) {
+            return Common::response(400, 'Bạn chưa tham gia phòng thi này.');
+        }
+
+        if ($arena->status != 'pending') {
+            return Common::response(400, 'Không thể rời phòng thi khi trận đấu đã bắt đầu.');
+        }
+
+        $users = explode(',', $arena->users);
+        $users = array_diff($users, array($user_id));
+        $arena['users'] = implode(',', $users);
+        $arena->save();
+
+        return Common::response(200, "Rời phòng thi thành công.");
+    }
+
+    public function start(int $id)
+    {
+        $arena = Arena::find($id);
+        if (!$arena) {
+            return Common::response(404, 'Không tìm thấy phòng thi này.');
+        }
+        $user_id = Auth::id();
+        if ($arena->author !== $user_id) {
+            return Common::response(403, 'Bạn không có quyền bắt đầu trận đấu.');
+        }
+
+        if (!$arena) {
+            return Common::response(404, 'Không tìm thấy phòng thi này.');
+        }
+
+        if ($arena->status != 'pending') {
+            return Common::response(400, 'Trạng thái hiện tại không thể bắt đầu.');
+        }
+
+        $arena->status = 'started';
+        $arena->start_at = now();
+        $arena->save();
+
+        return Common::response(200, 'Bắt đầu thi thành công.');
+    }
+
+    public function remain(int $id, Request $request)
+    {
+        $arena = Arena::find($id);
+
+        if (!$arena) {
+            return Common::response(404, 'Không tìm thấy phòng thi này.');
+        }
+
+        $lastRemainActionAt = Redis::get('arena:' . $id . ':last_remain_action_at');
+        $currentTime = now();
+        if ($lastRemainActionAt) {
+            $lastRemainActionAt = Carbon::createFromTimestamp($lastRemainActionAt);
+            $timeDiffInMinutes = $currentTime->diffInMinutes($lastRemainActionAt);
+            if ($timeDiffInMinutes < 2) {
+                return Common::response(400, 'Chỉ được phép gia hạn thời gian mỗi 2 phút một lần.');
+            }
+        }
+
+        if ($arena->status !== 'started') {
+            return Common::response(400, 'Không thể gia hạn thời gian thi khi trận đấu chưa bắt đầu.');
+        }
+
+        $minutesToAdd = $request->input('minute', 5);
+        $arena->time += $minutesToAdd;
+        Redis::set('arena:' . $id . ':last_remain_action_at', $currentTime->timestamp);
+        $arena->save();
+
+        return Common::response(200, 'Gia hạn thời gian thi thành công.');
+    }
+
+
+    public static function is_joined(int $room_id, int $user_id)
+    {
+        $arena = Arena::find($room_id);
+        $joined = $arena->joined();
+
+        $joinedIds = $joined->pluck('id');
+
+        if (in_array($user_id, $joinedIds->toArray())) {
+            return true;
+        }
+        return false;
     }
 }

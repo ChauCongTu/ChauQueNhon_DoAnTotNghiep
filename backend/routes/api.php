@@ -73,7 +73,7 @@ Route::prefix('/v1')->group(function () {
     });
 
     // Lesson Routing
-    Route::prefix('/lessons')->name('lessons.')->group(function(){
+    Route::prefix('/lessons')->name('lessons.')->group(function () {
         Route::get('/', [LessonController::class, 'index'])->middleware(['auth:api'])->name('index');
         Route::post('/', [LessonController::class, 'store'])->middleware(['auth:api'])->name('store');
         Route::post('/{id}/like', [LessonController::class, 'handleLike'])->middleware(['auth:api'])->name('handle_like');
@@ -82,7 +82,7 @@ Route::prefix('/v1')->group(function () {
         Route::get('/{slug}', [LessonController::class, 'detail'])->middleware(['auth:api'])->name('detail');
     });
 
-    Route::prefix('/questions')->name('questions.')->group(function(){
+    Route::prefix('/questions')->name('questions.')->group(function () {
         Route::get('/', [QuestionController::class, 'index'])->middleware(['auth:api'])->name('index');
         Route::post('/filter', [QuestionController::class, 'getQuestions'])->middleware(['auth:api'])->name('filter');
         Route::post('/', [QuestionController::class, 'store'])->middleware(['auth:api'])->name('store');
@@ -113,5 +113,10 @@ Route::prefix('/v1')->group(function () {
         Route::put('/{id}', [ArenaController::class, 'update'])->name('update')->middleware(['auth:api']);
         Route::delete('/{id}', [ArenaController::class, 'destroy'])->name('destroy')->middleware(['auth:api']);
         Route::get('/{id}', [ArenaController::class, 'detail'])->name('detail')->middleware(['auth:api']);
+
+        Route::post('/{id}/join', [ArenaController::class, 'join'])->name('join')->middleware(['auth:api']);
+        Route::post('/{id}/leave', [ArenaController::class, 'leave'])->name('leave')->middleware(['auth:api']);
+        Route::post('/{id}/start', [ArenaController::class, 'start'])->name('start')->middleware(['auth:api']);
+        Route::post('/{id}/remain', [ArenaController::class, 'remain'])->name('remain')->middleware(['auth:api']);
     });
 })->name('api_v1.');

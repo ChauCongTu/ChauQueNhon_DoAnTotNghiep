@@ -31,4 +31,8 @@ class Arena extends Model
         $questionIds = explode(',', $this->questions);
         return Question::whereIn('id', $questionIds)->get();
     }
+    public function joined(){
+        $userIds = explode(',', $this->users);
+        return User::select('id', 'name', 'username')->whereIn('id', $userIds)->get();
+    }
 }
