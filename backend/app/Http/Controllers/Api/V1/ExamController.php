@@ -93,11 +93,12 @@ class ExamController extends Controller
     public function detail(string $slug)
     {
         $exam = Exam::where('slug', $slug)->first();
-        $exam['question_list'] = $exam->questions();
+        if ($exam) {
+            $exam['question_list'] =  $exam->questions();
+            return Common::response(200, "Lấy thông tin đề thi thành công.", $exam);
+        }
 
-        return $exam
-            ? Common::response(200, "Lấy thông tin đề thi thành công.", $exam)
-            : Common::response(404, "Không tìm thấy đề thi này.");
+        return Common::response(404, "Không tìm thấy đề thi này.");
     }
 
     public function result(int $id, GetResultRequest $request)

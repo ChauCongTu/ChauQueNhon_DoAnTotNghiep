@@ -15,13 +15,20 @@ class Arena extends Model
         'max_users',
         'time',
         'questions',
+        'question_count',
         'start_at',
         'type',
         'password',
+        'status'
     ];
 
     public function author()
     {
         return $this->belongsTo(User::class);
+    }
+    public function questions()
+    {
+        $questionIds = explode(',', $this->questions);
+        return Question::whereIn('id', $questionIds)->get();
     }
 }

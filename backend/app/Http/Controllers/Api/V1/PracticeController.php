@@ -94,10 +94,11 @@ class PracticeController extends Controller
     public function detail(string $slug)
     {
         $practice = Practice::where('slug', $slug)->first();
-        $practice['question_list'] = $practice->questions();
-        return $practice
-            ? Common::response(200, "Lấy thông tin bài tập thành công.", $practice)
-            : Common::response(404, "Không tìm thấy bài tập này.");
+        if ($practice) {
+            $practice['question_list'] = $practice->questions();
+            return Common::response(200, "Lấy thông tin bài tập thành công.", $practice);
+        }
+        return Common::response(404, "Không tìm thấy bài tập này.");
     }
 
     public function result(int $id, GetResultRequest $request)

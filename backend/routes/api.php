@@ -1,6 +1,7 @@
 <?php
 
 use App\Helpers\Common;
+use App\Http\Controllers\Api\V1\ArenaController;
 use App\Http\Controllers\Api\V1\AuthController;
 use App\Http\Controllers\Api\V1\ChapterController;
 use App\Http\Controllers\Api\V1\ExamController;
@@ -104,5 +105,13 @@ Route::prefix('/v1')->group(function () {
         Route::put('/{id}', [ExamController::class, 'update'])->name('update')->middleware(['auth:api']);
         Route::delete('/{id}', [ExamController::class, 'destroy'])->name('destroy')->middleware(['auth:api']);
         Route::get('/{slug}', [ExamController::class, 'detail'])->name('detail')->middleware(['auth:api']);
+    });
+
+    Route::prefix('arenas')->name('arenas.')->group(function () {
+        Route::get('/', [ArenaController::class, 'index'])->name('index')->middleware(['auth:api']);
+        Route::post('/', [ArenaController::class, 'store'])->name('store')->middleware(['auth:api']);
+        Route::put('/{id}', [ArenaController::class, 'update'])->name('update')->middleware(['auth:api']);
+        Route::delete('/{id}', [ArenaController::class, 'destroy'])->name('destroy')->middleware(['auth:api']);
+        Route::get('/{id}', [ArenaController::class, 'detail'])->name('detail')->middleware(['auth:api']);
     });
 })->name('api_v1.');
