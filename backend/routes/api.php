@@ -83,6 +83,7 @@ Route::prefix('/v1')->group(function () {
 
     Route::prefix('/questions')->name('questions.')->group(function(){
         Route::get('/', [QuestionController::class, 'index'])->middleware(['auth:api'])->name('index');
+        Route::post('/filter', [QuestionController::class, 'getQuestions'])->middleware(['auth:api'])->name('filter');
         Route::post('/', [QuestionController::class, 'store'])->middleware(['auth:api'])->name('store');
         Route::put('/{id}', [QuestionController::class, 'update'])->middleware(['auth:api'])->name('update');
         Route::delete('/{id}', [QuestionController::class, 'destroy'])->middleware(['auth:api'])->name('destroy');

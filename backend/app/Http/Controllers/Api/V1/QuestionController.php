@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api\V1;
 
 use App\Helpers\Common;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\GetQuestionsRequest;
 use App\Http\Requests\QueryRequest;
 use App\Http\Requests\Question\StoreQuestionRequest;
 use App\Http\Requests\Question\UpdateQuestionRequest;
@@ -38,6 +39,38 @@ class QuestionController extends Controller
 
         return Common::response(200, 'Lấy danh sách câu hỏi thành công', $questions);
     }
+
+    public function getQuestions(GetQuestionsRequest $request)
+    {
+        $numb = $request->input('numb');
+        $subject_id = $request->input('subject_id');
+        $chapter_id = $request->input('chapter_id');
+        $level = $request->input('level');
+        $data = $request->input('data');
+        $questionIdsInData = collect($data)->pluck('id')->toArray();
+
+        $query = Question::query();
+
+        if (!is_null($subject_id)) {
+            $query->where('subject_id', $subject_id);
+        }
+
+        if (!is_null($chapter_id)) {
+            $query->where('chapter_id', $chapter_id);
+        }
+
+        if (!is_null($level)) {
+            $query->where('level', $level);
+        }
+        $additionalQuestions = $query->whereNotIn('id', $questionIdsInData)
+            ->inRandomOrder()
+            ->limit(max(0, $numb))
+            ->get();
+
+        return Common::response(200, 'Lấy danh sách câu hỏi thành công.', $additionalQuestions);
+    }
+
+
 
     public function store(StoreQuestionRequest $request)
     {
