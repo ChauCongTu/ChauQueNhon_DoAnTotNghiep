@@ -16,19 +16,23 @@ class StoreTargetRequest extends FormRequest
     public function rules()
     {
         return [
-            'hour_per_day' => 'required|numeric',
-            'target_score' => 'required|numeric',
-            'subject_id' => 'required|integer',
-            'stage' => 'required|string',
+            'total_time' => 'required|numeric',
+            'total_exams' => 'nullable|numeric',
+            'total_practices' => 'nullable|numeric',
+            'total_arenas' => 'nullable|numeric',
+            'min_score' => 'nullable|numeric',
+            'accuracy' => 'nullable|numeric'
         ];
     }
 
     public function attributes(): array {
         return [
-            'hour_per_day' => 'Số giờ mỗi ngày',
-            'target_score' => 'Mục tiêu điểm số',
-            'subject_id' => 'Môn học',
-            'stage' => 'Giai đoạn',
+            'total_time' => 'Tổng thời gian học (phút)',
+            'total_exams' => 'Tổng số lượng bài kiểm tra',
+            'total_practices' => 'Tổng số lượng bài tập',
+            'total_arenas' => 'Tổng số lượng trận đấu',
+            'min_score' => 'Điểm số tối thiểu',
+            'accuracy' => 'Độ chính xác',
         ];
     }
 
@@ -36,9 +40,7 @@ class StoreTargetRequest extends FormRequest
     {
         return [
             'required' => ':attribute không được để trống',
-            'integer' => ':attribute phải là một số nguyên',
             'numeric' => ':attribute phải là một số',
-            'string' => ':attribute phải là một chuỗi',
         ];
     }
 

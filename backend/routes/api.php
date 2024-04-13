@@ -5,6 +5,7 @@ use App\Http\Controllers\Api\V1\ArenaController;
 use App\Http\Controllers\Api\V1\AuthController;
 use App\Http\Controllers\Api\V1\ChapterController;
 use App\Http\Controllers\Api\V1\ExamController;
+use App\Http\Controllers\Api\V1\HistoryController;
 use App\Http\Controllers\Api\V1\LessonController;
 use App\Http\Controllers\Api\V1\PracticeController;
 use App\Http\Controllers\Api\V1\ProfileController;
@@ -122,8 +123,15 @@ Route::prefix('/v1')->group(function () {
     });
 
     Route::prefix('targets')->name('targets.')->group(function () {
+        Route::get('/check', [TargetController::class, 'firstOfDay'])->name('check')->middleware(['auth:api']);
+        Route::get('/', [TargetController::class, 'index'])->name('index')->middleware(['auth:api']);
+        Route::get('/{date?}', [TargetController::class, 'detail'])->name('detail')->middleware(['auth:api']);
         Route::post('/', [TargetController::class, 'store'])->name('store')->middleware(['auth:api']);
         Route::put('/{id}', [TargetController::class, 'update'])->name('update')->middleware(['auth:api']);
         Route::delete('/{id}', [TargetController::class, 'destroy'])->name('destroy')->middleware(['auth:api']);
+    });
+    Route::prefix('histories')->name('histories.')->middleware('auth:api')->group(function () {
+        Route::get('/', [HistoryController::class, 'index'])->name('index');
+        Route::get('/detail', [HistoryController::class, 'detail'])->name('detail');
     });
 })->name('api_v1.');
