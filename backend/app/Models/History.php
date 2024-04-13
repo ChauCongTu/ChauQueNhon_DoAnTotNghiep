@@ -26,4 +26,9 @@ class History extends Model
         return $query->where('user_id', $userId)
             ->whereDate('created_at', today());
     }
+    public function scopeYesterdayByUser($query, $userId)
+    {
+        return $query->where('user_id', $userId)
+            ->whereDate('created_at', today()->subDay());
+    }
 }

@@ -21,6 +21,9 @@ class Statistic extends Model
         'late_submissions',
         'accuracy',
         'day_stats',
+        'most_done_subject',
+        'subjects_done_today',
+        'total_questions_done',
     ];
 
     public function user()

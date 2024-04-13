@@ -11,3 +11,4 @@ Artisan::command('inspire', function () {
 
 Schedule::command('route:cache')->everySecond();
 Schedule::command('app:handle-arena')->everyMinute();
+Schedule::command('daily_stats')->daily();

@@ -231,6 +231,7 @@ class ArenaController extends Controller
         $totalQuestions = $questions->count();
         $scorePerQuestion = 10 / $totalQuestions;
         $correct_count = 0;
+        $assignment = [];
 
         foreach ($data['res'] as $key => $value) {
             $question = $questions->find($key);
@@ -238,7 +239,7 @@ class ArenaController extends Controller
             $correct_count += $isCorrect ? 1 : 0;
             $score = $isCorrect ? $scorePerQuestion : 0;
 
-            $result[$key] = [
+            $assignment[$key] = [
                 'question' => $question->question,
                 'your_answer' => $value,
                 'correct_answer' => $question->answer_correct,
@@ -247,6 +248,8 @@ class ArenaController extends Controller
         }
 
         $total_score = $correct_count * $scorePerQuestion;
+
+        $result['assignment'] = $assignment;
 
         $result['correct_count'] = $correct_count;
         $result['total_score'] = $total_score;
