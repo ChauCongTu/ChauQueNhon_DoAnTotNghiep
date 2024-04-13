@@ -5,6 +5,7 @@ use App\Http\Controllers\Api\V1\ArenaController;
 use App\Http\Controllers\Api\V1\AuthController;
 use App\Http\Controllers\Api\V1\ChapterController;
 use App\Http\Controllers\Api\V1\ExamController;
+use App\Http\Controllers\Api\V1\FileController;
 use App\Http\Controllers\Api\V1\HistoryController;
 use App\Http\Controllers\Api\V1\LessonController;
 use App\Http\Controllers\Api\V1\PracticeController;
@@ -13,6 +14,7 @@ use App\Http\Controllers\Api\V1\QuestionController;
 use App\Http\Controllers\Api\V1\StatisticController;
 use App\Http\Controllers\Api\V1\SubjectController;
 use App\Http\Controllers\Api\V1\TargetController;
+use App\Http\Controllers\Api\V1\TopicController;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -139,4 +141,14 @@ Route::prefix('/v1')->group(function () {
     Route::prefix('statistics')->name('statistics.')->middleware('auth:api')->group(function () {
         Route::get('/', [StatisticController::class, 'index'])->name('index');
     });
+
+    Route::prefix('topics')->name('topics.')->group(function () {
+        Route::get('/', [TopicController::class, 'index'])->middleware('auth:api')->name('index');
+        Route::post('/', [TopicController::class, 'store'])->middleware('auth:api')->name('store');
+        Route::put('/{id}', [TopicController::class, 'update'])->middleware('auth:api')->name('update');
+        Route::delete('/{id}', [TopicController::class, 'destroy'])->middleware('auth:api')->name('destroy');
+        Route::get('/{slug}', [TopicController::class, 'detail'])->middleware('auth:api')->name('detail');
+    });
+
+    Route::post('upload', [FileController::class, 'upload'])->name('upload')->middleware('auth:api');
 })->name('api_v1.');
