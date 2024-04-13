@@ -150,5 +150,13 @@ Route::prefix('/v1')->group(function () {
         Route::get('/{slug}', [TopicController::class, 'detail'])->middleware('auth:api')->name('detail');
     });
 
+    Route::prefix('topics/{topic_id}/comments')->name('topics.comments.')->group(function () {
+        Route::get('/', [TopicController::class, 'comment'])->middleware('auth:api')->name('index');
+        Route::post('/', [TopicController::class, 'postComment'])->middleware('auth:api')->name('store');
+        Route::put('/{id}', [TopicController::class, 'updateComment'])->middleware('auth:api')->name('update');
+        Route::delete('/{id}', [TopicController::class, 'destroyComment'])->middleware('auth:api')->name('destroy');
+        Route::post('/{id}/like', [TopicController::class, 'likeComment'])->middleware('auth:api')->name('like');
+    });
+
     Route::post('upload', [FileController::class, 'upload'])->name('upload')->middleware('auth:api');
 })->name('api_v1.');
