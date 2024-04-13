@@ -10,6 +10,7 @@ use App\Http\Controllers\Api\V1\LessonController;
 use App\Http\Controllers\Api\V1\PracticeController;
 use App\Http\Controllers\Api\V1\ProfileController;
 use App\Http\Controllers\Api\V1\QuestionController;
+use App\Http\Controllers\Api\V1\StatisticController;
 use App\Http\Controllers\Api\V1\SubjectController;
 use App\Http\Controllers\Api\V1\TargetController;
 use App\Models\User;
@@ -133,5 +134,9 @@ Route::prefix('/v1')->group(function () {
     Route::prefix('histories')->name('histories.')->middleware('auth:api')->group(function () {
         Route::get('/', [HistoryController::class, 'index'])->name('index');
         Route::get('/detail', [HistoryController::class, 'detail'])->name('detail');
+    });
+
+    Route::prefix('statistics')->name('statistics.')->middleware('auth:api')->group(function () {
+        Route::get('/', [StatisticController::class, 'index'])->name('index');
     });
 })->name('api_v1.');
