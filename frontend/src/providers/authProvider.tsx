@@ -2,6 +2,8 @@
 import React, { useState, useEffect, useContext, createContext } from "react";
 import { getCookie, setCookie, removeCookie } from "../utils/cookie";
 import { User } from "../modules/users/type";
+import Loading from "@/components/loading/loading";
+import { jwtDecode } from "jwt-decode";
 
 // Outside AuthProvider:
 const AuthContext = createContext<{
@@ -24,7 +26,8 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     useEffect(() => {
         setLoading(true);
         const token = getCookie('ACCESS_TOKEN');
-        const userString = getCookie("USER");
+
+        const userString = getCookie("USER_INFO");
         if (token && userString) {
             setIsLoggedIn(true);
             setUser(JSON.parse(userString));
@@ -35,15 +38,15 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     }, []);
 
     const login = (access_token: string, user: User) => {
-        if (access_token) {
-            setCookie('ACCESS_TOKEN', access_token, { expires: 1 });
-            setCookie('USER', JSON.stringify(user), { expires: 1 })
-            setIsLoggedIn(true);
-        }
+        setCookie('ACCESS_TOKEN', access_token, { expires: 1, secure: true });
+        setCookie('USER_INFO', JSON.stringify(user), { expires: 1, secure: true })
+        setUser(user);
+        setIsLoggedIn(true);
     };
 
     const logout = () => {
         removeCookie('ACCESS_TOKEN');
+        removeCookie('USER_INFO')
         setIsLoggedIn(false);
     };
 

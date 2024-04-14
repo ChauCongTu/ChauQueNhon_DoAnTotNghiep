@@ -3,6 +3,7 @@ import { Avatar, Image } from 'antd';
 import Link from 'next/link';
 import React from 'react';
 import { SearchOutlined, HomeOutlined, WechatWorkOutlined, FileOutlined, InsertRowBelowOutlined, BarChartOutlined } from '@ant-design/icons';
+import UserAvatar from './avatar/avatar';
 
 const Header = () => {
     return (
@@ -28,7 +29,7 @@ const Header = () => {
                             </ul>
                         </nav>
                         <div className='ml-20md w-180md'>
-                            <Link href={'/'} className='flex items-center w-full gap-10md'><Avatar /><>Đăng nhập</></Link>
+                            <UserAvatar />
                         </div>
                     </div>
                 </div>
@@ -38,15 +39,9 @@ const Header = () => {
                 <div className='mx-auto px-10xs md:px-40md'>
                     <div className='flex items-center justify-between'>
                         <div><Link href="/" className='flex items-center'><Image src='/logo.png' width={'40px'} preview={false} /> <h1 className='text-primary font-semibold'>GoUni</h1> </Link></div>
-                        <div>
-                            <form action="#" method="get" className='relative'>
-                                {/* <input type="search" className='w-228md border rounded-full px-15md py-5md' placeholder='Bạn cần tìm gì ...' /> */}
-                                <button type='submit' className='border rounded-full px-6xs bg-gray-200 absolute top-[50%] translate-y-[-50%] right-15md text-slate-500'><SearchOutlined /></button>
-                            </form>
-                        </div>
 
                         <div className='ml-20md'>
-                            <Link href={'/'} className='flex items-center w-full gap-10md'><Avatar /><>Đăng nhập</></Link>
+                            <UserAvatar />
                         </div>
                     </div>
                 </div>

@@ -17,3 +17,15 @@ export interface User {
     lastLoginAt: string | Date; // Hoặc có thể sử dụng kiểu Date nếu phù hợp
     google_id: string | null;
 }
+
+export interface LoginRequest {
+    email: string,
+    password: string
+}
+
+export interface RegisterRequest {
+    email: string,
+    password: string,
+    username: string,
+    name: string
+}

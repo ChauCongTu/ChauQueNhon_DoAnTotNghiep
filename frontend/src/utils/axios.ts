@@ -2,7 +2,9 @@ import axios from "axios";
 import { getCookie } from "./cookie";
 import toast from "react-hot-toast";
 
-const instance = axios.create({ baseURL: process.env.VITE_API_URL, timeout: 5000, headers: { 'Content-Type': 'application/json' } });
+const baseURL = process.env.VITE_API_URL ? process.env.VITE_API_URL : 'http://127.0.0.1:8000/api/v1';
+
+const instance = axios.create({ baseURL: baseURL, timeout: 5000, headers: { 'Content-Type': 'application/json' } });
 
 instance.interceptors.request.use((config) => {
     const token = getCookie("ACCESS_TOKEN");
