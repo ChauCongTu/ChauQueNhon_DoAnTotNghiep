@@ -66,7 +66,7 @@
         <h1>Lấy lại mật khẩu</h1>
         <p>Xin chào,</p>
         <p>Chúng tôi đã nhận được yêu cầu lấy lại mật khẩu của bạn.</p>
-        <p>Hãy click vào <a href="{{ env('FORGOT_PASSWORD_CALLBACK') . '?reset_token=' . $token }}" target="_blank">đây</a> để tiến hành đổi mật khẩu.</p>
+        <p>Hãy click vào <a href="{{ env('FORGOT_PASSWORD_CALLBACK') . '?reset_token=' . $token . '&email=' . $email }}" target="_blank">đây</a> để tiến hành đổi mật khẩu.</p>
         <p>Trân trọng!</p>
         <p>{{ env('MAIL_FROM_NAME') }}</p>
     </div>

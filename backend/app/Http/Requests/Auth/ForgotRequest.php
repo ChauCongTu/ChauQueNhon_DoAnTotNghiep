@@ -27,7 +27,18 @@ class ForgotRequest extends FormRequest
             'email' => 'required|email'
         ];
     }
-
+    public function attributes(): array {
+        return [
+            'email' => 'Địa chỉ email'
+        ];
+    }
+    public function messages(): array
+    {
+        return [
+            'required' => ':attribute không được để trống',
+            'email' => ':attribute không đúng định dạng.',
+        ];
+    }
     protected function failedValidation(Validator $validator)
     {
         throw new HttpResponseException(response()->json([

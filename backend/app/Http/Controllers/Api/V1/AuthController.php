@@ -115,7 +115,7 @@ class AuthController extends Controller
         }
 
         $token = Str::random(60);
-        Redis::setex($request->email . '_reset_token', 300, $token);
+        Redis::setex($request->email . '_reset_token', 500, $token);
 
         dispatch(new SendForgotPasswordEmail($user->email, $token));
 
@@ -126,7 +126,7 @@ class AuthController extends Controller
         $storedToken = Redis::get($request->email . '_reset_token');
 
         if (!$storedToken || $storedToken !== $request->token) {
-            return Common::response(400, 'Token không hợp lệ!');
+            return Common::response(400, 'Token không hợp lệ hoặc liên kết đã hết hạn!');
         }
 
         $user = User::where('email', $request->email)->first();

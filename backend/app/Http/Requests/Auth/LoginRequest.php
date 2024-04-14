@@ -40,6 +40,7 @@ class LoginRequest extends FormRequest
             'required' => ':attribute không được để trống',
             'min' => ':attribute phải có ít nhất :min kí tự',
             'max' => ':attribute chỉ được chứa tối đa :max kí tự',
+            'email' => ':attribute không đúng định dạng.',
         ];
     }
     protected function failedValidation(Validator $validator)
