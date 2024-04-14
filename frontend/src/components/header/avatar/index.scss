@@ -1,0 +1,13 @@
+.ant-drawer-header-title {
+    position: relative;
+
+    button {
+        position: absolute;
+        right: 0;
+    }
+}
+
+:where(.css-dev-only-do-not-override-1kuana8).ant-menu-light.ant-menu-root.ant-menu-vertical,
+:where(.css-dev-only-do-not-override-1kuana8).ant-menu-light>.ant-menu.ant-menu-root.ant-menu-vertical {
+    border-inline-end: 0;
+}
