@@ -1,0 +1,37 @@
+.ant-input-disabled {
+    background: #fff;
+}
+
+.ant-input-outlined.ant-input-disabled {
+    background: #fff !important;
+    color: #000 !important;
+    cursor: pointer !important;
+}
+
+.ant-select-outlined.ant-select-disabled:not(.ant-select-customize-input) .ant-select-selector {
+    background: #fff !important;
+    color: #000 !important;
+    cursor: pointer  !important;
+}
+
+
+.ant-select-disabled.ant-select-multiple .ant-select-selection-overflow .ant-select-selection-item {
+    color: #000;
+    border-color: transparent;
+    cursor: pointer  !important;
+}
+
+.ant-select-multiple .ant-select-selection-overflow .ant-select-selection-item {
+    color: #fff;
+    border-color: transparent;
+    cursor: not-allowed;
+    cursor: pointer  !important;
+}
+.ant-picker-outlined.ant-picker-disabled, .ant-picker-outlined[disabled] {
+    background: #fff !important;
+    color: #000 !important;
+    cursor: pointer  !important;
+    input {
+        color: #000 !important;
+    }
+}

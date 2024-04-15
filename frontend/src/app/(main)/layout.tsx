@@ -14,14 +14,12 @@ export default function MainLayout({
     children: React.ReactNode;
 }>) {
     return (
-        <html lang="vi">
-            <body>
-                <Header />
-                {children}
-                <Footer />
-                <Toaster />
-            </body>
-        </html>
+        <>
+            <Header />
+            {children}
+            <Footer />
+            <Toaster />
+        </>
 
     );
 }

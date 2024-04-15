@@ -1,10 +1,10 @@
 export interface User {
     id?: number;
-    username: string;
-    name: string;
-    email: string;
+    username: string | null;
+    name: string | null;
+    email: string | null;
     password: string;
-    phone: string;
+    phone: string | null;
     invite_code: string | null;
     avatar: string;
     gender: string | null;

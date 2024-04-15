@@ -1,5 +1,5 @@
 import api from '@/utils/axios';
-import { LoginRequest, RegisterRequest } from './type';
+import { LoginRequest, RegisterRequest, User } from './type';
 import { AxiosRequestConfig } from 'axios';
 
 export const postLogin = async (request: LoginRequest): Promise<any> => {
@@ -55,6 +55,26 @@ export const postForgot = async (request: { email: string }): Promise<any> => {
 export const postReset = async (request: { token: string, email: string, password: string }): Promise<any> => {
     try {
         const response = await api.post('/reset', request);
+        return response.data;
+    } catch (error) {
+        console.error('Create Post Error:', error);
+        throw error;
+    }
+};
+
+export const getProfile = async (username: string) => {
+    try {
+        const response = await api.get(`/profiles/${username}`);
+        return response.data;
+    } catch (error) {
+        console.error('Get Posts Error:', error);
+        throw error;
+    }
+};
+
+export const postProfile = async (request: User): Promise<any> => {
+    try {
+        const response = await api.post('/profiles/update', request);
         return response.data;
     } catch (error) {
         console.error('Create Post Error:', error);
