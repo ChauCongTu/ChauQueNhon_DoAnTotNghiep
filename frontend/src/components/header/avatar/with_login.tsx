@@ -56,7 +56,7 @@ const UserWithLogin = () => {
         </div>
         <Menu mode="vertical">
           <Menu.Item key="personal-info" icon={<UserOutlined />}>
-            <Link href="/personal-info">Thông tin cá nhân</Link>
+            <Link href={`/personal/${user?.username}`} onClick={onClose}>Thông tin cá nhân</Link>
           </Menu.Item>
           <Menu.Item key="account" icon={<SettingOutlined />}>
             <Link href="/account">Quản lý tài khoản</Link>

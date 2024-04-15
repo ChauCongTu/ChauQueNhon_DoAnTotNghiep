@@ -4,6 +4,7 @@ import { AuthProvider } from "@/providers/authProvider";
 import { Toaster } from "react-hot-toast";
 import Header from "@/components/header/header";
 import Footer from "@/components/footer/footer";
+import Providers from "@/providers/progressProvider";
 
 export const metadata: Metadata = {
   title: "Go Uni - Luyện thi hiệu quả",
@@ -19,7 +20,7 @@ export default function RootLayout({
     <AuthProvider>
       <html lang="vi">
         <body>
-          {children}
+          <Providers>{children}</Providers>
         </body>
       </html>
     </AuthProvider >

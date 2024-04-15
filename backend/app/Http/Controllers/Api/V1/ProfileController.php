@@ -18,7 +18,9 @@ class ProfileController extends Controller
     public function update(UpdateProfileRequest $request)
     {
         $user_id = Auth::id();
-        User::where('id', $user_id)->update($request->validated());
+        $profile = $request->validated();
+        $profile['test_class'] = implode(',', $profile['test_class']);
+        User::where('id', $user_id)->update($profile);
         $user = User::find(1);
         return Common::response(200, "Thành công", $user);
     }
@@ -79,6 +81,7 @@ class ProfileController extends Controller
     public function index(string $username = null)
     {
         $user = User::where('username', $username)->first();
+        $user['test_class'] = explode(',', $user['test_class']);
         if ($user) {
             return Common::response(200, 'Lấy thông tin người dùng thành công.', $user);
         }
