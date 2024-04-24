@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import React, { useEffect, useState } from 'react';
 import './index.scss';
+import AvatarComponent from './avatar_component';
 
 const UserWithLogin = () => {
   const { user, logout } = useAuth();
@@ -38,20 +39,22 @@ const UserWithLogin = () => {
     <div className="flex justify-end">
       <button className='cursor-pointer' onClick={showDrawer}>
         <span className="flex items-center justify-end gap-10xs md:gap-10md text-14xs md:text-14md">
-          <Avatar src={user?.avatar} size={'default'} className='border border-black' />
-          <div className='hidden md:block text-[15px] font-semibold'>{user?.name}</div>
+          <AvatarComponent src={user?.avatar} />
+          <div className='hidden md:block text-15xs md:text-15md font-semibold'>{user?.name}</div>
         </span>
       </button>
       <Drawer
         title={<>
-          <div><Link href="/" className='flex items-center'><Image src='/logo.png' width={'40px'} preview={false} /> <h1 className='text-primary font-semibold'>GoUni</h1> </Link></div>
+          <div><Link href="/" className='flex items-center'>
+            <div className='w-40xs md:w-40md'><Image src='/logo.png' width={'100%'} preview={false} /></div>
+            <h1 className='text-primary font-semibold'>GoUni</h1> </Link></div>
         </>}
         placement="right"
         onClose={onClose}
         open={open}
       >
         <div className='border-b'>
-          <div className='flex justify-center'><Image src={user?.avatar} width={'60%'} /></div>
+          <div className='flex justify-center'> <AvatarComponent src={user?.avatar} size={120} preview={true} /></div>
           <div className='flex justify-center mt-3 mb-3 font-semibold text-lg'>{user?.name}</div>
         </div>
         <Menu mode="vertical">

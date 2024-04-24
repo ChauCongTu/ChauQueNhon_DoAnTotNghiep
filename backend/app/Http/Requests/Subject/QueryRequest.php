@@ -29,7 +29,8 @@ class QueryRequest extends FormRequest
             'page' => 'nullable|numeric',
             'perPage' => 'nullable|numeric',
             'sort' => 'nullable',
-            'order' => 'nullable|in:ASC,DESC'
+            'order' => 'nullable|in:ASC,DESC',
+            'grade' => 'nullable|in:10,11,12,0'
         ];
     }
 
@@ -39,7 +40,8 @@ class QueryRequest extends FormRequest
             'page' => 'Trang',
             'perPage' => 'Số mục trên mỗi trang',
             'sort' => 'Sắp xếp',
-            'order' => 'Thứ tự sắp xếp'
+            'order' => 'Thứ tự sắp xếp',
+            'grade' => 'Khối lớp'
         ];
     }
 

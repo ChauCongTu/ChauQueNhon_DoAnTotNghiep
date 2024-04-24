@@ -8,6 +8,7 @@ import { useAuth } from '@/providers/authProvider';
 import { LoginRequest, RegisterRequest } from '@/modules/users/type';
 import { getGoogleUrl, postForgot, postLogin, postRegister } from '@/modules/users/services';
 import toast from 'react-hot-toast/headless';
+import AvatarComponent from './avatar_component';
 
 type Props = {};
 
@@ -27,6 +28,7 @@ const UserWithoutLogin = (props: Props) => {
 
     useEffect(() => {
         getGoogleUrl().then((res) => setGoogle(res.url));
+        
     }, []);
 
     const showModal = () => {
@@ -150,53 +152,53 @@ const UserWithoutLogin = (props: Props) => {
             <Loading loading={loading} />
             <div className='cursor-pointer' onClick={showModal}>
                 <span className="flex items-center justify-end gap-10xs md:gap-10md text-14xs md:text-14md">
-                    <Avatar src="/avatar-30.png" size={'default'} />
+                    <AvatarComponent src='/avatar.png' />
                     <div className='hidden md:block text-15xs md:text-13md font-semibold'>Tài khoản</div>
                 </span>
             </div>
-            <Modal title="" open={isModalOpen} onCancel={handleCancel} footer={null}>
+            <Modal title="" open={isModalOpen} onCancel={handleCancel} footer={null} className='!w-auto md:!w-600md'>
                 <div>
                     <div className='flex justify-center'>
-                        <div className='w-[50%]'><Image src='/bg-auth.png' preview={false}/></div>
+                        <div className='w-236xs md:w-236md'><Image src='/bg-auth.png' preview={false}/></div>
                     </div>
                     <div>
-                        <div className='text-center font-bold text-lg'>XIN CHÀO!</div>
+                        <div className='text-center font-bold text-20xs md:text-20md'>XIN CHÀO!</div>
                         {
-                            form == 0 && <><div className='text-center font-semibold mb-10xs md:mb-10md'>Đăng nhập để tiếp tục</div></>
+                            form == 0 && <><div className='text-center font-semibold mb-10xs md:mb-10md text-18xs md:text-18md'>Đăng nhập để tiếp tục</div></>
                         }
                         {
-                            form == 1 && <><div className='text-center font-semibold mb-10xs md:mb-10md'>Đăng ký tài khoản</div></>
+                            form == 1 && <><div className='text-center font-semibold mb-10xs md:mb-10md text-18xs md:text-18md'>Đăng ký tài khoản</div></>
                         }
                         {
-                            form == 2 && <><div className='text-center font-semibold mb-10xs md:mb-10md'>Lấy lại mật khẩu của bạn</div></>
+                            form == 2 && <><div className='text-center font-semibold mb-10xs md:mb-10md text-18xs md:text-18md'>Lấy lại mật khẩu của bạn</div></>
                         }
 
                         <div>
                             <div className='mb-15xs md:mb-15md'>
-                                <label className='text-gray-700 text-[15px]'>Địa chỉ Email <span className='text-primary'>*</span> </label>
-                                <Input placeholder='Nhập địa chỉ email' name='email' value={email} onChange={handleEmailChange} prefix={<UserOutlined />} />
-                                <div className='text-[13px] text-primary'>{error?.email}</div>
+                                <label className='text-gray-700 text-16sx md:text-16md'>Địa chỉ Email <span className='text-primary'>*</span> </label>
+                                <Input className='!text-15xs md:!text-15md !w-full !h-42xs md:!h-42md' placeholder='Nhập địa chỉ email' name='email' value={email} onChange={handleEmailChange} prefix={<UserOutlined />} />
+                                <div className='text-14sx md:text-14md text-primary'>{error?.email}</div>
                             </div>
                             {
                                 (form == 0 || form == 1)
                                 && <div className='mb-15xs md:mb-15md'>
-                                    <label className='text-gray-700 text-[15px]'>Mật khẩu <span className='text-primary'>*</span> </label>
-                                    <Input.Password name='password' placeholder='Nhập mật khẩu' value={password} onChange={handlePasswordChange} prefix={<LockOutlined />} />
-                                    <div className='text-[13px] text-primary'>{error?.password}</div>
+                                    <label className='text-gray-700 text-16sx md:text-16md'>Mật khẩu <span className='text-primary'>*</span> </label>
+                                    <Input.Password className='!text-15xs md:!text-15md !w-full !h-42xs md:!h-42md' name='password' placeholder='Nhập mật khẩu' value={password} onChange={handlePasswordChange} prefix={<LockOutlined />} />
+                                    <div className='text-14sx md:text-14md text-primary'>{error?.password}</div>
                                 </div>
                             }
-                            <div className='text-[13px] text-green-600'>{message}</div>
+                            <div className='text-14sx md:text-14md text-green-600'>{message}</div>
                             {
                                 form == 1 && <>
                                     <div className='mb-15xs md:mb-15md'>
-                                        <label className='text-gray-700 text-[15px]'>Tên người dùng <span className='text-primary'>*</span> </label>
-                                        <Input placeholder='Nhập tên người dùng' name='username' value={username} onChange={handleUsernameChange} prefix={<UserOutlined />} />
-                                        <div className='text-[13px] text-primary'>{error?.username}</div>
+                                        <label className='text-gray-700 text-16sx md:text-16md'>Tên người dùng <span className='text-primary'>*</span> </label>
+                                        <Input className='!text-15xs md:!text-15md !w-full !h-42xs md:!h-42md' placeholder='Nhập tên người dùng' name='username' value={username} onChange={handleUsernameChange} prefix={<UserOutlined />} />
+                                        <div className='text-14sx md:text-14md text-primary'>{error?.username}</div>
                                     </div>
                                     <div>
-                                        <label className='text-gray-700 text-[15px]'>Họ tên: <span className='text-primary'>*</span> </label>
-                                        <Input name='name' placeholder='Nhập họ tên' value={name} onChange={handleNameChange} prefix={<UserOutlined />} />
-                                        <div className='text-[13px] text-primary'>{error?.name}</div>
+                                        <label className='text-gray-700 text-16sx md:text-16md'>Họ tên: <span className='text-primary'>*</span> </label>
+                                        <Input className='!text-15xs md:!text-15md !w-full !h-42xs md:!h-42md' name='name' placeholder='Nhập họ tên' value={name} onChange={handleNameChange} prefix={<UserOutlined />} />
+                                        <div className='text-14sx md:text-14md text-primary'>{error?.name}</div>
                                     </div>
                                 </>
                             }
@@ -205,17 +207,17 @@ const UserWithoutLogin = (props: Props) => {
                         <div className="flex justify-between mt-20xs md:mt-20md">
                             {
                                 form == 1 && <>
-                                    <button className='bg-primary hover:bg-slate-500 text-white w-full rounded py-5xs md:py-5md' onClick={handleRegister}>Tạo tài khoản</button>
+                                    <button className='bg-primary hover:bg-slate-500 text-white w-full rounded h-42xs md:h-42md text-16xs md:text-16md' onClick={handleRegister}>Tạo tài khoản</button>
                                 </>
                             }
                             {
                                 form == 0 && <>
-                                    <button className='bg-primary hover:bg-slate-500 text-white w-full rounded py-5xs md:py-5md' onClick={handleLogin}>Đăng nhập</button>
+                                    <button className='bg-primary hover:bg-slate-500 text-white w-full rounded h-42xs md:h-42md text-16xs md:text-16md' onClick={handleLogin}>Đăng nhập</button>
                                 </>
                             }
                             {
                                 form == 2 && <>
-                                    <button className='bg-primary hover:bg-slate-500 text-white w-full rounded py-5xs md:py-5md' onClick={handleForgot}>Lấy liên kết</button>
+                                    <button className='bg-primary hover:bg-slate-500 text-white w-full rounded h-42xs md:h-42md text-16xs md:text-16md' onClick={handleForgot}>Lấy liên kết</button>
                                 </>
                             }
                         </div>
