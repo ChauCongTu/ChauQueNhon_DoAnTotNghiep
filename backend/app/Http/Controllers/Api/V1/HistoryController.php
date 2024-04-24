@@ -22,6 +22,7 @@ class HistoryController extends Controller
             $histories = $query->paginate($perPage);
         }
         foreach ($histories as $value) {
+            $value['model'] = $value['model']::where('id', $value['foreign_id'])->first();
             $value['result'] = json_decode($value['result']);
         }
         return Common::response(200, "Lấy danh sách lịch sử thành công.", $histories);
