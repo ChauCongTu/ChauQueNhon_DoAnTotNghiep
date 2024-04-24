@@ -9,10 +9,12 @@ const Header = () => {
     return (
         <>
             {/* PC Header */}
-            <header className='hidden md:block bg-white py-10xs md:py-10md shadow-lg'>
+            <header className='hidden md:block bg-white py-10xs md:py-10md shadow-lg text-16xs md:text-16md'>
                 <div className='mx-auto px-10xs md:px-40md'>
                     <div className='flex items-center justify-between'>
-                        <div><Link href="/" className='flex items-center'><Image src='/logo.png' width={'40px'} preview={false} /> <h1 className='text-primary font-semibold'>GoUni</h1> </Link></div>
+                        <div><Link href="/" className='flex items-center'>
+                            <div className='w-40xs md:w-40md'><Image src='/logo.png' width={'100%'} preview={false} /></div>
+                            <h1 className='text-primary font-semibold'>GoUni</h1> </Link></div>
                         <div className='ml-20md'>
                             <form action="#" method="get" className='relative'>
                                 <input type="search" className='w-228md border rounded-full px-15md py-5md' placeholder='Bạn cần tìm gì ...' />
@@ -21,11 +23,11 @@ const Header = () => {
                         </div>
                         <nav className='flex-1 ml-20md max-w-740md'>
                             <ul className='flex justify-between text-slate-700 font-semibold'>
-                                <li><Link href={'/'} className='flex items-center gap-8md hover:text-primary'><HomeOutlined className='text-lg' />Trang chủ</Link></li>
-                                <li><Link href={'/'} className='flex items-center gap-8md hover:text-primary'><WechatWorkOutlined className='text-lg' />Hỏi đáp</Link></li>
-                                <li><Link href={'/'} className='flex items-center gap-8md hover:text-primary'><FileOutlined className='text-lg' />Thi online</Link></li>
-                                <li><Link href={'/'} className='flex items-center gap-8md hover:text-primary'><InsertRowBelowOutlined className='text-lg' />Đấu trường</Link></li>
-                                <li><Link href={'/'} className='flex items-center gap-8md hover:text-primary'><BarChartOutlined className='text-lg' />Thống kê</Link></li>
+                                <li><Link href={'/'} className='flex items-center gap-8md hover:text-primary'><HomeOutlined className='text-18xs md:text-18md' />Trang chủ</Link></li>
+                                <li><Link href={'/'} className='flex items-center gap-8md hover:text-primary'><WechatWorkOutlined className='text-18xs md:text-18md' />Hỏi đáp</Link></li>
+                                <li><Link href={'/'} className='flex items-center gap-8md hover:text-primary'><FileOutlined className='text-18xs md:text-18md' />Thi online</Link></li>
+                                <li><Link href={'/'} className='flex items-center gap-8md hover:text-primary'><InsertRowBelowOutlined className='text-18xs md:text-18md' />Đấu trường</Link></li>
+                                <li><Link href={'/'} className='flex items-center gap-8md hover:text-primary'><BarChartOutlined className='text-18xs md:text-18md' />Thống kê</Link></li>
                             </ul>
                         </nav>
                         <div className='ml-20md w-180md'>
