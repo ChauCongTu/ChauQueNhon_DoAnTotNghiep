@@ -28,7 +28,7 @@ const GoogleCallback = () => {
         }
     }
     return (
-        <>GoogleCallback</>
+        <div className='mt-30xs md:mt-30md text-center'>Đang xử lý đồng bộ tài khoản google, vui lòng đợi vài giây ...</div>
     )
 }
 

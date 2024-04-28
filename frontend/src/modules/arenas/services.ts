@@ -1,9 +1,9 @@
 import api from '@/utils/axios';
 import { AxiosRequestConfig } from 'axios';
 
-export const getExams = async (params: AxiosRequestConfig['params']): Promise<any> => {
+export const getArenas = async (params: AxiosRequestConfig['params']): Promise<any> => {
     try {
-        const response = await api.get('/exams', { params });
+        const response = await api.get('/arenas', { params });
         return response.data;
     } catch (error) {
         console.error('Call API Error:', error);

@@ -7,7 +7,7 @@ export const postLogin = async (request: LoginRequest): Promise<any> => {
         const response = await api.post('/sign-in', request);
         return response.data;
     } catch (error) {
-        console.error('Create Post Error:', error);
+        console.error('Call API Error:', error);
         throw error;
     }
 };
@@ -17,7 +17,7 @@ export const postRegister = async (request: RegisterRequest): Promise<any> => {
         const response = await api.post('/sign-up', request);
         return response.data;
     } catch (error) {
-        console.error('Create Post Error:', error);
+        console.error('Call API Error:', error);
         throw error;
     }
 };
@@ -47,7 +47,7 @@ export const postForgot = async (request: { email: string }): Promise<any> => {
         const response = await api.post('/forgot', request);
         return response.data;
     } catch (error) {
-        console.error('Create Post Error:', error);
+        console.error('Call API Error:', error);
         throw error;
     }
 };
@@ -57,7 +57,7 @@ export const postReset = async (request: { token: string, email: string, passwor
         const response = await api.post('/reset', request);
         return response.data;
     } catch (error) {
-        console.error('Create Post Error:', error);
+        console.error('Call API Error:', error);
         throw error;
     }
 };
@@ -77,7 +77,31 @@ export const postProfile = async (request: User): Promise<any> => {
         const response = await api.post('/profiles/update', request);
         return response.data;
     } catch (error) {
-        console.error('Create Post Error:', error);
+        console.error('Call API Error:', error);
         throw error;
     }
 };
+
+export const getMyProfile = async () => {
+    try {
+        const response = await api.get(`/my-profile`);
+        return response.data;
+    } catch (error) {
+        console.error('Call API Error:', error);
+        throw error;
+    }
+};
+
+export const postAvatar = async (form: FormData) => {
+    try {
+        const response = await api.post('/profiles/avatar', form, {
+            headers: {
+                'Content-Type': 'multipart/form-data'
+            }
+        });
+        return response.data;
+    } catch (error) {
+        console.error('Call API Error:', error);
+        throw error;
+    }
+}

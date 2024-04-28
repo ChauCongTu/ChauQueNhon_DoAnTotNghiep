@@ -152,8 +152,8 @@ const UserWithoutLogin = (props: Props) => {
             <Loading loading={loading} />
             <div className='cursor-pointer' onClick={showModal}>
                 <span className="flex items-center justify-end gap-10xs md:gap-10md text-14xs md:text-14md">
-                    <AvatarComponent src='/avatar.png' />
-                    <div className='hidden md:block text-15xs md:text-13md font-semibold'>Tài khoản</div>
+                    <Avatar src='/avatar.png' />
+                    <div className='hidden md:block text-16xs md:text-16md font-semibold'>Tài khoản</div>
                 </span>
             </div>
             <Modal title="" open={isModalOpen} onCancel={handleCancel} footer={null} className='!w-auto md:!w-600md'>

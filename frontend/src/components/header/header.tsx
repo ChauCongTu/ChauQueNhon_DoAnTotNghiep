@@ -9,7 +9,7 @@ const Header = () => {
     return (
         <>
             {/* PC Header */}
-            <header className='hidden md:block bg-white py-10xs md:py-10md shadow-lg text-16xs md:text-16md'>
+            <header className='hidden md:block bg-white py-10xs md:py-10md shadow-lg text-16xs md:text-16md sticky top-0 z-50'>
                 <div className='mx-auto px-10xs md:px-40md'>
                     <div className='flex items-center justify-between'>
                         <div><Link href="/" className='flex items-center'>
@@ -37,7 +37,7 @@ const Header = () => {
                 </div>
             </header>
             {/* SP Header */}
-            <header className='block md:hidden shadow-lg py-10xs'>
+            <header className='block bg-white md:hidden shadow-lg py-10xs sticky top-0 z-50'>
                 <div className='mx-auto px-10xs md:px-40md'>
                     <div className='flex items-center justify-between'>
                         <div><Link href="/" className='flex items-center'><Image src='/logo.png' width={'40px'} preview={false} /> <h1 className='text-primary font-semibold'>GoUni</h1> </Link></div>

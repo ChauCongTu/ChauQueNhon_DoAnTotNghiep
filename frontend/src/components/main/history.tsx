@@ -22,7 +22,7 @@ const HistorySidebar = (props: Props) => {
     return (
         <div className='border-t-4 border-primary'>
             <Loading loading={loading} />
-            <h3 className='leading-27xs md:leading-27md pt-5xs md:pt-5md font-bold text-20xs md:text-20md'>Lịch sử của tôi</h3>
+            <h3 className='leading-27xs md:leading-27md pt-20xs md:pt-20md font-bold text-20xs md:text-20md'><Link href="/history">Lịch sử của tôi</Link></h3>
             <div className='mt-30xs md:mt-30md'>
                 {
                     histories.map((value) => (

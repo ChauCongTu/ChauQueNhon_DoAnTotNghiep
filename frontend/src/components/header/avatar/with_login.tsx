@@ -39,7 +39,7 @@ const UserWithLogin = () => {
     <div className="flex justify-end">
       <button className='cursor-pointer' onClick={showDrawer}>
         <span className="flex items-center justify-end gap-10xs md:gap-10md text-14xs md:text-14md">
-          <AvatarComponent src={user?.avatar} />
+          <Avatar src={user?.avatar} />
           <div className='hidden md:block text-15xs md:text-15md font-semibold'>{user?.name}</div>
         </span>
       </button>
@@ -54,7 +54,7 @@ const UserWithLogin = () => {
         open={open}
       >
         <div className='border-b'>
-          <div className='flex justify-center'> <AvatarComponent src={user?.avatar} size={120} preview={true} /></div>
+          <div className='flex justify-center'> <Image src={user?.avatar} className='!w-120xs md:!w-120md !rounded-full ring-1 ' preview={true} /></div>
           <div className='flex justify-center mt-3 mb-3 font-semibold text-lg'>{user?.name}</div>
         </div>
         <Menu mode="vertical">
