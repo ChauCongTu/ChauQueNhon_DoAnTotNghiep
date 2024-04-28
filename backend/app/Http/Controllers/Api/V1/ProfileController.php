@@ -31,7 +31,7 @@ class ProfileController extends Controller
         $user = User::find($id);
 
         $avatar = $request->file('avatar');
-        $avatarName = $id . '.' . $avatar->getClientOriginalExtension();
+        $avatarName = $id . '.jpg';
         $avatarPath = 'public/avatar/' . $avatarName;
 
         $existingAvatarPath = $user->avatar;

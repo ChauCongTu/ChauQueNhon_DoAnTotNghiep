@@ -9,6 +9,7 @@ use App\Http\Requests\Arena\StoreArenaRequest;
 use App\Http\Requests\Arena\UpdateArenaRequest;
 use App\Http\Requests\Practice\GetResultRequest;
 use App\Models\Arena;
+use App\Models\User;
 use Carbon\Carbon;
 use GuzzleHttp\Psr7\Response;
 use Illuminate\Http\Request;
@@ -21,7 +22,7 @@ class ArenaController extends Controller
     public function index(QueryRequest $request)
     {
         $with = $request->input('with', []);
-        $filterBy = $request->input('filter', null);
+        $filterBy = $request->input('filterBy', null);
         $value = $request->input('value', null);
         $condition = $request->input('condition', null);
         $page = $request->input('page', 1);
@@ -41,7 +42,9 @@ class ArenaController extends Controller
         $query->orderBy($sort, $order);
         $arenas = $perPage == 0 ? $query->get() : $query->paginate($perPage, ['*'], 'page', $page);
         foreach ($arenas as $value) {
-            $value['is_joined'] = $this->is_joined($value->id, Auth::id());
+            $value['author'] = User::find($value['author']);
+            $value['users'] = count(explode(',', $value['users']));
+            $value['is_joined'] = $this->is_joined($value->id, (int) Auth::id());
         }
         return Common::response(200, 'Lấy danh sách phòng thi thành công', $arenas);
     }

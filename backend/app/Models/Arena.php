@@ -10,6 +10,7 @@ class Arena extends Model
     use HasFactory;
     protected $fillable = [
         'name',
+        'grade',
         'author',
         'users',
         'max_users',

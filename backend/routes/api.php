@@ -34,15 +34,16 @@ Route::get('/demo', function () {
     return User::first()->getAllPermissions();
 })->middleware('auth:api');
 
-Route::get('/profile', function () {
-    return Common::response(
-        200,
-        'Lấy thông tin người dùng thành công.',
-        Auth::user()
-    );
-})->middleware(['auth:api', 'can:create subject']);
 
 Route::prefix('/v1')->group(function () {
+
+    Route::get('/my-profile', function () {
+        return Common::response(
+            200,
+            'Lấy thông tin người dùng thành công.',
+            Auth::user()
+        );
+    })->middleware('auth:api');
     // Auth Routing
     Route::post('/sign-up', [AuthController::class, 'signUp'])->name('sign_up');
     Route::post('/sign-in', [AuthController::class, 'signIn'])->name('sign_in');
@@ -61,63 +62,63 @@ Route::prefix('/v1')->group(function () {
 
     // Subject Routing
     Route::prefix('/subjects')->name('subjects.')->group(function () {
-        Route::get('/', [SubjectController::class, 'index'])->middleware(['auth:api'])->name('index');
+        Route::get('/', [SubjectController::class, 'index'])->name('index');
         Route::post('/', [SubjectController::class, 'store'])->middleware(['auth:api'])->name('store');
         Route::put('/{id}', [SubjectController::class, 'update'])->middleware(['auth:api'])->name('update');
         Route::delete('/{id}', [SubjectController::class, 'destroy'])->middleware(['auth:api'])->name('destroy');
-        Route::get('/{id}', [SubjectController::class, 'detail'])->middleware(['auth:api'])->name('detail');
+        Route::get('/{id}', [SubjectController::class, 'detail'])->name('detail');
     });
 
     // Chapter Routing
     Route::prefix('/chapters')->name('chapters.')->group(function () {
-        Route::get('/', [ChapterController::class, 'index'])->middleware(['auth:api'])->name('index');
+        Route::get('/', [ChapterController::class, 'index'])->name('index');
         Route::post('/', [ChapterController::class, 'store'])->middleware(['auth:api'])->name('store');
         Route::put('/{id}', [ChapterController::class, 'update'])->middleware(['auth:api'])->name('update');
         Route::delete('/{id}', [ChapterController::class, 'destroy'])->middleware(['auth:api'])->name('destroy');
-        Route::get('/{slug}', [ChapterController::class, 'detail'])->middleware(['auth:api'])->name('detail');
+        Route::get('/{slug}', [ChapterController::class, 'detail'])->name('detail');
     });
 
     // Lesson Routing
     Route::prefix('/lessons')->name('lessons.')->group(function () {
-        Route::get('/', [LessonController::class, 'index'])->middleware(['auth:api'])->name('index');
+        Route::get('/', [LessonController::class, 'index'])->name('index');
         Route::post('/', [LessonController::class, 'store'])->middleware(['auth:api'])->name('store');
         Route::post('/{id}/like', [LessonController::class, 'handleLike'])->middleware(['auth:api'])->name('handle_like');
         Route::put('/{id}', [LessonController::class, 'update'])->middleware(['auth:api'])->name('update');
         Route::delete('/{id}', [LessonController::class, 'destroy'])->middleware(['auth:api'])->name('destroy');
-        Route::get('/{slug}', [LessonController::class, 'detail'])->middleware(['auth:api'])->name('detail');
+        Route::get('/{slug}', [LessonController::class, 'detail'])->name('detail');
     });
 
     Route::prefix('/questions')->name('questions.')->group(function () {
-        Route::get('/', [QuestionController::class, 'index'])->middleware(['auth:api'])->name('index');
+        Route::get('/', [QuestionController::class, 'index'])->name('index');
         Route::post('/filter', [QuestionController::class, 'getQuestions'])->middleware(['auth:api'])->name('filter');
         Route::post('/', [QuestionController::class, 'store'])->middleware(['auth:api'])->name('store');
         Route::put('/{id}', [QuestionController::class, 'update'])->middleware(['auth:api'])->name('update');
         Route::delete('/{id}', [QuestionController::class, 'destroy'])->middleware(['auth:api'])->name('destroy');
-        Route::get('/{slug}', [QuestionController::class, 'detail'])->middleware(['auth:api'])->name('detail');
+        Route::get('/{slug}', [QuestionController::class, 'detail'])->name('detail');
     });
     Route::prefix('practices')->name('practices.')->group(function () {
-        Route::get('/', [PracticeController::class, 'index'])->name('index')->middleware(['auth:api']);
+        Route::get('/', [PracticeController::class, 'index'])->name('index');
         Route::post('/', [PracticeController::class, 'store'])->name('store')->middleware(['auth:api']);
         Route::post('/{id}', [PracticeController::class, 'result'])->name('result')->middleware(['auth:api']);
         Route::put('/{id}', [PracticeController::class, 'update'])->name('update')->middleware(['auth:api']);
         Route::delete('/{id}', [PracticeController::class, 'destroy'])->name('destroy')->middleware(['auth:api']);
-        Route::get('/{slug}', [PracticeController::class, 'detail'])->name('detail')->middleware(['auth:api']);
+        Route::get('/{slug}', [PracticeController::class, 'detail'])->name('detail');
     });
     Route::prefix('exams')->name('exams.')->group(function () {
-        Route::get('/', [ExamController::class, 'index'])->name('index')->middleware(['auth:api']);
+        Route::get('/', [ExamController::class, 'index'])->name('index');
         Route::post('/', [ExamController::class, 'store'])->name('store')->middleware(['auth:api']);
         Route::post('/{id}', [ExamController::class, 'result'])->name('result')->middleware(['auth:api']);
         Route::put('/{id}', [ExamController::class, 'update'])->name('update')->middleware(['auth:api']);
         Route::delete('/{id}', [ExamController::class, 'destroy'])->name('destroy')->middleware(['auth:api']);
-        Route::get('/{slug}', [ExamController::class, 'detail'])->name('detail')->middleware(['auth:api']);
+        Route::get('/{slug}', [ExamController::class, 'detail'])->name('detail');
     });
 
     Route::prefix('arenas')->name('arenas.')->group(function () {
-        Route::get('/', [ArenaController::class, 'index'])->name('index')->middleware(['auth:api']);
+        Route::get('/', [ArenaController::class, 'index'])->name('index');
         Route::post('/', [ArenaController::class, 'store'])->name('store')->middleware(['auth:api']);
         Route::put('/{id}', [ArenaController::class, 'update'])->name('update')->middleware(['auth:api']);
         Route::delete('/{id}', [ArenaController::class, 'destroy'])->name('destroy')->middleware(['auth:api']);
-        Route::get('/{id}', [ArenaController::class, 'detail'])->name('detail')->middleware(['auth:api']);
+        Route::get('/{id}', [ArenaController::class, 'detail'])->name('detail');
         Route::post('/{id}', [ArenaController::class, 'result'])->name('result')->middleware(['auth:api']);
         Route::post('/{id}/join', [ArenaController::class, 'join'])->name('join')->middleware(['auth:api']);
         Route::post('/{id}/leave', [ArenaController::class, 'leave'])->name('leave')->middleware(['auth:api']);
@@ -143,19 +144,19 @@ Route::prefix('/v1')->group(function () {
     });
 
     Route::prefix('topics')->name('topics.')->group(function () {
-        Route::get('/', [TopicController::class, 'index'])->middleware('auth:api')->name('index');
+        Route::get('/', [TopicController::class, 'index'])->name('index');
         Route::post('/', [TopicController::class, 'store'])->middleware('auth:api')->name('store');
         Route::put('/{id}', [TopicController::class, 'update'])->middleware('auth:api')->name('update');
         Route::delete('/{id}', [TopicController::class, 'destroy'])->middleware('auth:api')->name('destroy');
-        Route::get('/{slug}', [TopicController::class, 'detail'])->middleware('auth:api')->name('detail');
+        Route::get('/{slug}', [TopicController::class, 'detail'])->name('detail');
     });
 
     Route::prefix('topics/{topic_id}/comments')->name('topics.comments.')->group(function () {
-        Route::get('/', [TopicController::class, 'comment'])->middleware('auth:api')->name('index');
+        Route::get('/', [TopicController::class, 'comment'])->name('index');
         Route::post('/', [TopicController::class, 'postComment'])->middleware('auth:api')->name('store');
         Route::put('/{id}', [TopicController::class, 'updateComment'])->middleware('auth:api')->name('update');
         Route::delete('/{id}', [TopicController::class, 'destroyComment'])->middleware('auth:api')->name('destroy');
-        Route::post('/{id}/like', [TopicController::class, 'likeComment'])->middleware('auth:api')->name('like');
+        Route::post('/{id}/like', [TopicController::class, 'likeComment'])->name('like');
     });
 
     Route::post('upload', [FileController::class, 'upload'])->name('upload')->middleware('auth:api');

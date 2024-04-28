@@ -11,6 +11,7 @@ use App\Http\Requests\Topic\CommentRequest;
 use App\Http\Requests\Topic\UpdateCommentRequest;
 use App\Models\Topic;
 use App\Models\TopicComment;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
@@ -20,7 +21,7 @@ class TopicController extends Controller
     public function index(QueryRequest $request)
     {
         $with = $request->input('with', []);
-        $filterBy = $request->input('filter', null);
+        $filterBy = $request->input('filterBy', null);
         $value = $request->input('value', null);
         $condition = $request->input('condition', null);
         $page = $request->input('page', 1);
@@ -42,6 +43,9 @@ class TopicController extends Controller
             $topics = $query->get();
         } else {
             $topics = $query->paginate($perPage, ['*'], 'page', $page);
+        }
+        foreach ($topics as $topic) {
+            $topic['author']  = User::find($topic['author']);
         }
 
         return Common::response(200, 'Lấy danh sách chủ đề thành công', $topics);
