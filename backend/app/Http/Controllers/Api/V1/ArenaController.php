@@ -93,7 +93,7 @@ class ArenaController extends Controller
     {
         $arena = Arena::find($id);
         if ($arena) {
-            $arena['is_joined'] = $this->is_joined($id, Auth::id());
+            $arena['is_joined'] = $this->is_joined($id,(int)  Auth::id());
             $arena['joined'] = $arena->joined();
             $arena['question_list'] = $arena->questions();
             return Common::response(200, "Lấy thông tin phòng thi thành công.", $arena);

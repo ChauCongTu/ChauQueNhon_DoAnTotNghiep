@@ -22,10 +22,32 @@ class HistoryController extends Controller
             $histories = $query->paginate($perPage);
         }
         foreach ($histories as $value) {
+            if ($value['model'] == 'App\Models\Exam') {
+                $value['type'] = 'Exam';
+            } else if ($value['model'] == 'App\Models\Arena') {
+                $value['type'] = 'Arena';
+            } else if ($value['model'] == 'App\Models\Practice') {
+                $value['type'] = 'Practice';
+            }
             $value['model'] = $value['model']::where('id', $value['foreign_id'])->first();
             $value['result'] = json_decode($value['result']);
         }
         return Common::response(200, "Lấy danh sách lịch sử thành công.", $histories);
+    }
+
+    public function element(int $id)
+    {
+        $history = History::find($id);
+        if ($history->model == 'App\Models\Exam') {
+            $history->type = 'Exam';
+        } else if ($history->model == 'App\Models\Arena') {
+            $history->type = 'Arena';
+        } else if ($history->model == 'App\Models\Practice') {
+            $history->type = 'Practice';
+        }
+        $history->model = $history->model::where('id', $history->foreign_id)->first();
+        $history->result = json_decode($history->result);
+        return Common::response(200, "Lấy lịch sử thành công.", $history);
     }
 
     public function detail(Request $request)

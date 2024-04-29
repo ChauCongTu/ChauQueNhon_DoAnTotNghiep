@@ -136,6 +136,7 @@ Route::prefix('/v1')->group(function () {
     });
     Route::prefix('histories')->name('histories.')->middleware('auth:api')->group(function () {
         Route::get('/', [HistoryController::class, 'index'])->name('index');
+        Route::get('/{id}', [HistoryController::class, 'element'])->name('element');
         Route::get('/detail', [HistoryController::class, 'detail'])->name('detail');
     });
 
