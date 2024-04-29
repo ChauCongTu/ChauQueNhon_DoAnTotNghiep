@@ -9,6 +9,8 @@ use App\Http\Requests\Exam\StoreExamRequest;
 use App\Http\Requests\Exam\UpdateExamRequest;
 use App\Http\Requests\Practice\GetResultRequest;
 use App\Models\Exam;
+use App\Models\History;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
@@ -94,12 +96,25 @@ class ExamController extends Controller
     {
         $exam = Exam::where('slug', $slug)->first();
         if ($exam) {
-            $exam['question_list'] =  $exam->questions();
+            $exam->question_list =  $exam->questions(); // Assuming `questions()` is a relationship method
+            $histories = History::where('model', 'App\Models\Exam')->where('foreign_id', $exam->id)->get();
+            foreach ($histories as $history) {
+                $history->result = json_decode($history->result);
+                $history->user = User::find($history->user_id);
+            }
+
+            $sortedHistories = $histories->sortByDesc(function ($history) {
+                return $history->result->total_score;
+            })->values()->all();
+
+            $exam->histories = $sortedHistories;
+
             return Common::response(200, "Lấy thông tin đề thi thành công.", $exam);
         }
 
         return Common::response(404, "Không tìm thấy đề thi này.");
     }
+
 
     public function result(int $id, GetResultRequest $request)
     {
@@ -138,7 +153,7 @@ class ExamController extends Controller
         $result['late'] = ceil($time - $exam->time);
 
         if ($result['late'] > 0) {
-            Common::saveHistory($user_id, 'Exam', $id, $result, "Nộp trễ " . $result['late'] .' phút.');
+            Common::saveHistory($user_id, 'Exam', $id, $result, "Nộp trễ " . $result['late'] . ' phút.');
             return Common::response(200, 'Bạn đã nộp muộn ' . ($result['late']) . ' phút.', $result);
         }
         Common::saveHistory($user_id, 'Exam', $id, $result);

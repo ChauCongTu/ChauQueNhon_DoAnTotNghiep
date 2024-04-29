@@ -1,10 +1,13 @@
+import { User } from "../users/type"
+
 export interface HistoryType {
     id: number | null,
     user_id: number,
+    user: User,
     model: []|any,
     foreign_id: number,
     result: {
-        time: string,
+        time: number,
         assignment: {
             [key: string]: {
                 question: string,
