@@ -10,3 +10,13 @@ export const getArenas = async (params: AxiosRequestConfig['params']): Promise<a
         throw error;
     }
 };
+
+export const getArena = async (id: number): Promise<any> => {
+    try {
+        const response = await api.get('/arenas/' + id);
+        return response.data;
+    } catch (error) {
+        console.error('Call API Error:', error);
+        throw error;
+    }
+};

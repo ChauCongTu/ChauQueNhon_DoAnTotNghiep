@@ -1,9 +1,9 @@
 import api from '@/utils/axios';
 import { AxiosRequestConfig } from 'axios';
 
-export const getHistories = async (params: AxiosRequestConfig['params']): Promise<any> => {
+export const getPractices = async (params: AxiosRequestConfig['params']): Promise<any> => {
     try {
-        const response = await api.get('/histories', { params });
+        const response = await api.get('/practices', { params });
         return response.data;
     } catch (error) {
         console.error('Call API Error:', error);
@@ -11,9 +11,9 @@ export const getHistories = async (params: AxiosRequestConfig['params']): Promis
     }
 };
 
-export const getHistory = async (id: number): Promise<any> => {
+export const getPractice = async (slug: string): Promise<any> => {
     try {
-        const response = await api.get(`/histories/${id}`);
+        const response = await api.get(`/practices/${slug}`);
         return response.data;
     } catch (error) {
         console.error('Call API Error:', error);

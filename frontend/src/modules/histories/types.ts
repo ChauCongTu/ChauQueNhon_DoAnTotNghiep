@@ -20,6 +20,7 @@ export interface HistoryType {
         total_score: number,
         late: number
     },
+    type: string,
     note: string,
     created_at: string | null,
     updated_at: string | null
