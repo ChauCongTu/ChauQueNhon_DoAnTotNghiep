@@ -11,6 +11,7 @@ class Arena extends Model
     protected $fillable = [
         'name',
         'grade',
+        'subject_id',
         'author',
         'users',
         'max_users',
@@ -34,6 +35,6 @@ class Arena extends Model
     }
     public function joined(){
         $userIds = explode(',', $this->users);
-        return User::select('id', 'name', 'username')->whereIn('id', $userIds)->get();
+        return User::select('id', 'name', 'username', 'avatar')->whereIn('id', $userIds)->get();
     }
 }

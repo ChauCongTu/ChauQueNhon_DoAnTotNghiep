@@ -5,3 +5,26 @@
 a {
     @apply text-gray-800 hover:text-primary;
 }
+
+/* 
+nextjs-portal {
+    display: none;
+} */
+
+::-webkit-scrollbar {
+    /* Customize the scrollbar width */
+    width: 1px;
+    color: red;
+}
+
+::-webkit-scrollbar-track {
+    /* Customize the scrollbar track */
+    width: 1px;
+    color: red;
+}
+
+::-webkit-scrollbar-thumb {
+    /* Customize the scrollbar thumb */
+    width: 1px;
+    color: red;
+}

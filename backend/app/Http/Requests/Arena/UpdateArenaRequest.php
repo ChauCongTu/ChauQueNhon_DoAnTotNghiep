@@ -25,10 +25,12 @@ class UpdateArenaRequest extends FormRequest
             'name' => 'required|min:3|max:255',
             'max_users' => 'required|numeric',
             'time' => 'required|numeric',
+            'grade' => 'nullable',
             'questions' => 'required|array',
             'question_count' => 'required|numeric',
             'start_at' => 'required|date_format:Y-m-d H:i:s',
             'type' => 'required',
+            'subject_id' => 'nullable',
             'password' => 'nullable|min:6',
         ];
     }
@@ -38,6 +40,8 @@ class UpdateArenaRequest extends FormRequest
             'name' => 'Tên sân chơi',
             'max_users' => 'Số người chơi tối đa',
             'time' => 'Thời gian',
+            'grade' => 'Khối lớp',
+            'subject_id' => 'Môn học',
             'questions' => 'Câu hỏi',
             'question_count' => 'Số lượng câu hỏi',
             'start_at' => 'Thời gian bắt đầu',

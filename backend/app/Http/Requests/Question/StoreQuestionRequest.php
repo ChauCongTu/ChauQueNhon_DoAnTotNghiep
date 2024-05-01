@@ -32,7 +32,8 @@ class StoreQuestionRequest extends FormRequest
             'answer_correct' => 'required|in:1,2,3,4',
             'answer_detail' => 'nullable',
             'subject_id' => 'required',
-            'chapter_id' => 'required',
+            'grade' => 'nullable',
+            'chapter_id' => 'nullable',
             'level' => 'required|in:1,2,3,4,5'
         ];
     }

@@ -17,6 +17,7 @@ class Question extends Model
         'answer_correct',
         'answer_detail',
         'subject_id',
+        'grade',
         'chapter_id',
         'level',
     ];

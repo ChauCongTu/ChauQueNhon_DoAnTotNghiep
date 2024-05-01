@@ -3,12 +3,11 @@ import { useAuth } from '@/providers/authProvider'
 import React, { use, useEffect, useState } from 'react'
 import { DateTime } from 'luxon';
 import { Button } from 'antd';
-import { now } from 'moment';
-import Link from 'next/link';
-import { time } from 'console';
 import { postExamSubmit } from '@/modules/exams/services';
 import ExamResult from './result';
 import toast from 'react-hot-toast';
+import { ClockCircleOutlined, QuestionCircleOutlined } from '@ant-design/icons';
+
 
 type Props = {
     exam: ExamType
@@ -20,6 +19,7 @@ const ExamDetail: React.FC<Props> = ({ exam }) => {
     const [timeToEnd, setTimeToEnd] = useState(0);
     const [formattedTime, setFormattedTime] = useState<string>('');
     const [isStart, setIsStart] = useState(false);
+    const [questionDone, setQuestionDone] = useState(0);
     const [result, setResult] = useState<ExamResultType | null>(null);
 
     useEffect(() => {
@@ -82,6 +82,9 @@ const ExamDetail: React.FC<Props> = ({ exam }) => {
             if (assign) {
                 var ExamDidObject = JSON.parse(assign);
                 const res: { [key: string]: string | null } = ExamDidObject.res;
+                if (res[question] == null) {
+                    setQuestionDone(questionDone + 1);
+                }
                 res[question.toString()] = anwser.toString();
                 ExamDidObject.res = res;
                 setExamDid(ExamDidObject);
@@ -153,7 +156,7 @@ const ExamDetail: React.FC<Props> = ({ exam }) => {
                                                 <div className='flex justify-between border-b border-primary py-20xs md:py-20md'>
                                                     <div className='text-center w-1/2'>
                                                         <div>Đã làm</div>
-                                                        <div className='text-20xs md:text-20md font-semibold'>0/{exam.question_count}</div>
+                                                        <div className='text-20xs md:text-20md font-semibold'>{questionDone}/{exam.question_count}</div>
                                                     </div>
                                                     <div className='text-center w-1/2'>
                                                         <div>Thời gian còn lại</div>
@@ -181,11 +184,16 @@ const ExamDetail: React.FC<Props> = ({ exam }) => {
                                                     <Button className='bg-primary text-white' onClick={handleSubmit}>Nộp bài</Button>
                                                 </div>
                                             </>
-                                            : <>
-                                                <div>{exam.question_count} câu</div>
-                                                <div>Thời gian {exam.time} phút</div>
-                                                <div><Button className='bg-primary text-white' onClick={handleStart}>Bắt đầu</Button></div>
-                                            </>
+                                            : <div className="text-center">
+                                                <div className="text-lg font-bold">{exam.question_count} câu</div>
+                                                <div className="flex items-center justify-center mt-2 space-x-2">
+                                                    <ClockCircleOutlined className="text-gray-500" />
+                                                    <span>Thời gian {exam.time} phút</span>
+                                                </div>
+                                                <div className="mt-4">
+                                                    <Button className='bg-primary text-white' onClick={handleStart}>Bắt đầu</Button>
+                                                </div>
+                                            </div>
                                     }
                                 </div>
 

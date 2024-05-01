@@ -17,7 +17,7 @@ class QuestionController extends Controller
     public function index(QueryRequest $request)
     {
         $with = $request->input('with', []);
-        $filterBy = $request->input('filter', null);
+        $filterBy = $request->input('filterBy', null);
         $value = $request->input('value', null);
         $condition = $request->input('condition', null);
         $page = $request->input('page', 1);
@@ -45,18 +45,23 @@ class QuestionController extends Controller
         $numb = $request->input('numb');
         $subject_id = $request->input('subject_id');
         $chapter_id = $request->input('chapter_id');
+        $grade = $request->input('grade');
         $level = $request->input('level');
         $data = $request->input('data');
         $questionIdsInData = collect($data)->pluck('id')->toArray();
 
         $query = Question::query();
 
-        if (!is_null($subject_id)) {
-            $query->where('subject_id', $subject_id);
-        }
-
         if (!is_null($chapter_id)) {
             $query->where('chapter_id', $chapter_id);
+        }
+
+        if (!is_null($grade)) {
+            if (!is_null($subject_id)) {
+                $query->where('subject_id', $subject_id);
+            } else {
+                $query->where('grade', $grade);
+            }
         }
 
         if (!is_null($level)) {

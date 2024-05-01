@@ -11,8 +11,8 @@ type Props = {
 
 const ArenaItem: React.FC<Props> = ({ arena }) => {
     return (
-        <Link href={`arena/${arena.id}`}>
-            <div className='flex border border-slate-400 rounded-xl py-5xs md:py-5md hover:bg-gray-50 cursor-pointer'>
+        <Link href={`arena/${arena.id}`} className='hover:text-black'>
+            <div className='flex border border-slate-400 rounded-xl py-5xs md:py-5md hover:bg-gray-50 cursor-pointer h-auto'>
                 <div className='w-2/5 flex flex-col items-center justify-center border-r'>
                     <div className='w-62 flex-shrink-0'>
                         <Image src='/logo.png' preview={false} />

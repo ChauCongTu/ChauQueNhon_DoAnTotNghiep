@@ -20,7 +20,7 @@ export interface ExamType {
 }
 
 export interface ExamDid {
-    user_id: number;
+    user_id?: number | null;
     start_at: DateTime;
     time: number | null;
     res: {

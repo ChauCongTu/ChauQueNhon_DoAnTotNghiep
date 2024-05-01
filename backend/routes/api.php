@@ -90,7 +90,7 @@ Route::prefix('/v1')->group(function () {
 
     Route::prefix('/questions')->name('questions.')->group(function () {
         Route::get('/', [QuestionController::class, 'index'])->name('index');
-        Route::post('/filter', [QuestionController::class, 'getQuestions'])->middleware(['auth:api'])->name('filter');
+        Route::get('/filter', [QuestionController::class, 'getQuestions'])->middleware(['auth:api'])->name('filter');
         Route::post('/', [QuestionController::class, 'store'])->middleware(['auth:api'])->name('store');
         Route::put('/{id}', [QuestionController::class, 'update'])->middleware(['auth:api'])->name('update');
         Route::delete('/{id}', [QuestionController::class, 'destroy'])->middleware(['auth:api'])->name('destroy');
@@ -118,12 +118,15 @@ Route::prefix('/v1')->group(function () {
         Route::post('/', [ArenaController::class, 'store'])->name('store')->middleware(['auth:api']);
         Route::put('/{id}', [ArenaController::class, 'update'])->name('update')->middleware(['auth:api']);
         Route::delete('/{id}', [ArenaController::class, 'destroy'])->name('destroy')->middleware(['auth:api']);
-        Route::get('/{id}', [ArenaController::class, 'detail'])->name('detail');
+        Route::get('/{id}', [ArenaController::class, 'detail'])->name('detail')->middleware(['auth:api']);
         Route::post('/{id}', [ArenaController::class, 'result'])->name('result')->middleware(['auth:api']);
         Route::post('/{id}/join', [ArenaController::class, 'join'])->name('join')->middleware(['auth:api']);
         Route::post('/{id}/leave', [ArenaController::class, 'leave'])->name('leave')->middleware(['auth:api']);
         Route::post('/{id}/start', [ArenaController::class, 'start'])->name('start')->middleware(['auth:api']);
         Route::post('/{id}/remain', [ArenaController::class, 'remain'])->name('remain')->middleware(['auth:api']);
+        Route::post('/progress/set', [ArenaController::class, 'saveProgress'])->name('set')->middleware(['auth:api']);
+        Route::post('/progress/get', [ArenaController::class, 'loadProgress'])->name('get')->middleware(['auth:api']);
+        Route::post('/progress/del', [ArenaController::class, 'delProgress'])->name('del')->middleware(['auth:api']);
     });
 
     Route::prefix('targets')->name('targets.')->group(function () {

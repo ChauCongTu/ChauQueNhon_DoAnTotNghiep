@@ -53,7 +53,7 @@ const ProfileUpdateForm: React.FC<Props> = ({ allowEdit, user, setAllowEdit }) =
             ...values,
             dob: values.dob ? moment(values.dob).format('YYYY-MM-DD') : null
         };
-        postProfile(formattedValues).then((res) => {
+        postProfile(formattedValues).then((res: any) => {
             console.log(res);
             if (res.status) {
                 if (res.status.code === 200) {
@@ -163,7 +163,7 @@ const ProfileUpdateForm: React.FC<Props> = ({ allowEdit, user, setAllowEdit }) =
                         <Option value="10">10</Option>
                         <Option value="11">11</Option>
                         <Option value="12">12</Option>
-                        <Option value="0">Kiến thức tổng hợp</Option>
+                        <Option value="13">Kiến thức tổng hợp</Option>
                     </Select>
                 </Form.Item>
                 {

@@ -5,6 +5,7 @@ import Link from 'next/link'
 import React, { useEffect, useState } from 'react'
 import Loading from '../loading/loading'
 import { convertTimeString } from '@/utils/time'
+import { ClockCircleOutlined, FormOutlined, CalendarOutlined, FileDoneOutlined, PicLeftOutlined, OrderedListOutlined } from '@ant-design/icons';
 
 type Props = {}
 
@@ -19,6 +20,17 @@ const HistorySidebar = (props: Props) => {
             }
         }).finally(() => setLoading(false));
     }, []);
+    const renderHistoryType = (type: string) => {
+        if (type == 'Arena') {
+            return <><PicLeftOutlined /> Phòng thi đấu</>
+        }
+        else if (type == 'Exam') {
+            return <><FileDoneOutlined /> Bài kiểm tra</>
+        }
+        else if (type == 'Practice') {
+            return <><OrderedListOutlined /> Bài tập</>
+        }
+    }
     return (
         <div className='border-t-4 border-primary'>
             <Loading loading={loading} />
@@ -26,9 +38,12 @@ const HistorySidebar = (props: Props) => {
             <div className='mt-30xs md:mt-30md'>
                 {
                     histories.map((value) => (
-                        <div key={value.id} className='mt-20xs md:mt-20md'>
-                            <div><Link href={`/history/${value.id}`} className='text-16xs md:text-16md font-semibold hover:text-slate-700'>{value.model.name}</Link></div>
-                            <div className='flex justify-end text-13xs md:text-13md'>{convertTimeString(value.created_at)}</div>
+                        <div key={value.id} className='mt-20xs md:mt-20md border-t pt-20xs md:pt-20md'>
+                            <div><Link href={`/history/${value.id}`} className='text-16xs md:text-16md font-semibold hover:text-slate-700 line-clamp-1'>{value.model.name}</Link></div>
+                            <div className='flex justify-between text-13xs md:text-13md'>
+                                <div>{renderHistoryType(value.type)}</div>
+                                <div>{convertTimeString(value.created_at)}</div>
+                            </div>
                         </div>
                     ))
                 }

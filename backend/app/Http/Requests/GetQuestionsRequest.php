@@ -25,6 +25,7 @@ class GetQuestionsRequest extends FormRequest
             'numb' => 'required|integer',
             'subject_id' => 'nullable|integer',
             'chapter_id' => 'nullable|integer',
+            'grade' => 'nullable|integer',
             'level' => 'nullable|integer',
             'data' => 'nullable|array',
             // Các quy tắc xác thực khác nếu cần

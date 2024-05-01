@@ -25,10 +25,12 @@ class StoreArenaRequest extends FormRequest
             'name' => 'required|min:3|max:255',
             'max_users' => 'required|numeric',
             'time' => 'required|numeric',
-            'questions' => 'required|array',
+            'grade' => 'nullable',
+            'questions' => 'required',
             'question_count' => 'required|numeric',
             'start_at' => 'required|date_format:Y-m-d H:i:s',
             'type' => 'required',
+            'subject_id' => 'nullable',
             'password' => 'nullable|min:6',
         ];
     }
@@ -39,6 +41,8 @@ class StoreArenaRequest extends FormRequest
             'name' => 'Tên phòng thi',
             'max_users' => 'Số thí sinh tối đa',
             'time' => 'Thời gian',
+            'grade' => 'Khối lớp',
+            'subject_id' => 'Môn học',
             'questions' => 'Danh sách câu hỏi',
             'question_count' => 'Số lượng câu hỏi',
             'start_at' => 'Thời gian bắt đầu',

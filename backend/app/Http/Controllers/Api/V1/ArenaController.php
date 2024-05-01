@@ -4,11 +4,13 @@ namespace App\Http\Controllers\Api\V1;
 
 use App\Helpers\Common;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Arena\ProgressRequest;
 use App\Http\Requests\QueryRequest;
 use App\Http\Requests\Arena\StoreArenaRequest;
 use App\Http\Requests\Arena\UpdateArenaRequest;
 use App\Http\Requests\Practice\GetResultRequest;
 use App\Models\Arena;
+use App\Models\Subject;
 use App\Models\User;
 use Carbon\Carbon;
 use GuzzleHttp\Psr7\Response;
@@ -44,6 +46,9 @@ class ArenaController extends Controller
         foreach ($arenas as $value) {
             $value['author'] = User::find($value['author']);
             $value['users'] = count(explode(',', $value['users']));
+            if ($value['subject_id']) {
+                $value['subject'] = Subject::find($value['subject_id']);
+            }
             $value['is_joined'] = $this->is_joined($value->id, (int) Auth::id());
         }
         return Common::response(200, 'Lấy danh sách phòng thi thành công', $arenas);
@@ -52,13 +57,18 @@ class ArenaController extends Controller
     public function store(StoreArenaRequest $request)
     {
         $data = $request->validated();
+        $data['questions'] = explode(',', $data['questions']);
         if (count($data['questions']) != $data['question_count']) {
             return Common::response(400, "Số câu hỏi đã nhập không đúng với số lượng câu hỏi.");
         }
         $data['author'] = Auth::id();
         $data['questions'] = implode(',', $data['questions']);
-        // return response()->json($data);
         $arena = Arena::create($data);
+        $arena->author = User::find($arena->author);
+        $arena->users = count(explode(',', $arena->users));
+        if ($arena->subject_id) {
+            $arena->subject = Subject::find($arena->subject_id);
+        }
 
         return $arena
             ? Common::response(201, "Tạo phòng thi mới thành công.", $arena)
@@ -92,10 +102,15 @@ class ArenaController extends Controller
     public function detail(int $id)
     {
         $arena = Arena::find($id);
+        $user_id = Auth::id();
         if ($arena) {
-            $arena['is_joined'] = $this->is_joined($id,(int)  Auth::id());
+            $arena['is_joined'] = $this->is_joined($id, $user_id);
             $arena['joined'] = $arena->joined();
+            $arena->author = User::find($arena->author);
             $arena['question_list'] = $arena->questions();
+            if ($arena['subject_id']) {
+                $arena['subject'] = Subject::find($arena['subject_id']);
+            }
             return Common::response(200, "Lấy thông tin phòng thi thành công.", $arena);
         }
 
@@ -267,6 +282,23 @@ class ArenaController extends Controller
         return Common::response(200, "Nộp bài thành công!", $result);
     }
 
+    public function saveProgress(ProgressRequest $request)
+    {
+        Redis::del($request->userId . '_arena_progress_' . $request->arenaId);
+        Redis::set($request->userId . '_arena_progress_' . $request->arenaId, $request->progress);
+        return Common::response(200, "Lưu thành công!");
+    }
+
+    public function loadProgress(ProgressRequest $request)
+    {
+        $progress = Redis::get(Auth::id() . '_arena_progress_' . $request->arenaId);
+        return Common::response(200, "Tải thành công!", $progress);
+    }
+    public function delProgress(ProgressRequest $request)
+    {
+        Redis::del(Auth::id() . '_arena_progress_' . $request->arenaId);
+        return Common::response(200, "Xóa thành công!");
+    }
 
     public static function is_joined(int $room_id, int $user_id)
     {

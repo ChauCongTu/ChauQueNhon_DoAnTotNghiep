@@ -41,6 +41,7 @@ const MainArena: React.FC<Props> = ({ user }) => {
                 <Swiper
                     slidesPerView={1}
                     spaceBetween={10}
+                    autoplay
                     loop={true}
                     breakpoints={{
                         '@0.00': {
@@ -50,10 +51,10 @@ const MainArena: React.FC<Props> = ({ user }) => {
                             slidesPerView: 1,
                         },
                         '@1.00': {
-                            slidesPerView: 3,
+                            slidesPerView: 2,
                         },
                         '@1.50': {
-                            slidesPerView: 3,
+                            slidesPerView: 2,
                         },
                     }}>
                     {
