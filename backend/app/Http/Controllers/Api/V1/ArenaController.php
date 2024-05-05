@@ -198,6 +198,7 @@ class ArenaController extends Controller
         $arena->status = 'started';
         $arena->start_at = now();
         $arena->save();
+        Redis::publish('tick', json_encode(array('event' => 'MessagePushed', 'data' => json_encode(['status' => $arena->status, 'arena' => $arena]))));
 
         return Common::response(200, 'Bắt đầu thi thành công.');
     }

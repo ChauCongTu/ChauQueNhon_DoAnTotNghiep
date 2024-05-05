@@ -22,6 +22,7 @@ export default function RootLayout({
       <html lang="vi">
         <body>
           <Providers>{children}</Providers>
+          <script src="http://localhost:6001/socket.io/socket.io.js"></script>
         </body>
       </html>
     </AuthProvider >

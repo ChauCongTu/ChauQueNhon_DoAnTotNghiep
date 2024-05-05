@@ -1,3 +1,4 @@
+"use client"
 import { ArenaType } from '@/modules/arenas/types'
 import React, { useEffect, useState } from 'react'
 import { ExamDid, ExamResultType, ExamType } from '@/modules/exams/types'
@@ -10,6 +11,7 @@ import { CopyOutlined } from '@ant-design/icons';
 import { convertTimeString } from '@/utils/time';
 import Countdown from 'react-countdown';
 import ArenaJoinRoom from './join/page';
+import Echo from 'laravel-echo';
 import { postGet, postSet, postStart } from '@/modules/arenas/services';
 
 type Props = {
@@ -42,6 +44,37 @@ const ArenaRoomDetail: React.FC<Props> = ({ arena, setArena }) => {
     //     };
     // }, []);
     useEffect(() => {
+        const echo = new Echo({
+            broadcaster: 'socket.io',
+            host: window.location.hostname + ':6001',
+        });
+        echo.channel('gouni_database_tick').listen('.MessagePushed', (data: any) => {
+            const parseObject = JSON.parse(data);
+            console.log(data);
+            if (parseObject.status == 'started') {
+                postGet({ arenaId: arena.id }).then((res) => {
+                    if (res.status && res.status.code === 200 && res.data.length > 0) {
+                        const now = DateTime.local();
+                        var ExamDidObject: ExamDid = JSON.parse(res.data[0]);
+                        const startAt = DateTime.fromISO(ExamDidObject.start_at);
+                        if (startAt.isValid) {
+                            const endAt = startAt.plus({ minutes: arena.time });
+                            const diffInSeconds = endAt.diff(now).as('seconds');
+                            const diffInMinutes = diffInSeconds / 60;
+                            if (diffInMinutes >= 0) {
+                                setExamDid(ExamDidObject);
+                                setTimeToEnd(diffInMinutes * 60)
+                            }
+                        }
+                    }
+                })
+                setIsStart(true);
+                toast.success('Đã bắt đầu làm bài.')
+            }
+            console.log(parseObject);
+        });
+    }, [])
+    useEffect(() => {
         if (arena) {
             if (arena.status != 'pending') {
                 postGet({ arenaId: arena.id }).then((res) => {
@@ -70,7 +103,6 @@ const ArenaRoomDetail: React.FC<Props> = ({ arena, setArena }) => {
     useEffect(() => {
         const interval = setInterval(() => {
             setTimeToEnd(prevTime => prevTime - 1);
-          
         }, 1000);
 
         return () => clearInterval(interval);
@@ -151,6 +183,7 @@ const ArenaRoomDetail: React.FC<Props> = ({ arena, setArena }) => {
         }
     };
     const handleSubmit = () => {
+        
     }
 
     return (
