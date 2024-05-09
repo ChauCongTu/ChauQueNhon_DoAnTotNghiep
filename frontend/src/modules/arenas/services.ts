@@ -1,6 +1,7 @@
 import api from '@/utils/axios';
 import { AxiosRequestConfig } from 'axios';
 import { ArenaType } from './types';
+import { ExamDid } from '../exams/types';
 
 export const getArenas = async (params: AxiosRequestConfig['params']): Promise<any> => {
     try {
@@ -15,6 +16,26 @@ export const getArenas = async (params: AxiosRequestConfig['params']): Promise<a
 export const getArena = async (id: number): Promise<any> => {
     try {
         const response = await api.get('/arenas/' + id);
+        return response.data;
+    } catch (error) {
+        console.error('Call API Error:', error);
+        throw error;
+    }
+};
+
+export const getArenaHistories = async (id: number | undefined): Promise<any> => {
+    try {
+        const response = await api.get('/arenas/histories/' + id);
+        return response.data;
+    } catch (error) {
+        console.error('Call API Error:', error);
+        throw error;
+    }
+};
+
+export const getArenaHistory = async (id: number | undefined): Promise<any> => {
+    try {
+        const response = await api.get('/arenas/history/' + id);
         return response.data;
     } catch (error) {
         console.error('Call API Error:', error);
@@ -98,3 +119,13 @@ export const postDel = async (data: { arenaId?: number }): Promise<any> => {
         throw error;
     }
 };
+
+export const postArenaSubmit = async (id: number | undefined, request: ExamDid) => {
+    try {
+        const response = await api.post(`/arenas/${id}`, request);
+        return response.data;
+    } catch (error) {
+        console.error('Call API Error:', error);
+        throw error;
+    }
+}

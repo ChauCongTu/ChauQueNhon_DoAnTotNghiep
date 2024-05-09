@@ -24,7 +24,7 @@
 
 ---
 ## Tiến độ (*):
-- Link Google Sheet tiến độ thực hiện đồ án: (chưa cập nhật)
+- Link Google Sheet tiến độ thực hiện đồ án: https://docs.google.com/spreadsheets/d/1cG0hCakne2OxGOjW2k_Qe98mvLorm25uFpy8I9zBBFw/edit#gid=1409424902
 - Link Google Doc báo cáo nghiên cứu lý thuyết: (chưa cập nhật)
 - Link đề cương tốt nghiệp: (chưa cập nhật)
 
