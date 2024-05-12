@@ -23,7 +23,7 @@ const MainStatistics = () => {
                         value={'200000'}
                         prefix={<SolutionOutlined />}
                         formatter={formatter}
-                        valueStyle={{ color: '#f14600', fontSize: '36px' }}
+                        valueStyle={{ color: '#f14600', fontSize: '24px', fontWeight: 600 }}
                     />
                 </Col>
                 <Col xs={12} sm={12} md={6} lg={6} xl={6}>
@@ -36,7 +36,7 @@ const MainStatistics = () => {
                         value={4000}
                         prefix={<FileTextOutlined />}
                         formatter={formatter}
-                        valueStyle={{ color: '#f14600', fontSize: '36px' }}
+                        valueStyle={{ color: '#f14600', fontSize: '24px', fontWeight: 600 }}
                     />
                 </Col>
                 <Col xs={12} sm={12} md={6} lg={6} xl={6}>
@@ -49,7 +49,7 @@ const MainStatistics = () => {
                         value={120000}
                         prefix={<TrophyOutlined />}
                         formatter={formatter}
-                        valueStyle={{ color: '#f14600', fontSize: '36px' }}
+                        valueStyle={{ color: '#f14600', fontSize: '24px', fontWeight: 600 }}
                     />
                 </Col>
                 <Col xs={12} sm={12} md={6} lg={6} xl={6}>
@@ -62,7 +62,7 @@ const MainStatistics = () => {
                         value={80000}
                         prefix={<MessageOutlined />}
                         formatter={formatter}
-                        valueStyle={{ color: '#f14600', fontSize: '36px' }}
+                        valueStyle={{ color: '#f14600', fontSize: '24px', fontWeight: 600 }}
                     />
                 </Col>
             </Row>

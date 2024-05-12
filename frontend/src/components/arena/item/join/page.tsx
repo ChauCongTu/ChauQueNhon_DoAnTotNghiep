@@ -98,8 +98,14 @@ const ArenaJoinRoom: React.FC<Props> = ({ arena, setArena }) => {
             }
             <Modal open={open} footer={null}>
                 <div className='mt-30xs md:mt-30md'>
-                    <label className='my-5xs md:my-5md font-semibold'>Nhập mật khẩu phòng</label>
-                    <Input.Password id='password' value={password} onChange={(e) => { setPassword(e.target.value) }} />
+                    
+                    {
+                        arena.type == 'private' ? <><label className='my-5xs md:my-5md font-semibold'>Nhập mật khẩu phòng</label></> : <>Tham gia phòng thi</>
+                    }
+                    {
+                        arena.type == 'private' && <Input.Password id='password' value={password} onChange={(e) => { setPassword(e.target.value) }} />
+                    }
+                    
                     <div className='mt-10xs md:mt-10md flex gap-7xs md:gap-7md justify-end'>
                         <Button onClick={() => {
                             setPassword('');

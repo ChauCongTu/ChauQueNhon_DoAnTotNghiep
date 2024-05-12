@@ -32,7 +32,9 @@ const MainTopic = (props: Props) => {
                     ))
                 }
             </div>
-            <div className='py-10xs md:py-10md mb-20xs md:mb-20md flex justify-center'><Link href={'/topic'}>Xem thêm</Link></div>
+            {
+                topics && topics.length > 10 && <div className='py-10xs md:py-10md mb-20xs md:mb-20md flex justify-center'><Link href={'/topic'}>Xem thêm</Link></div>
+            }
         </div>
     )
 }

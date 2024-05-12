@@ -2,6 +2,7 @@
 import ArenaRoomDetail from '@/components/arena/item/page'
 import HistorySidebar from '@/components/main/history'
 import SwiperExam from '@/components/main/swiper'
+import TrailerEmbeded from '@/components/main/trailer'
 import { getArena } from '@/modules/arenas/services'
 import { ArenaType } from '@/modules/arenas/types'
 import { useAuth } from '@/providers/authProvider'
@@ -39,7 +40,7 @@ const ArenaDetail = ({ params }: { params: { id: number } }) => {
                                         title: <Link href={'/arena'}>Thi online</Link>,
                                     },
                                     {
-                                        title: <>Thi online</>,
+                                        title: <>{arena.name}</>,
                                     }
                                 ]} />
                             </div>

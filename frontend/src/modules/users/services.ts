@@ -72,6 +72,16 @@ export const getProfile = async (username: string) => {
     }
 };
 
+export const getProfiles = async (params?: AxiosRequestConfig['params']) => {
+    try {
+        const response = await api.get(`/profiles/list`, { params });
+        return response.data;
+    } catch (error) {
+        console.error('Get Posts Error:', error);
+        throw error;
+    }
+};
+
 export const postProfile = async (request: User): Promise<any> => {
     try {
         const response = await api.post('/profiles/update', request);

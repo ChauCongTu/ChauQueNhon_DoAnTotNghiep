@@ -12,12 +12,12 @@ type Props = {
 const ArenaItem: React.FC<Props> = ({ arena }) => {
     return (
         <Link href={`arena/${arena.id}`} className='hover:text-black'>
-            <div className='flex border border-slate-400 rounded-xl py-5xs md:py-5md hover:bg-gray-50 cursor-pointer h-auto'>
+            <div className='flex border border-slate-400 rounded-xl py-5xs md:py-5md hover:bg-gray-50 cursor-pointer !h-full'>
                 <div className='w-2/5 flex flex-col items-center justify-center border-r'>
-                    <div className='w-62 flex-shrink-0'>
+                    <div className='w-24 flex-shrink-0'>
                         <Image src='/logo.png' preview={false} />
                     </div>
-                    <div className='text-20xs md:text-20md font-semibold text-primary my-2 px-2 text-center'>{arena.name}</div>
+                    <div className='text-16xs md:text-16md font-semibold text-primary my-2 px-2 text-center'>{arena.name}</div>
 
                 </div>
                 <div className='w-3/5 px-10xs md:px-10md flex flex-col gap-1xs md:gap-1md py-7xs md:py-7md'>

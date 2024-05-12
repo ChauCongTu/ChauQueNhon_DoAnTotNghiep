@@ -1,11 +1,49 @@
 'use client'
-import { Avatar, Image } from 'antd';
+import { Avatar, Button, Form, Image, Input, Modal } from 'antd';
 import Link from 'next/link';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { SearchOutlined, HomeOutlined, WechatWorkOutlined, FileOutlined, InsertRowBelowOutlined, BarChartOutlined } from '@ant-design/icons';
 import UserAvatar from './avatar/avatar';
+import { getTargetCheck, postSetTarget } from '@/modules/targets/services';
+import toast from 'react-hot-toast';
+import { DateTime } from 'luxon';
 
 const Header = () => {
+    const [hasTarget, setHasTarget] = useState(false);
+    useEffect(() => {
+        getTargetCheck().then((res) => {
+            if (res.status && res.status.code === 200) {
+                setHasTarget(true);
+            }
+            else {
+                setHasTarget(false);
+            }
+        });
+    }, []);
+    useEffect(() => {
+        const interval = setInterval(() => {
+            const today = DateTime.local().toFormat('yyyy-MM-dd');
+            const timeOnlineToday = localStorage.getItem(`time_online_${today}`);
+            if (timeOnlineToday) {
+                const timeParse = JSON.parse(timeOnlineToday);
+                const time = timeParse.time + 1;
+                localStorage.setItem(`time_online_${today}`, JSON.stringify({ time: time }));
+            }
+            else {
+                localStorage.setItem(`time_online_${today}`, JSON.stringify({ time: 0 }));
+            }
+        }, 1000);
+
+        return () => clearInterval(interval);
+    }, []);
+    const onFinish = (values: any) => {
+        postSetTarget(values).then((res) => {
+            if (res.status && res.status === 201) {
+                toast.success("Thiết lập mục tiêu hằng ngày thành công.");
+                setHasTarget(false);
+            }
+        })
+    }
     return (
         <>
             {/* PC Header */}
@@ -57,6 +95,74 @@ const Header = () => {
                     </ul>
                 </nav>
             </header>
+            <Modal
+                title={<h1 className='text-18xs md:text-18md font-bold py-10xs md:py-10md text-center'>Thiết lập mục tiêu ôn thi hôm nay của bạn</h1>}
+                open={hasTarget}
+                footer={null}
+                closable={false}
+            >
+                <div>
+                    <Form
+                        name="basic"
+                        layout='vertical'
+                        onFinish={onFinish}
+                    >
+                        <Form.Item
+                            label="Thời gian ôn luyện hôm nay"
+                            name="total_time"
+                            rules={[
+                                { required: true, message: "Vui lòng nhập thời gian ôn luyện hàng ngày" }
+                            ]}
+                        >
+                            <Input type="number" placeholder='Nhập tổng số phút ôn luyện hôm nay' addonAfter={'phút'} />
+                        </Form.Item>
+
+                        <Form.Item
+                            label="Số đề sẽ giải"
+                            name="total_exams"
+                        >
+                            <Input type="number" placeholder='Nhập số đề bạn muốn giải hôm nay' />
+                        </Form.Item>
+
+                        <Form.Item
+                            label="Số bài tập sẽ làm"
+                            name="total_practices"
+                        >
+                            <Input type="number" placeholder='Nhập số bài tập bạn muốn giải hôm nay' />
+                        </Form.Item>
+
+                        <Form.Item
+                            label="Số phòng thi sẽ tham gia"
+                            name="total_arenas"
+                        >
+                            <Input type="number" placeholder='Nhập số phòng thi bạn muốn tham gia hôm nay' />
+                        </Form.Item>
+
+                        <Form.Item
+                            label="Điểm thấp nhất"
+                            name="min_score"
+                        >
+                            <Input type="number" placeholder='Nhập số điểm tối thiểu mà bạn dự kiến' />
+                        </Form.Item>
+
+                        <Form.Item
+                            label="Tỉ lệ chính xác"
+                            name="accuracy"
+                        >
+                            <Input type="number" addonAfter={'%'} placeholder='Nhập tỉ lệ làm đúng' />
+                        </Form.Item>
+
+                        <Form.Item
+                            className='flex justify-end items-center'
+                        >
+                            <button className='mr-10xs md:mr-10md'>Xem mục tiêu hôm qua</button>
+                            <Button className='bg-primary text-white' htmlType="submit">
+                                Thiết lập
+                            </Button>
+                        </Form.Item>
+                    </Form>
+                </div>
+            </Modal>
         </>
     )
 }

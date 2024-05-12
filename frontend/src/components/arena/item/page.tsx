@@ -16,6 +16,7 @@ import { getArenaHistory, postArenaSubmit, postGet, postSet, postStart } from '@
 import Loading from '@/components/loading/loading'
 import RoomRanking from './ranking/page'
 import { getHistory } from '@/modules/histories/services'
+import Link from 'next/link'
 
 type Props = {
     arena: ArenaType,
@@ -173,14 +174,13 @@ const ArenaRoomDetail: React.FC<Props> = ({ arena, setArena }) => {
                 if (res.status && res.status.code === 200) {
                     setIsStart(true);
                     const now = DateTime.local();
-
-                    toast.success(res.status.message);
-                    setIsStart(true);
-                    setTimeToEnd(arena.time * 60)
-                    const cloneArena = arena;
+                    let cloneArena = arena;
                     cloneArena.start_at = now.toString();
+                    if (now.isValid) {
+                        const endDateTime = now.plus({ minutes: arena.time }).toISO();
+                        setTimeEnd(endDateTime);
+                    }
                     setArena(cloneArena);
-                    calcTimeEnd();
                     arena.joined?.forEach((element) => {
                         const resp: { [key: string]: string | null } = {};
                         arena.question_list && arena.question_list.map((value) => {
@@ -193,7 +193,7 @@ const ArenaRoomDetail: React.FC<Props> = ({ arena, setArena }) => {
                             res: resp
                         }
                         setExamDid(ExamDidObject);
-                        postSet({ userId: element.id, arenaId: arena?.id, progress: JSON.stringify(ExamDidObject) }).then((data) => { })
+                        postSet({ userId: element.id, arenaId: arena?.id, progress: JSON.stringify(ExamDidObject) })
                     })
                 }
                 else if (res.status && res.status.code != 200) {
@@ -403,7 +403,7 @@ const ArenaRoomDetail: React.FC<Props> = ({ arena, setArena }) => {
             </div>
             {
                 result && <Modal
-                    title="NỘP BÀI THÀNH CÔNG."
+                    title="KẾT QUẢ CỦA BẠN"
                     footer={null}
                     open={open}
                     onCancel={() => setOpen(false)}
@@ -422,7 +422,9 @@ const ArenaRoomDetail: React.FC<Props> = ({ arena, setArena }) => {
                             <div className='text-24xs md:text-24md text-green-700 font-semibold'>{result.total_score}</div>
                         </div>
                     </div>
-                    <div></div>
+                    <div>
+                        <Link href={'/history'}>Xem chi tiết bài làm của bạn</Link>
+                    </div>
                 </Modal>
             }
         </>

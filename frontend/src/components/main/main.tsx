@@ -5,6 +5,8 @@ import { useAuth } from '@/providers/authProvider';
 import MainArena from './home/arena';
 import MainTopic from './home/topic';
 import MainStatistics from './home/statistics';
+import MainFeatures from './home/features';
+import MainUsers from './home/users';
 
 const MainHomePage = () => {
   const { user } = useAuth();
@@ -14,6 +16,8 @@ const MainHomePage = () => {
       <div className='!w-full'><MainCategory user={user} /></div>
       <div className='!w-full'><MainArena user={user} /></div>
       <div className='!w-full'><MainTopic /></div>
+      <div><MainFeatures /></div>
+      <div><MainUsers /></div>
       <div><MainStatistics /></div>
     </div>
   )

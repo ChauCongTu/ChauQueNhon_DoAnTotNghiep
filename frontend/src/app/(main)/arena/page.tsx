@@ -9,6 +9,9 @@ import { Tabs } from 'antd';
 import type { TabsProps } from 'antd';
 import RoomList from '@/components/arena/room/page';
 import './style.scss';
+import CategorySideComponent from '@/components/category/component'
+import TrailerEmbeded from '@/components/main/trailer'
+import TargetSidebar from '@/components/target/sidebar'
 
 const onChange = (key: string) => {
     console.log(key);
@@ -33,7 +36,7 @@ const items: TabsProps['items'] = [
 ];
 
 const ArenaDetail = () => {
-    const { isLoggedIn } = useAuth();
+    const { isLoggedIn, user } = useAuth();
     return (
         <>
             {
@@ -56,7 +59,13 @@ const ArenaDetail = () => {
 
             <div className="mt-10xs md:mt-10md mx-auto px-10xs md:px-40m text-16xs md:text-16md">
                 <div className="flex flex-wrap gap-20xs md:gap-20md justify-between">
-                    <main className="w-full flex-1 order-1 md:order-2 md:max-w-1000md">
+                    <div className='w-full md:w-280md'>
+                        <TargetSidebar />
+                        <div className='mt-10xs md:mt-20md w-full'>
+                            <CategorySideComponent user={user} />
+                        </div>
+                    </div>
+                    <main className="w-full flex-1 order-1 md:order-2 md:max-w-720md">
                         <Tabs defaultActiveKey="1" items={items} onChange={onChange} />
                     </main>
                     <nav className="w-full md:w-310md order-3">
@@ -67,7 +76,6 @@ const ArenaDetail = () => {
                             {
                                 isLoggedIn && <HistorySidebar />
                             }
-
                         </div>
                     </nav>
                 </div>
