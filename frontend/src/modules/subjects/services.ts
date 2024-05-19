@@ -20,3 +20,13 @@ export const getSubject = async (slug: string): Promise<any> => {
         throw error;
     }
 };
+
+export const getChapters = async (params: AxiosRequestConfig['params']): Promise<any> => {
+    try {
+        const response = await api.get('/chapters', { params });
+        return response.data;
+    } catch (error) {
+        console.error('Call API Error:', error);
+        throw error;
+    }
+};

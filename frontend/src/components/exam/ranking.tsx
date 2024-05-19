@@ -37,7 +37,7 @@ const ExamRanking: React.FC<{ histories: HistoryType[] }> = ({ histories }) => {
                                             #{index + 1} {history.user.name}
                                         </p>
                                         <p className='text-black text-13xs md:text-13md'>
-                                            {Math.ceil(history.result.time / 60)}' | {history.result.total_score} điểm {history.user_id == user?.id && <>(tôi)</>}
+                                            {Math.ceil(history.result.time / 60)}&#39; | {history.result.total_score} điểm {history.user_id == user?.id && <>(tôi)</>}
                                         </p>
                                     </Link>
                                 </div>

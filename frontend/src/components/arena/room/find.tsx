@@ -33,7 +33,7 @@ const FindRoom: React.FC<Props> = ({ arenas, setArenas, setCurrent, setTotal }) 
     return (
         <>
             <div className='relative'>
-                <input type='text' value={code} onChange={(e) => { setCode(e.target.value) }} placeholder='Nhập mã phòng' className='border px-10xs md:px-10md py-5xs md:py-5md rounded focus:border-primary w-364xs md:w-364md' />
+                <input type='text' value={code} onChange={(e) => { setCode(e.target.value) }} placeholder='Nhập mã phòng' className='border px-10xs md:px-10md py-5xs md:py-5md rounded focus:border-primary w-264xs md:w-264md' />
                 <button className='absolute right-10xs md:right-10md top-1/2 -translate-y-1/2'><SearchOutlined className='text-slate-500' /></button>
             </div>
         </>

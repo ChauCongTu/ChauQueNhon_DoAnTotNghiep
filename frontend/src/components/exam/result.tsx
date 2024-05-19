@@ -2,12 +2,13 @@
 import React, { useState } from 'react';
 import { ExamDid, ExamResultType, ExamType } from '../../modules/exams/types';
 import { Button, Modal, Result } from 'antd';
+import { PracticeType } from '@/modules/practices/types';
 
 type Props = {
     result: ExamResultType,
     setResult: (result: ExamResultType | null) => void,
     examDid: ExamDid,
-    exam: ExamType
+    exam: ExamType | PracticeType
 }
 
 const ExamResult: React.FC<Props> = ({ result, examDid, exam, setResult }) => {
@@ -67,7 +68,7 @@ const ExamResult: React.FC<Props> = ({ result, examDid, exam, setResult }) => {
                     <div>
                         <div className='my-10xs md:my-10md text-18xs md:text-18md font-bold'>Chi tiết bài làm của bạn</div>
                         {
-                            exam.question_list && exam.question_list.map((value, index) => (
+                            exam.question_list && exam.question_list.map((value: any, index) => (
                                 <div key={value.id} className='py-10xs md:py-10md'>
                                     <div className='font-semibold'>Câu {index + 1}.</div>
                                     <div className='font-semibold' dangerouslySetInnerHTML={{ __html: value.question }}></div>

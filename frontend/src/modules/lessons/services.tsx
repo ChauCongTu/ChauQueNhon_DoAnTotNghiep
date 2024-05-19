@@ -1,10 +1,9 @@
 import api from '@/utils/axios';
 import { AxiosRequestConfig } from 'axios';
-import { ExamDid } from '../exams/types';
 
-export const getPractices = async (params: AxiosRequestConfig['params']): Promise<any> => {
+export const getLessons = async (params: AxiosRequestConfig['params']): Promise<any> => {
     try {
-        const response = await api.get('/practices', { params });
+        const response = await api.get('/lessons', { params });
         return response.data;
     } catch (error) {
         console.error('Call API Error:', error);
@@ -12,18 +11,19 @@ export const getPractices = async (params: AxiosRequestConfig['params']): Promis
     }
 };
 
-export const getPractice = async (slug: string): Promise<any> => {
+export const getLesson = async (slug: string): Promise<any> => {
     try {
-        const response = await api.get(`/practices/${slug}`);
+        const response = await api.get(`/lessons/${slug}`);
         return response.data;
     } catch (error) {
         console.error('Call API Error:', error);
         throw error;
     }
 };
-export const postSubmitPractice = async (id: number, data: ExamDid): Promise<any> => {
+
+export const postLikeLesson = async (id: number): Promise<any> => {
     try {
-        const response = await api.post(`/practices/${id}`, data);
+        const response = await api.post(`/lessons/${id}/like`);
         return response.data;
     } catch (error) {
         console.error('Call API Error:', error);

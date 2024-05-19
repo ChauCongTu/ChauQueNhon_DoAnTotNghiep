@@ -1,5 +1,5 @@
-import Link from 'next/link'
-import React, { useEffect, useState } from 'react'
+import Link from 'next/link';
+import React, { useEffect, useState } from 'react';
 import { Swiper, SwiperSlide } from 'swiper/react';
 
 import 'swiper/css';
@@ -16,7 +16,7 @@ const MainUsers = () => {
                 setUserList(res.data[0].data);
             }
         });
-    }, [])
+    }, []);
     return (
         <div>
             <div className='border-y-2 border-primary mt-40xs md:mt-40md'>
@@ -28,7 +28,7 @@ const MainUsers = () => {
                         slidesPerView={1}
                         spaceBetween={10}
                         autoplay={
-                            {delay: 3000}
+                            { delay: 3000 }
                         }
                         loop={true}
                         breakpoints={{
@@ -49,7 +49,7 @@ const MainUsers = () => {
                             userList.map((value) => (
                                 <SwiperSlide className='text-center' key={value.id}>
                                     <div className='w-full flex justify-center'>
-                                        <img src={value.avatar} alt={value?.username} className='!w-58xs md:!w-58md rounded-full' />
+                                        <img src={value.avatar} alt={`ảnh đại diện ${value?.username}`} className='!w-58xs md:!w-58md rounded-full' />
                                     </div>
                                     <div>
                                         {value.name}
@@ -61,7 +61,7 @@ const MainUsers = () => {
                 </div>
             </div>
         </div>
-    )
-}
+    );
+};
 
-export default MainUsers
+export default MainUsers;

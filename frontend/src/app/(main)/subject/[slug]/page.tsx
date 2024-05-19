@@ -1,8 +1,6 @@
 "use client"
-import ArenaRoomDetail from '@/components/arena/item/page'
 import CategorySideComponent from '@/components/category/component'
 import SwiperExam from '@/components/main/swiper'
-import TrailerEmbeded from '@/components/main/trailer'
 import SubjectMainSection from '@/components/subject/main/page'
 import TargetSidebar from '@/components/target/sidebar'
 import { getSubject } from '@/modules/subjects/services'
@@ -11,8 +9,6 @@ import { useAuth } from '@/providers/authProvider'
 import { Breadcrumb } from 'antd'
 import Link from 'next/link'
 import React, { useEffect, useState } from 'react'
-
-type Props = {}
 
 const SubjectPage = ({ params }: { params: { slug: string } }) => {
     const [subject, setSubject] = useState<SubjectType>();

@@ -1,3 +1,4 @@
+import { HistoryType } from "../histories/types";
 import { QuestionType } from "../questions/types";
 
 export interface PracticeType {
@@ -10,5 +11,6 @@ export interface PracticeType {
     created_at: string,
     updated_at: string,
     question_count: number,
-    question_list: QuestionType[] | null
+    question_list: QuestionType[] | null,
+    histories: HistoryType[]
 }

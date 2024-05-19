@@ -37,12 +37,12 @@ const Header = () => {
         return () => clearInterval(interval);
     }, []);
     const onFinish = (values: any) => {
+        // setHasTarget(false);
         postSetTarget(values).then((res) => {
-            if (res.status && res.status === 201) {
-                toast.success("Thiết lập mục tiêu hằng ngày thành công.");
-                setHasTarget(false);
-            }
-        })
+        }).finally(() => {
+            toast.success("Thiết lập mục tiêu hằng ngày thành công.");
+            setHasTarget(false);
+        });
     }
     return (
         <>
@@ -99,7 +99,6 @@ const Header = () => {
                 title={<h1 className='text-18xs md:text-18md font-bold py-10xs md:py-10md text-center'>Thiết lập mục tiêu ôn thi hôm nay của bạn</h1>}
                 open={hasTarget}
                 footer={null}
-                closable={false}
             >
                 <div>
                     <Form

@@ -17,14 +17,16 @@ export default function Home() {
           <main className="w-full flex-1 order-1 md:order-2 md:max-w-720md">
             <MainHomePage />
           </main>
-          <nav className="w-full md:w-310md order-3">
-            <div>
-              <SwiperExam />
-            </div>
-            <div>
-              {
-                isLoggedIn && <HistorySidebar />
-              }
+          <nav className="w-full hidden md:flex md:w-310md order-3">
+            <div className="w-full">
+              <div>
+                <SwiperExam />
+              </div>
+              <div>
+                {
+                  isLoggedIn && <HistorySidebar />
+                }
+              </div>
             </div>
           </nav>
         </div>

@@ -44,7 +44,9 @@ const RoomList = (props: Props) => {
                             <div><Button>Của tôi</Button></div>
                             <div><Button>Sắp diễn ra</Button></div>
                         </div>
-                        <><FindRoom arenas={arenas} setArenas={setArenas} setCurrent={setCurrent} setTotal={setTotal} /></>
+                        <>
+                        <FindRoom arenas={arenas} setArenas={setArenas} setCurrent={setCurrent} setTotal={setTotal} />
+                        </>
                     </div>
                     <div className='mt-16xs md:mt-16md grid grid-cols grid-cols-1 md:grid-cols-2 gap-7xs md:gap-7md'>
                         {
