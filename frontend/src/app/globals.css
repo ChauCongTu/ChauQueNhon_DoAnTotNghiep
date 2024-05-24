@@ -6,10 +6,36 @@ a {
     @apply text-gray-800 hover:text-primary;
 }
 
-/* 
+
 nextjs-portal {
     display: none;
-} */
+}
+/* custom-pagination.css */
+.ant-pagination{
+    @apply font-sans;
+}
+.ant-pagination .ant-pagination-item {
+    border: none !important;
+    font-size: 14px;
+}
+.ant-pagination-disabled {
+    display: none !important;
+}
+
+.ant-pagination .ant-pagination-item-active a {
+    color: #f14600;
+    border-bottom: 1px solid #f14600 !important;
+}
+
+.ant-pagination .ant-pagination-item-active a:hover {
+    color: #000;
+    border-bottom: 1px solid #000 !important;
+}
+
+.ant-pagination-item-active {
+    color: #f14600 !important;
+    border-bottom: 1px solid #f14600 !important;
+}
 
 ::-webkit-scrollbar {
     /* Customize the scrollbar width */

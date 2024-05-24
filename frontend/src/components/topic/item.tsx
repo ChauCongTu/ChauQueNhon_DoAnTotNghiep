@@ -2,6 +2,7 @@ import React from 'react';
 import { CommentOutlined } from '@ant-design/icons';
 import { TopicType } from '@/modules/topics/types';
 import { convertTimeString } from '@/utils/time';
+import Link from 'next/link';
 
 type Props = {
     topic: TopicType
@@ -27,7 +28,7 @@ const TopicItem: React.FC<Props> = ({ topic }) => {
                     </div>
                 </div>
             </div>
-            <h3 className="text-20xs md:text-24md font-semibold text-gray-900 mb-2">{topic.title}</h3>
+            <h3 className="text-20xs md:text-24md font-semibold text-gray-900 mb-2"><Link href={`/topic/${topic.slug}`}>{topic.title}</Link></h3>
             <p className="text-gray-700 line-clamp-3 mb-2 text-justify">{topic.content}</p>
         </div>
     );

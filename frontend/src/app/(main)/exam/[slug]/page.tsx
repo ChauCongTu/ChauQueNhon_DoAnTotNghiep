@@ -40,20 +40,8 @@ const ExamDetailPage = ({ params }: { params: { slug: string } }) => {
                         </div>
                     }
                     <div className='flex flex-wrap gap-5xs md:gap-5md justify-between'>
-                        <div className='w-full md:max-w-1000md'>
+                        <div className='w-full'>
                             <ExamDetail exam={exam} />
-                        </div>
-
-                        <div className="w-full md:w-310md">
-                            <div>
-                                <SwiperExam />
-                            </div>
-                            {
-                                exam.histories && <div>
-                                    <ExamRanking histories={exam.histories} />
-                                </div>
-                            }
-
                         </div>
                     </div>
                 </div>

@@ -9,6 +9,9 @@ import { Button } from 'antd'
 import { UnorderedListOutlined } from '@ant-design/icons'
 import QuestionReport from './report/page'
 import { postSubmitPractice } from '@/modules/practices/services'
+import ControlExam from '../exam/control_panel/page'
+import QuestionList from '../exam/question_list/page'
+import QuestionShow from '../exam/question/page'
 
 type Props = {
     practice: PracticeType
@@ -17,7 +20,7 @@ type Props = {
 const PracticeDetail: React.FC<Props> = ({ practice }) => {
     const { user } = useAuth();
     const [examDid, setExamDid] = useState<ExamDid>();
-    const [timeToEnd, setTimeToEnd] = useState(0);
+    const [selected, setSelected] = useState<number>(0);
     const [time, setTime] = useState(0); // Thời gian làm bài tính bằng giây
     const [formattedTime, setFormattedTime] = useState<string>('');
     const [isStart, setIsStart] = useState(false);
@@ -48,6 +51,8 @@ const PracticeDetail: React.FC<Props> = ({ practice }) => {
         }
     }, [user]);
     useEffect(() => {
+        // console.log(practice.question_list[0]);
+
         setFormattedTime(renderTime());
         const assign = localStorage.getItem(`PRACTICEDID_${user?.id}_${practice.id}`);
         if (assign) {
@@ -161,83 +166,26 @@ const PracticeDetail: React.FC<Props> = ({ practice }) => {
             }
         }
     }
-    const handleShowMenu = () => {
-        var menu = document.getElementsByClassName('r-menu');
-        if (menu.length > 0) {  // Đảm bảo rằng có ít nhất một phần tử có class 'r-menu'
-            menu[0].classList.toggle('hidden');
-        }
-        console.log(menu);
-    }
+
     return (
         <div>
             {
-                result
+                result && user && practice.question_list
                     ? <>{examDid && <ExamResult setResult={setResult} exam={practice} result={result} examDid={examDid} />}</>
                     : <>
                         <div className='flex flex-wrap gap-26xs md:gap-26md'>
-                            <div className="w-full sticky top-108md md:top-108md md:w-310md h-full border mt-5xs md:mt-5md rounded border-primary px-10xs md:px-10md py-5xs md:py-5md">
-                                <div className='r-menu hidden md:block z-20'>
-                                    <div className='bg-white'>
-                                        <div className='flex justify-between border-b border-primary py-20xs md:py-20md'>
-                                            <div className='text-center w-1/2'>
-                                                <div>Đã làm</div>
-                                                <div className='text-20xs md:text-20md font-semibold'>{questionDone}/{practice.question_count}</div>
-                                            </div>
-                                            <div className='text-center w-1/2'>
-                                                <div>Thời gian làm bài</div>
-                                                <div className='text-20xs md:text-20md font-semibold'>
-                                                    {formattedTime}
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div className='max-548xs md:max-h-548md overflow-y-auto'>
-                                            {
-                                                examDid?.res && Object.entries(examDid.res).map(([key, value], index) => {
-                                                    return (
-                                                        <div onClick={() => handleClickScrollToElement("question-" + key.toString())} key={key} className='cursor-pointer flex justify-between items-center px-16xs md:px-16md text-center mt-10xs md:mt-10md hover:text-black'>
-                                                            {index + 1}.
-                                                            <div className={`px-10md py-3md border rounded-full ${value && value == '1' ? 'border-green-700' : ''}`}>A</div>
-                                                            <div className={`px-10md py-3md border rounded-full ${value && value == '2' ? 'border-green-700' : ''}`}>B</div>
-                                                            <div className={`px-10md py-3md border rounded-full ${value && value == '3' ? 'border-green-700' : ''}`}>C</div>
-                                                            <div className={`px-10md py-3md border rounded-full ${value && value == '4' ? 'border-green-700' : ''}`}>D</div>
-                                                        </div>
-                                                    )
-                                                })
-                                            }
-                                        </div>
-                                        <div className='flex justify-center py-30xs md:py-30md gap-10xs md:gap-10md'>
-                                            <Button onClick={handleReset}>Làm lại</Button>
-                                            <Button className='bg-primary text-white' onClick={handleSubmit}>Nộp bài</Button>
-                                        </div>
-                                    </div>
+                            <div className='w-250md'>
+                                <ControlExam user={user} exam={practice} questionDone={questionDone} time={formattedTime} handleSubmit={handleSubmit} mode={'Bài tập'} handleReset={handleReset} type={'practice'} />
+                            </div>
+                            <div className="w-full flex-1 px-20xs md:px-20md py-10xs md:py-10md rounded mt-5xs md:mt-5md shadow">
+                                <QuestionShow questionList={practice?.question_list} selected={selected} examDid={examDid} handleChangeAnswer={handleChangeAnswer} />
+                                <div className='flex justify-between mt-10xs md:mt-10md pb-10xs md:pb-10md'>
+                                    <button disabled={selected == 0} className='border px-20xs md:px-20md py-5xs md:py-5md rounded bg-primary text-white hover:bg-white hover:text-black disabled:bg-white disabled:text-black' onClick={() => setSelected(selected - 1)}>Trước</button>
+                                    <button disabled={selected + 1 == practice.question_count} className='border px-20xs md:px-20md py-5xs md:py-5md rounded bg-primary text-white hover:bg-white hover:text-black disabled:bg-white disabled:text-black' onClick={() => setSelected(selected + 1)}>Sau</button>
                                 </div>
-                                <Button className='fixed bottom-10xs right-10xs opacity-70 md:hidden z-50' icon={<UnorderedListOutlined />} onClick={handleShowMenu}></Button>
                             </div>
-                            <div className="w-full flex-1 border px-20xs md:px-20md py-10xs md:py-10md rounded mt-5xs md:mt-5md">
-                                <div className='text-24xs md:text-24md font-bold'>{practice.name}</div>
-                                {
-                                    practice.question_list && practice.question_list.map((vl, index) => (
-                                        <div key={vl.id} className='py-10xs md:py-10md' id={`question-${vl.id}`}>
-                                            <div className='flex justify-between items-center'>
-                                                <div className='font-semibold'>Câu hỏi {index + 1}: </div>
-                                                <><QuestionReport questions={vl} /></>
-                                            </div>
-                                            <><div dangerouslySetInnerHTML={{ __html: vl.question }}></div></>
-                                            <div className='grid grid-cols grid-cols-1 md:grid-cols-2 gap-10xs md:gap-10md mt-10xs md:mt-10md'>
-                                                <button className={`text-left border p-5xs md:p-5md rounded text-13xs md:text-14md ${examDid && examDid.res[vl.id] && examDid.res[vl.id.toString()] == '1' ? 'border-green-700' : ''}`} onClick={() => handleChangeAnswer(vl.id, 1)}>A. {vl.answer_1}</button>
-                                                <button className={`text-left border p-5xs md:p-5md rounded text-13xs md:text-14md ${examDid && examDid.res[vl.id] && examDid.res[vl.id.toString()] == '2' ? 'border-green-700' : ''}`} onClick={() => handleChangeAnswer(vl.id, 2)}>B. {vl.answer_2}</button>
-                                                {
-                                                    vl.answer_3 && <button className={`text-left border p-5xs md:p-5md rounded text-13xs md:text-14md ${examDid && examDid.res[vl.id] && examDid.res[vl.id.toString()] == '3' ? 'border-green-700' : ''}`} onClick={() => handleChangeAnswer(vl.id, 3)}>C. {vl.answer_3}</button>
-                                                }
-                                                {
-                                                    vl.answer_4 && <button className={`text-left border p-5xs md:p-5md rounded text-13xs md:text-14md ${examDid && examDid.res[vl.id] && examDid.res[vl.id.toString()] == '4' ? 'border-green-700' : ''}`} onClick={() => handleChangeAnswer(vl.id, 4)}>D. {vl.answer_4}</button>
-                                                }
-
-                                            </div>
-                                        </div>
-                                    ))
-                                }
-                            </div>
+                            {/*  */}
+                            <QuestionList examDid={examDid} selected={selected} setSelected={setSelected} />
                         </div>
                     </>
             }

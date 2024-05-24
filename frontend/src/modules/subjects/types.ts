@@ -15,6 +15,7 @@ export interface ChapterType {
     id: number,
     name: string,
     subject_id: number,
+    grade: number,
     created_at: string,
     updated_at: string,
     lessons: LessonType[],

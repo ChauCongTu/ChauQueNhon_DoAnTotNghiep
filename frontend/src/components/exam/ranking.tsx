@@ -19,35 +19,36 @@ const ExamRanking: React.FC<{ histories: HistoryType[] }> = ({ histories }) => {
     };
 
     return (
-        <div className="bg-white rounded-lg p-4">
-            <div className='text-20xs md:text-20md font-bold'>TOP cao thủ giải đề</div>
-            <ul className="divide-y divide-gray-200">
-                {histories.length == 0 && <div className='text-13xs md:text-13md'>Hãy trở thành người đầu tiên trên bảng vàng.</div>}
+        <div>
+            <div className="grid grid-cols grid-cols-1 md:grid-cols-3 gap-10xs md:gap-10md w-full mt-20xs md:mt-20md">
+                {/* {histories.length == 0 && <div className='text-13xs md:text-13md'>Hãy trở thành người đầu tiên trên bảng vàng.</div>} */}
                 {histories.map((history, index) => {
                     if (user_list.length < 10 && !user_list.includes(history.user_id)) {
                         user_list.push(history.user_id);
                         return (
-                            <li key={index} className="flex items-center py-4">
-                                <div className="flex-shrink-0">
-                                    {renderRankingIcon(index)}
-                                </div>
-                                <div className="ml-3">
-                                    <Link href={`/personal/${history.user.username}`}>
-                                        <p className={index < 3 ? 'text-lg text-yellow-500 font-semibold' : 'text-lg'}>
-                                            #{index + 1} {history.user.name}
-                                        </p>
-                                        <p className='text-black text-13xs md:text-13md'>
-                                            {Math.ceil(history.result.time / 60)}&#39; | {history.result.total_score} điểm {history.user_id == user?.id && <>(tôi)</>}
-                                        </p>
+                            <div className='group/item border py-24xs md:py-24md flex justify-between rounded hover:bg-primary hover:text-white' key={history.id}>
+                                <div className='px-20xs md:px-20md'>
+                                    <Link href={'/'} className='flex items-center gap-7xs md:gap-7md group-hover/item:text-white'>
+                                        <div><img src={history.user.avatar} className='w-42md rounded-full' /></div>
+                                        <div>
+                                            <div className='font-bold'>{history.user.name}</div>
+                                            <div className='text-13xs md:text-14md'>
+                                                {Math.ceil(history.result.time / 60)} phút | {history.result.total_score} điểm {history.user_id == user?.id && <>(tôi)</>}
+                                            </div>
+                                        </div>
                                     </Link>
+
                                 </div>
-                            </li>
+                                <div className='pr-20xs md:pr-20md font-bold text-24xs md:text-24md'>
+                                    #{index + 1}
+                                </div>
+                            </div>
                         );
                     } else {
                         return null;
                     }
                 })}
-            </ul>
+            </div>
         </div>
     );
 };

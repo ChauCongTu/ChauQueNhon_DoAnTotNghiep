@@ -4,7 +4,7 @@ import { SubjectType } from "../subjects/types";
 import { User } from "../users/type";
 
 export interface ArenaType {
-    id?: number,
+    id: number,
     name: string,
     grade: number | null,
     author: User,

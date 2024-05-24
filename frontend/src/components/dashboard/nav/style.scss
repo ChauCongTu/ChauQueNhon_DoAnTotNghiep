@@ -1,0 +1,24 @@
+.item-link {
+    color: #fff;
+    display: flex;
+    align-items: center;
+    padding: calc(10/1440*100vw) calc(20/1440*100vw);
+    border-left: 3px solid #fff;
+    border-color: #1F2937;
+
+    &:hover {
+        background: #283547;
+        border-color: #fff;
+        color: #fff;
+    }
+}
+
+.active {
+    background: #283547;
+    border-color: #fff;
+
+    &:hover {
+        background: #283547;
+        border-color: #fff;
+    }
+}

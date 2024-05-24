@@ -73,6 +73,9 @@ const UserWithLogin = () => {
           <Menu.Item key="settings" icon={<SettingOutlined />}>
             <Link href="/settings">Cài đặt</Link>
           </Menu.Item>
+          <Menu.Item key="dashboard" icon={<SettingOutlined />}>
+            <Link href="/dashboard">Dashboard</Link>
+          </Menu.Item>
           <Menu.Item key="logout" icon={<LogoutOutlined />} onClick={showLogoutModal}>
             Đăng xuất
           </Menu.Item>

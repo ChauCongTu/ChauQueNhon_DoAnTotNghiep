@@ -4,6 +4,10 @@ import { useAuth } from '@/providers/authProvider'
 import { Button, Input, Modal } from 'antd'
 import React, { useEffect, useState } from 'react'
 import toast from 'react-hot-toast'
+import {
+    LogoutOutlined,
+    LoginOutlined
+} from '@ant-design/icons'
 
 type Props = {
     arena: ArenaType,
@@ -92,20 +96,29 @@ const ArenaJoinRoom: React.FC<Props> = ({ arena, setArena }) => {
     return (
         <>
             {
-                status
-                    ? <><Button className='bg-primary text-white' onClick={handleLeave}>Rời khỏi phòng</Button></>
-                    : <><Button className='bg-primary text-white' onClick={() => { setOpen(true) }}>Tham gia</Button></>
+                !arena.is_joined && arena.max_users === arena.joined?.length ?
+                    <div className='text-center text-15xs md:text-15md'>Phòng đã đủ người</div>
+                    :
+                    status
+                        ? <><button className='block border w-full py-5xs md:py-7md bg-white text-black hover:bg-slate-100 hover:text-black' onClick={handleLeave}><LogoutOutlined /> Rời khỏi phòng</button></>
+                        : <>
+                            <button onClick={() => { setOpen(true) }}
+                                className='block border w-full py-5xs md:py-7md bg-white text-black hover:bg-slate-100 hover:text-black'><LoginOutlined /> Tham gia</button>
+
+                        </>
             }
             <Modal open={open} footer={null}>
                 <div className='mt-30xs md:mt-30md'>
-                    
                     {
-                        arena.type == 'private' ? <><label className='my-5xs md:my-5md font-semibold'>Nhập mật khẩu phòng</label></> : <>Tham gia phòng thi</>
+                        arena.type == 'public' && <>Tham gia phòng thi</>
                     }
                     {
-                        arena.type == 'private' && <Input.Password id='password' value={password} onChange={(e) => { setPassword(e.target.value) }} />
+                        arena.type == 'private' && <div className="relative">
+                            <input value={password} onChange={(e) => { setPassword(e.target.value) }} type="password" id="floating_outlined" className="border block px-2.5 pb-2.5 pt-4 w-full text-sm text-gray-900 bg-transparent rounded-lg border-1 border-gray-300 appearance-none focus:outline-none focus:ring-0 focus:border-blue-600 peer" placeholder=" " />
+                            <label htmlFor="floating_outlined" className="absolute text-sm text-gray-500 duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-white px-2 peer-focus:px-2 peer-focus:text-blue-600 peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto start-1">Nhập mật khẩu</label>
+                        </div>
                     }
-                    
+
                     <div className='mt-10xs md:mt-10md flex gap-7xs md:gap-7md justify-end'>
                         <Button onClick={() => {
                             setPassword('');

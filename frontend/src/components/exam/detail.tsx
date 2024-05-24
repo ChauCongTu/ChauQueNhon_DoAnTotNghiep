@@ -2,11 +2,18 @@ import { ExamDid, ExamResultType, ExamType } from '@/modules/exams/types'
 import { useAuth } from '@/providers/authProvider'
 import React, { use, useEffect, useState } from 'react'
 import { DateTime } from 'luxon';
-import { Button } from 'antd';
+import { Button, Modal } from 'antd';
 import { postExamSubmit } from '@/modules/exams/services';
 import ExamResult from './result';
 import toast from 'react-hot-toast';
-import { ClockCircleOutlined, QuestionCircleOutlined } from '@ant-design/icons';
+import { FormOutlined, PlusOutlined, HeartOutlined, HeartFilled, QuestionOutlined, ClockCircleOutlined, FileDoneOutlined } from '@ant-design/icons';
+import ControlExam from './control_panel/page';
+import QuestionShow from './question/page';
+import QuestionList from './question_list/page';
+import PrepareExamControl from './pre_control/page';
+import ExamRanking from './ranking';
+import Link from 'next/link';
+import { delayAction } from '@/utils/time';
 
 
 type Props = {
@@ -15,6 +22,8 @@ type Props = {
 
 const ExamDetail: React.FC<Props> = ({ exam }) => {
     const { user } = useAuth();
+    const [open, setOpen] = useState(false);
+    const [selected, setSelected] = useState(0);
     const [examDid, setExamDid] = useState<ExamDid>();
     const [timeToEnd, setTimeToEnd] = useState(0);
     const [formattedTime, setFormattedTime] = useState<string>('');
@@ -114,14 +123,11 @@ const ExamDetail: React.FC<Props> = ({ exam }) => {
             toast.error('Vui lòng đăng nhập để bắt đầu làm bài.')
         }
     }
-
-    const handleClickScrollToElement = (elementId: string) => {
-        const element = document.getElementById(elementId);
-        if (element) {
-            const y = element.getBoundingClientRect().top + window.scrollY + (-108);
-            window.scrollTo({ behavior: 'smooth', top: y });
-        }
-    };
+    const start = () => {
+        delayAction(handleStart, 5000, (timeRemaining) => {
+            toast.success(`Bắt đầu sau ${timeRemaining / 1000}s`);
+        });
+    }
     const handleSubmit = () => {
         if (isStart) {
             const assign = localStorage.getItem(`EXAMDID_${user?.id}_${exam.id}`);
@@ -135,7 +141,8 @@ const ExamDetail: React.FC<Props> = ({ exam }) => {
                     if (res.status && res.status.code === 200) {
                         setResult(res.data[0]);
                         setIsStart(false);
-                        localStorage.removeItem(`EXAMDID_${user?.id}_${exam.id}`)
+                        setOpen(true);
+                        localStorage.removeItem(`EXAMDID_${user?.id}_${exam.id}`);
                     }
                 });
             }
@@ -144,89 +151,52 @@ const ExamDetail: React.FC<Props> = ({ exam }) => {
     return (
         <>
             {
-                result
-                    ? <>{examDid && <ExamResult setResult={setResult} exam={exam} result={result} examDid={examDid} />}</>
-                    : <>
-                        <div className='flex flex-wrap gap-26xs md:gap-26md'>
-                            <div className="w-full sticky top-108md md:top-108md md:w-310md h-full border mt-5xs md:mt-5md rounded border-primary px-10xs md:px-10md py-5xs md:py-5md">
-                                <div>
-                                    {
-                                        isStart
-                                            ? <>
-                                                <div className='flex justify-between border-b border-primary py-20xs md:py-20md'>
-                                                    <div className='text-center w-1/2'>
-                                                        <div>Đã làm</div>
-                                                        <div className='text-20xs md:text-20md font-semibold'>{questionDone}/{exam.question_count}</div>
-                                                    </div>
-                                                    <div className='text-center w-1/2'>
-                                                        <div>Thời gian còn lại</div>
-                                                        <div className='text-20xs md:text-20md font-semibold'>
-                                                            {formattedTime}
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div className='max-548xs md:max-h-548md overflow-y-auto'>
-                                                    {
-                                                        examDid?.res && Object.entries(examDid.res).map(([key, value], index) => {
-                                                            return (
-                                                                <div onClick={() => handleClickScrollToElement("question-" + key.toString())} key={key} className='cursor-pointer flex justify-between items-center px-16xs md:px-16md text-center mt-10xs md:mt-10md hover:text-black'>
-                                                                    {index + 1}.
-                                                                    <div className={`px-10md py-3md border rounded-full ${value && value == '1' ? 'border-green-700' : ''}`}>A</div>
-                                                                    <div className={`px-10md py-3md border rounded-full ${value && value == '2' ? 'border-green-700' : ''}`}>B</div>
-                                                                    <div className={`px-10md py-3md border rounded-full ${value && value == '3' ? 'border-green-700' : ''}`}>C</div>
-                                                                    <div className={`px-10md py-3md border rounded-full ${value && value == '4' ? 'border-green-700' : ''}`}>D</div>
-                                                                </div>
-                                                            )
-                                                        })
-                                                    }
-                                                </div>
-                                                <div className='flex justify-center py-30xs md:py-30md'>
-                                                    <Button className='bg-primary text-white' onClick={handleSubmit}>Nộp bài</Button>
-                                                </div>
-                                            </>
-                                            : <div className="text-center">
-                                                <div className="text-lg font-bold">{exam.question_count} câu</div>
-                                                <div className="flex items-center justify-center mt-2 space-x-2">
-                                                    <ClockCircleOutlined className="text-gray-500" />
-                                                    <span>Thời gian {exam.time} phút</span>
-                                                </div>
-                                                <div className="mt-4">
-                                                    <Button className='bg-primary text-white' onClick={handleStart}>Bắt đầu</Button>
-                                                </div>
-                                            </div>
-                                    }
+                isStart
+                    ? <>
+                        {/* {
+                            result
+                                ? <>{examDid && <ExamResult setResult={setResult} exam={exam} result={result} examDid={examDid} />}</>
+                                : 
+                        } */}
+                        <>
+                            <div className='flex flex-wrap gap-26xs md:gap-26md'>
+                                <div className='w-250md'>
+                                    <ControlExam user={user} exam={exam} questionDone={questionDone} time={formattedTime} handleSubmit={handleSubmit} mode={'Kiểm tra'} type={'exam'} />
                                 </div>
-
+                                <div className="w-full flex-1 px-20xs md:px-20md py-10xs md:py-10md rounded mt-5xs md:mt-5md shadow">
+                                    <QuestionShow questionList={exam?.question_list} selected={selected} examDid={examDid} handleChangeAnswer={handleChangeAnswer} />
+                                    <div className='flex justify-between mt-10xs md:mt-10md pb-10xs md:pb-10md'>
+                                        <button disabled={selected == 0} className='border px-20xs md:px-20md py-5xs md:py-5md rounded bg-primary text-white hover:bg-white hover:text-black disabled:bg-white disabled:text-black' onClick={() => setSelected(selected - 1)}>Trước</button>
+                                        <button disabled={selected + 1 == exam.question_count} className='border px-20xs md:px-20md py-5xs md:py-5md rounded bg-primary text-white hover:bg-white hover:text-black disabled:bg-white disabled:text-black' onClick={() => setSelected(selected + 1)}>Sau</button>
+                                    </div>
+                                </div>
+                                <QuestionList examDid={examDid} selected={selected} setSelected={setSelected} />
                             </div>
-                            <div className="w-full flex-1">
-                                <div className='text-20xs md:text-20md font-semibold'>{exam.name}</div>
-                                {
-                                    exam.question_list && exam.question_list.map((vl, index) => (
-                                        <div key={vl.id} className='py-10xs md:py-10md' id={`question-${vl.id}`}>
-                                            <div className='font-semibold'>Câu hỏi {index + 1}: </div>
-                                            {
-                                                isStart
-                                                    ? <><div dangerouslySetInnerHTML={{ __html: vl.question }}></div></>
-                                                    : <>Vui lòng bắt đầu  để thấy nội dung câu hỏi.</>
-                                            }
-                                            <div className='grid grid-cols grid-cols-1 md:grid-cols-2 gap-10xs md:gap-10md mt-10xs md:mt-10md'>
-                                                <button className={`text-left border p-5xs md:p-5md rounded-xl text-13xs md:text-14md ${examDid && examDid.res[vl.id] && examDid.res[vl.id.toString()] == '1' ? 'border-green-700' : ''}`} onClick={() => handleChangeAnswer(vl.id, 1)}>A. {vl.answer_1}</button>
-                                                <button className={`text-left border p-5xs md:p-5md rounded-xl text-13xs md:text-14md ${examDid && examDid.res[vl.id] && examDid.res[vl.id.toString()] == '2' ? 'border-green-700' : ''}`} onClick={() => handleChangeAnswer(vl.id, 2)}>B. {vl.answer_2}</button>
-                                                {
-                                                    vl.answer_3 && <button className={`text-left border p-5xs md:p-5md rounded-xl text-13xs md:text-14md ${examDid && examDid.res[vl.id] && examDid.res[vl.id.toString()] == '3' ? 'border-green-700' : ''}`} onClick={() => handleChangeAnswer(vl.id, 3)}>C. {vl.answer_3}</button>
-                                                }
-                                                {
-                                                    vl.answer_4 && <button className={`text-left border p-5xs md:p-5md rounded-xl text-13xs md:text-14md ${examDid && examDid.res[vl.id] && examDid.res[vl.id.toString()] == '4' ? 'border-green-700' : ''}`} onClick={() => handleChangeAnswer(vl.id, 4)}>D. {vl.answer_4}</button>
-                                                }
-
-                                            </div>
-                                        </div>
-                                    ))
-                                }
+                        </>
+                    </>
+                    : <div className='flex gap-20xs md:gap-20md'>
+                        <PrepareExamControl exam={exam} type='exam' user={user} handleStart={start} />
+                        <div className='flex-1 shadow rounded h-auto p-20xs md:p-20md relative flex flex-col content-between'>
+                            <div className='w-full'>
+                                <div className='text-24xs md:text-24md font-semibold'>Bảng xếp hạng</div>
+                                <div>
+                                    {exam?.histories && <ExamRanking histories={exam?.histories} />}
+                                </div>
+                            </div>
+                            <div className='mt-20xs md:mt-20md bg-primary p-20px md:p-20md'>
+                                <div className='text-white'>Bạn đang ở chế độ xem trước, hãy bắt đầu ôn thi ngay nhé</div>
                             </div>
                         </div>
-                    </>
+                    </div>
             }
+            <Modal onCancel={() => setOpen(false)} open={open} footer={null}>
+                <div className='h-240xs md:h-140md relative'>
+                    <div className='absolute top-1/2 -translate-y-1/2 '>
+                        <div className='font-bold text-21xs md:text-21md'>Nộp bài thành công!</div>
+                        <div className='mt-5xs md:mt-5md'>Xem chi tiết tại: <Link href="/history">tại  đây</Link></div>
+                    </div>
+                </div>
+            </Modal>
         </>
     )
 }

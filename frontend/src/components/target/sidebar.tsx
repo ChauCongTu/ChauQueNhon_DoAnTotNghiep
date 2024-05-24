@@ -18,6 +18,7 @@ const TargetSidebar = (props: Props) => {
     const [reality, setReality] = useState<UserTarget>();
     const [timeOnline, setTimeOnline] = useState(0);
     const [mobileShow, setMobileShow] = useState(false);
+    const [check, setCheck] = useState(0);
 
     useEffect(() => {
         setLoading(true);
@@ -27,7 +28,7 @@ const TargetSidebar = (props: Props) => {
                 setTargets(res.data[0]);
             }
         }).finally(() => setLoading(false));
-    }, []);
+    }, [check]);
     useEffect(() => {
         setLoading(true);
         const now = DateTime.local();
@@ -36,7 +37,7 @@ const TargetSidebar = (props: Props) => {
                 setReality(res.data[0]);
             }
         }).finally(() => setLoading(false));
-    }, []);
+    }, [check]);
     useEffect(() => {
         const interval = setInterval(() => {
             const today = DateTime.local().toFormat('yyyy-MM-dd');
@@ -45,6 +46,7 @@ const TargetSidebar = (props: Props) => {
                 const timeParse = JSON.parse(timeOnlineToday);
                 setTimeOnline(Math.ceil(timeParse.time / 60));
             }
+            setCheck(check + 1);
         }, 1000);
 
         return () => clearInterval(interval);
@@ -206,7 +208,7 @@ const TargetSidebar = (props: Props) => {
                             </div>
                         </>
                         : <>
-                            <div className='border rounded mt-5xs md:mt-5md py-20xs md:py-20md px-15xs md:px-15md'>Vui lòng đăng nhập</div>
+                            <div className='border rounded mt-5xs md:mt-5md py-20xs md:py-20md px-15xs md:px-15md'>Vui lòng thiết lập target</div>
                         </>
                 }
             </>
