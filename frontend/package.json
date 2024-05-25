@@ -9,6 +9,10 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@ckeditor/ckeditor5-build-classic": "^41.4.2",
+    "@ckeditor/ckeditor5-code-block": "^41.4.2",
+    "@ckeditor/ckeditor5-document-outline": "^41.4.2",
+    "@ckeditor/ckeditor5-react": "^7.0.0",
     "@tailwindcss/aspect-ratio": "^0.4.2",
     "@types/croppie": "^2.6.4",
     "@types/luxon": "^3.4.2",

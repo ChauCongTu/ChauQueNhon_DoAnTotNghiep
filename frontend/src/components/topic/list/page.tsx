@@ -2,6 +2,7 @@ import { TopicType } from '@/modules/topics/types'
 import { Button, Modal } from 'antd'
 import React, { useState } from 'react'
 import TopicItem from '../item'
+import Link from 'next/link'
 
 type Props = {
     topics: TopicType[]
@@ -14,7 +15,7 @@ const MainTopicPage: React.FC<Props> = ({ topics }) => {
             <div className='text-24xs md:text-24md font-bold'>THẢO LUẬN</div>
             <div className='mt-10xs md:mt-10md flex items-center gap-7xs md:gap-7md'>
                 <div>
-                    <Button className='bg-primary text-white'>Tạo chủ đề</Button>
+                    <Link href={'/topic/new'} className='btn-primary btn-lg'>Tạo chủ đề</Link>
                 </div>
                 <div>
                     <Button>Đã like</Button>

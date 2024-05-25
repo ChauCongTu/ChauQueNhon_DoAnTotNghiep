@@ -139,7 +139,7 @@ const TargetSidebar = (props: Props) => {
 
                                             <div>
                                                 <div className='font-semibold'>Tỉ lệ làm đúng</div>
-                                                <div>{reality?.accuracy} / {targets.accuracy}</div>
+                                                <div>{reality?.accuracy} / {targets.accuracy}%</div>
                                                 <div>
                                                     <Progress percent={calcProgress(reality?.accuracy, targets.accuracy)}
                                                         status={calcProgress(reality?.accuracy, targets.accuracy) >= 100 ? 'success' : 'active'} />
@@ -160,7 +160,7 @@ const TargetSidebar = (props: Props) => {
 
                                     <div>
                                         <div className='font-semibold'>Số đề đã giải</div>
-                                        <div>{reality?.total_exams} / {targets.total_exams}</div>
+                                        <div>{reality?.total_exams} / {targets.total_exams} đề</div>
                                         <div>
                                             <Progress percent={calcProgress(reality?.total_exams, targets.total_exams)}
                                                 status={calcProgress(reality?.total_exams, targets.total_exams) >= 100 ? 'success' : 'active'} />
@@ -169,7 +169,7 @@ const TargetSidebar = (props: Props) => {
 
                                     <div>
                                         <div className='font-semibold'>Số bài tập đã làm</div>
-                                        <div>{reality?.total_practices} / {targets.total_practices}</div>
+                                        <div>{reality?.total_practices} / {targets.total_practices} bài</div>
                                         <div>
                                             <Progress percent={calcProgress(reality?.total_practices, targets.total_practices)}
                                                 status={calcProgress(reality?.total_practices, targets.total_practices) >= 100 ? 'success' : 'active'} />
@@ -178,7 +178,7 @@ const TargetSidebar = (props: Props) => {
 
                                     <div>
                                         <div className='font-semibold'>Số phòng thi đã tham gia</div>
-                                        <div>{reality?.total_arenas} / {targets.total_arenas || 'None'}</div>
+                                        <div>{reality?.total_arenas} / {targets.total_arenas || ''}</div>
                                         <div>
                                             <Progress
                                                 percent={calcProgress(reality?.total_arenas, targets.total_arenas)}
@@ -198,7 +198,7 @@ const TargetSidebar = (props: Props) => {
 
                                     <div>
                                         <div className='font-semibold'>Tỉ lệ làm đúng</div>
-                                        <div>{reality?.accuracy} / {targets.accuracy}</div>
+                                        <div>{reality?.accuracy} / {targets.accuracy}%</div>
                                         <div>
                                             <Progress percent={calcProgress(reality?.accuracy, targets.accuracy)}
                                                 status={calcProgress(reality?.accuracy, targets.accuracy) >= 100 ? 'success' : 'active'} />

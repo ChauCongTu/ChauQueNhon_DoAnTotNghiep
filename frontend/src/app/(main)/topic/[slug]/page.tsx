@@ -51,7 +51,7 @@ const TopicDetail = ({ params }: { params: { slug: string } }) => {
                                 {
                                     loading
                                         ? <><CustomSkeleton height={500} loading={loading} /></>
-                                        : <><MainTopicDetail topic={topic} /></>
+                                        : <><MainTopicDetail setTopic={setTopic} topic={topic} /></>
                                 }
                             </main>
                             <nav className="w-full md:w-310md order-3">

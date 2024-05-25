@@ -6,6 +6,13 @@ a {
     @apply text-gray-800 hover:text-primary;
 }
 
+.btn-primary {
+    @apply bg-primary px-20xs md:px-20md py-5xs md:py-5md text-white hover:bg-white rounded border border-primary hover:text-primary;
+}
+
+.btn-lg {
+    @apply py-10xs md:py-10md text-16xs md:text-16md;
+}
 
 nextjs-portal {
     display: none;

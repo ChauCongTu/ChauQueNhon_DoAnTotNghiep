@@ -8,15 +8,18 @@ export interface User {
     invite_code: string | null;
     avatar: string;
     gender: string | null;
-    dob: string | Date | null; // Hoặc có thể sử dụng kiểu Date nếu phù hợp
+    dob: string | Date | null;
     address: string | null;
     school: string | null;
     class: string | null;
     test_class: string | null;
     grade: string | null;
-    lastLoginAt: string | Date; // Hoặc có thể sử dụng kiểu Date nếu phù hợp
+    lastLoginAt: string | Date;
     google_id: string | null;
+    role: string[];
 }
+
+
 
 export interface LoginRequest {
     email: string,
