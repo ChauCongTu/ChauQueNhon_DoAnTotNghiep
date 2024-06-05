@@ -12,6 +12,7 @@ class Subject extends Model
     protected $fillable = [
         'name',
         'slug',
+        'icon',
         'grade',
     ];
     public function chapters()

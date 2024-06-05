@@ -17,6 +17,7 @@ const HistorySidebar = (props: Props) => {
         getHistories({ perPage: 10 }).then((res) => {
             if (res.status.code === 200) {
                 setHistories(res.data[0].data);
+                console.log(res.data[0].data);
             }
         }).finally(() => setLoading(false));
     }, []);
@@ -38,13 +39,18 @@ const HistorySidebar = (props: Props) => {
             <div className='mt-30xs md:mt-30md'>
                 {
                     histories.map((value) => (
-                        <div key={value.id} className='mt-20xs md:mt-20md border-t pt-20xs md:pt-20md'>
-                            <div><Link href={`/history/${value.id}`} className='text-16xs md:text-16md font-semibold hover:text-slate-700 line-clamp-1'>{value.model.name}</Link></div>
-                            <div className='flex justify-between text-13xs md:text-13md'>
-                                <div>{renderHistoryType(value.type)}</div>
-                                <div>{convertTimeString(value.created_at)}</div>
-                            </div>
-                        </div>
+                        <>  
+                            {
+                                value.model && <div key={value.id} className='mt-20xs md:mt-20md border-t pt-20xs md:pt-20md'>
+                                    <div><Link href={`/history/${value.id}`} className='text-16xs md:text-16md font-semibold hover:text-slate-700 line-clamp-1'>{value.model.name}</Link></div>
+                                    <div className='flex justify-between text-13xs md:text-13md'>
+                                        <div>{renderHistoryType(value.type)}</div>
+                                        <div>{convertTimeString(value.created_at)}</div>
+                                    </div>
+                                </div>
+                            }
+
+                        </>
                     ))
                 }
             </div>

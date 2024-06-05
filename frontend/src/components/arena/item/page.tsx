@@ -114,6 +114,7 @@ const ArenaRoomDetail: React.FC<Props> = ({ arena, setArena }) => {
             console.log(parseObject);
         });
     }, []);
+    
     useEffect(() => {
         if (arena) {
             calcTimeEnd();

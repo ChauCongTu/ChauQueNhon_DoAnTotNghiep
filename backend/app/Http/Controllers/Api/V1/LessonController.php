@@ -24,10 +24,15 @@ class LessonController extends Controller
         $perPage = $request->input('perPage', 0);
         $sort = $request->input('sort', 'created_at');
         $order = $request->input('order', 'desc');
+        $chapter_id = $request->input('chapter_id', null);
 
         $query = Lesson::query();
         if ($filterBy && $value) {
             $query = ($condition) ? $query->where($filterBy, $condition, $value) : $query->where($filterBy, $value);
+        }
+
+        if ($chapter_id) {
+            $query->where('chap_id', $chapter_id);
         }
 
         if (count($with) > 0) {

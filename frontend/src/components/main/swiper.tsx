@@ -27,21 +27,21 @@ const SwiperExam = (props: Props) => {
                 effect={'cards'}
                 grabCursor={true}
                 modules={[EffectCards]}
-                className="mySwiper text-15xs md:text-15md !overflow-hidden !p-20xs md:!p-20md"
+                className="mySwiper text-15xs md:text-15md !overflow-hidden !p-20xs md:!p-20md border border-black mt-18xs md:mt-18md"
             >
                 {
                     exams
                         ? <>
                             {
                                 exams.map((exam) => (
-                                    <SwiperSlide key={exam.id} className='!h-auto border rounded-xl !p-12xs md:!p-12md bg-slate-100 !flex !flex-col !justify-between content-between'>
+                                    <SwiperSlide key={exam.id} className='!h-auto rounded !p-12xs md:!p-12md bg-white !flex !flex-col !justify-between content-between  border border-black'>
                                         <div className='!w-full'>
-                                            <Image src='/exams01.jpg' preview={false} className='!h-180xs md:!h-180md object-cover' width={'100%'} />
+                                            <Image src='https://img.freepik.com/premium-vector/quiz-comic-pop-art-style_175838-505.jpg?w=600' preview={false} className='!h-180xs md:!h-180md object-cover' width={'100%'} />
                                         </div>
-                                        <div>
-                                            <h3 className='flex-1'><Link href={`/exam/${exam.slug}`} className='font-semibold text-20xs md:text-20md leading-23xs md:leading-23md line-clamp-2 mt-5xs md:mt-5md'>{exam.name}</Link></h3>
+                                        <div className='border-t border-black pt-10xs md:pt-10md'>
+                                            <h3 className='flex-1'><Link href={`/exam/${exam.slug}`} className='font-semibold text-20xs md:text-20md leading-23xs md:leading-23md line-clamp-2 mt-5xs md:mt-5md text-justify'>{exam.name}</Link></h3>
                                             <div className='text-primary font-semibold mt-5xs md:mt-5md text-18xs md:text-18md'>
-                                                [Toán học]
+                                                {exam.subject_id}
                                             </div>
                                         </div>
                                         <div className='mt-15xs md:mt-15md'>

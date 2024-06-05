@@ -27,10 +27,26 @@ class PracticeController extends Controller
         $perPage = $request->input('perPage', 0);
         $sort = $request->input('sort', 'created_at');
         $order = $request->input('order', 'desc');
+        // = 0 lấy ra những thằng ko có chapter
+        $subject = $request->input('subject', null);
+        $chapter = $request->input('chapter', null);
+
 
         $query = Practice::query();
         if ($filterBy && $value) {
             $query->where($filterBy, $condition ?? '=', $value);
+        }
+
+        if ($chapter) {
+            if ($chapter == 0) {
+                $query = $query->where('chapter_id', null);
+            } else {
+                $query = $query->where('chapter_id', $chapter);
+            }
+        } else {
+            if ($subject) {
+                $query = $query->where('subject_id', $subject);
+            }
         }
 
         if (!empty($with)) {
@@ -40,6 +56,11 @@ class PracticeController extends Controller
         $query->orderBy($sort, $order);
         $practices = $perPage == 0 ? $query->get() : $query->paginate($perPage, ['*'], 'page', $page);
 
+        foreach ($practices as $value) {
+            $value['join_count'] = $value->join_count();
+            $value['question_list'] = $value->questions();
+        }
+
         return Common::response(200, 'Lấy danh sách bài tập thành công', $practices);
     }
 
@@ -47,6 +68,7 @@ class PracticeController extends Controller
     {
         $data = $request->validated();
         $data['questions'] = array_unique($data['questions']);
+        $data['question_count'] = (int)$data['question_count'];
         if (count($data['questions']) != $data['question_count']) {
             return Common::response(400, "Số câu hỏi đã nhập không đúng với số lượng câu hỏi.");
         }
@@ -54,6 +76,8 @@ class PracticeController extends Controller
         $data['questions'] = implode(',', $data['questions']);
 
         $practice = Practice::create($data);
+        $practice['join_count'] = $practice->join_count();
+        $practice['question_list'] = $practice->questions();
 
         return $practice
             ? Common::response(201, "Tạo bài tập mới thành công.", $practice)
@@ -71,6 +95,7 @@ class PracticeController extends Controller
         $data = $request->validated();
 
         $data['questions'] = array_unique($data['questions']);
+        $data['question_count'] = (int)$data['question_count'];
         if (count($data['questions']) != $data['question_count']) {
             return Common::response(400, "Số câu hỏi đã nhập không đúng với số lượng câu hỏi.");
         }

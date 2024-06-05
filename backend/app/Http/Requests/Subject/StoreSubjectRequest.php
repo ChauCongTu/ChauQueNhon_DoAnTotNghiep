@@ -24,12 +24,14 @@ class StoreSubjectRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => 'required|max:255|unique:subjects,name',
-            'grade' => 'required|in:0,10,11,12'
+            'name' => 'required|max:255',
+            'grade' => 'required|in:10,11,12,13',
+            'icon' => 'required'
         ];
     }
 
-    public function attributes(): array {
+    public function attributes(): array
+    {
         return [
             'name' => 'Tên môn học',
             'grade' => 'Khối lớp'

@@ -4,6 +4,8 @@ import Footer from "@/components/footer/footer";
 import { Toaster } from "react-hot-toast";
 import AdminNav from "@/components/dashboard/nav/page";
 import AdminHeader from "@/components/dashboard/header/page";
+import Link from "next/link";
+import ToTop from "@/components/footer/toTop/page";
 
 export const metadata: Metadata = {
     title: "Go Uni - Luyện thi hiệu quả",
@@ -17,17 +19,22 @@ export default function AdminLayout({
 }>) {
     return (
         <>
-            <div>
-                <div>
-                    <AdminHeader />
-                </div>
-                <div className="flex gap-10xs md:gap-10md bg-[#ddd]">
-                    <div className="w-240xs md:w-240md">
+            <div className="bg-[#FAFBFF]">
+                <div className="flex gap-10xs md:gap-71md">
+                    <div className="w-306xs md:w-306md">
                         <AdminNav />
+                    </div> 
+                    <div className="flex-1 mt-10xs md:mt-10md mr-10xs md:mr-71md">
+                        <AdminHeader />
+                        <div className="shadow rounded">{children}</div>
                     </div>
-                    <div className="flex-1 bg-[#ddd] min-h-dvh mt-10xs md:mt-10md">{children}</div>
+                </div>
+                <div className="flex justify-center p-30xs md:p-30md">
+                    <ToTop />
+                    <span className="text-15xs md:text-15md text-gray-700"><Link href='/'>GoUni</Link> Admin &copy; 2024</span>
                 </div>
             </div>
+            <Toaster />
         </>
 
     );

@@ -6,6 +6,7 @@ import Header from "@/components/header/header";
 import Footer from "@/components/footer/footer";
 import Providers from "@/providers/progressProvider";
 import 'swiper/css';
+import 'katex/dist/katex.min.css';
 
 export const metadata: Metadata = {
   title: "Go Uni - Luyện thi hiệu quả",
@@ -20,7 +21,7 @@ export default function RootLayout({
   return (
     <AuthProvider>
       <html lang="vi">
-        <body>
+        <body className="font-poppins">
           <Providers>{children}</Providers>
           <script src="http://localhost:6001/socket.io/socket.io.js"></script>
         </body>

@@ -32,13 +32,15 @@ class StoreQuestionRequest extends FormRequest
             'answer_correct' => 'required|in:1,2,3,4',
             'answer_detail' => 'nullable',
             'subject_id' => 'required',
-            'grade' => 'nullable',
+            'grade' => 'required',
+            'created_by' => 'nullable|numeric',
             'chapter_id' => 'nullable',
             'level' => 'required|in:1,2,3,4,5'
         ];
     }
 
-    public function attributes(): array {
+    public function attributes(): array
+    {
         return [
             'question' => 'Câu hỏi',
             'answer_1' => 'Đáp án 1',

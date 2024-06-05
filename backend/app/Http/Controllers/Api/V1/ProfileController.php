@@ -22,6 +22,8 @@ class ProfileController extends Controller
         $profile['test_class'] = implode(',', $profile['test_class']);
         User::where('id', $user_id)->update($profile);
         $user = User::find(1);
+        $user['test_class'] = explode(',', $user['test_class']);
+        $user['role'] = $user->getRoleNames();
         return Common::response(200, "Thành công", $user);
     }
 
@@ -36,13 +38,13 @@ class ProfileController extends Controller
 
         $existingAvatarPath = $user->avatar;
         if ($existingAvatarPath) {
-            Storage::delete(str_replace(env('APP_URL') . '/storage/', 'public/', $existingAvatarPath));
+            Storage::delete(str_replace('http://127.0.0.1:8000' . '/storage/', 'public/', $existingAvatarPath));
         }
 
         // Lưu ảnh mới vào thư mục storage
         Storage::putFileAs('public/avatar/', $avatar, $avatarName);
 
-        $user->avatar = env('APP_URL') . '/storage/avatar/' . $avatarName;
+        $user->avatar = 'http://127.0.0.1:8000' . '/storage/avatar/' . $avatarName;
         $user->save();
 
         // Trả về response thành công
@@ -81,8 +83,9 @@ class ProfileController extends Controller
     public function index(string $username = null)
     {
         $user = User::where('username', $username)->first();
-        $user['test_class'] = explode(',', $user['test_class']);
+
         if ($user) {
+            $user['test_class'] = explode(',', $user['test_class']);
             $user['role'] = $user->getRoleNames();
             return Common::response(200, 'Lấy thông tin người dùng thành công.', $user);
         }

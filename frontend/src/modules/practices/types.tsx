@@ -12,5 +12,6 @@ export interface PracticeType {
     updated_at: string,
     question_count: number,
     question_list: QuestionType[] | null,
-    histories: HistoryType[]
+    histories: HistoryType[],
+    join_count: number
 }

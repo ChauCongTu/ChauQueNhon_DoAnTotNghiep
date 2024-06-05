@@ -28,6 +28,7 @@ class ExamController extends Controller
         $sort = $request->input('sort', 'created_at');
         $order = $request->input('order', 'desc');
         // = 0 lấy ra những thằng ko có chapter
+        $subject = $request->input('subject', null);
         $chapter = $request->input('chapter', null);
 
         $query = Exam::query();
@@ -40,6 +41,10 @@ class ExamController extends Controller
             } else {
                 $query = $query->where('chapter_id', $chapter);
             }
+        } else {
+            if ($subject) {
+                $query = $query->where('subject_id', $subject);
+            }
         }
         if (!empty($with)) {
             $query->with($with);
@@ -47,6 +52,10 @@ class ExamController extends Controller
 
         $query->orderBy($sort, $order);
         $exams = $perPage == 0 ? $query->get() : $query->paginate($perPage, ['*'], 'page', $page);
+        foreach ($exams as $exam) {
+            $exam['join_count'] = $exam->join_count();
+            $exam['question_list'] = $exam->questions();
+        }
 
         return Common::response(200, 'Lấy danh sách đề thi thành công', $exams);
     }

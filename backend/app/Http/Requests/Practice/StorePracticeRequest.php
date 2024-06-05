@@ -27,7 +27,7 @@ class StorePracticeRequest extends FormRequest
             'name' => 'required|min:5|max:255|unique:practices,name',
             'questions' => 'required|array',
             'subject_id' => 'required|numeric|exists:subjects,id',
-            'chapter_id' => 'numeric|exists:chapters,id',
+            'chapter_id' => 'nullable|numeric|exists:chapters,id',
             'question_count' => 'required|numeric'
         ];
     }

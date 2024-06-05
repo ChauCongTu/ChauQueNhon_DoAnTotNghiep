@@ -82,7 +82,7 @@ export const getProfiles = async (params?: AxiosRequestConfig['params']) => {
     }
 };
 
-export const postProfile = async (request: User): Promise<any> => {
+export const postProfile = async (request: User | undefined): Promise<any> => {
     try {
         const response = await api.post('/profiles/update', request);
         return response.data;

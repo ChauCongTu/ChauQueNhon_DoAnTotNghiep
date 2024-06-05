@@ -34,7 +34,8 @@ class UpdateQuestionRequest extends FormRequest
             'subject_id' => 'required',
             'grade' => 'nullable',
             'chapter_id' => 'nullable',
-            'level' => 'required|in:1,2,3,4,5'
+            'level' => 'required|in:1,2,3,4,5',
+            'created_by' => 'nullable|numeric'
         ];
     }
 

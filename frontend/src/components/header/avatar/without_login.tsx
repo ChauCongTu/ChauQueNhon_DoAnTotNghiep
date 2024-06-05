@@ -28,7 +28,6 @@ const UserWithoutLogin = (props: Props) => {
 
     useEffect(() => {
         getGoogleUrl().then((res) => setGoogle(res.url));
-        
     }, []);
 
     const showModal = () => {
@@ -150,16 +149,16 @@ const UserWithoutLogin = (props: Props) => {
     return (
         <>
             <Loading loading={loading} />
-            <div className='cursor-pointer' onClick={showModal}>
+            <div className='cursor-pointer'>
                 <span className="flex items-center justify-end gap-10xs md:gap-10md text-14xs md:text-14md">
                     <Avatar src='/avatar.png' />
-                    <div className='hidden md:block text-16xs md:text-16md font-semibold'>Tài khoản</div>
+                    <Link href={'/login'} className='hidden md:block text-16xs md:text-16md font-semibold'>Tài khoản</Link>
                 </span>
             </div>
             <Modal title="" open={isModalOpen} onCancel={handleCancel} footer={null} className='!w-auto md:!w-600md'>
                 <div>
                     <div className='flex justify-center'>
-                        <div className='w-236xs md:w-236md'><Image src='/bg-auth.png' preview={false}/></div>
+                        <div className='w-236xs md:w-236md'><Image src='/bg-auth.png' preview={false} /></div>
                     </div>
                     <div>
                         <div className='text-center font-bold text-20xs md:text-20md'>XIN CHÀO!</div>

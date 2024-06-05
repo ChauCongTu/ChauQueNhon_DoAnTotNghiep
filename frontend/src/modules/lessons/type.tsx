@@ -12,8 +12,8 @@ export interface LessonType {
     chapter: ChapterType | null,
     subject: SubjectType | null,
     liked_list: {
-        name: string,
-        username: string
+        name: string | null,
+        username: string | null
     }[] | null,
     preview: LessonType | null,
     next: LessonType | null,

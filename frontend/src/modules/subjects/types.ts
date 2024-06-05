@@ -9,7 +9,8 @@ export interface SubjectType {
     icon: string,
     grade: number,
     created_at: string,
-    updated_at: string
+    updated_at: string,
+    
 }
 export interface ChapterType {
     id: number,
@@ -19,6 +20,7 @@ export interface ChapterType {
     created_at: string,
     updated_at: string,
     lessons: LessonType[],
-    exams: ExamType[], 
-    practices: PracticeType[]
+    exams: ExamType[],
+    practices: PracticeType[],
+    subject: SubjectType | null
 }

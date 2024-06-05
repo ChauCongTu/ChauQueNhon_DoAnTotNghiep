@@ -1,10 +1,9 @@
 .item-link {
-    color: #fff;
-    display: flex;
-    align-items: center;
-    padding: calc(10/1440*100vw) calc(20/1440*100vw);
-    border-left: 3px solid #fff;
-    border-color: #1F2937;
+    padding: calc(12/1440*100vw) calc(10/1440*100vw);
+    font-weight: 500;
+    line-height: auto;
+    text-align: left;
+    color: #000;
 
     &:hover {
         background: #283547;
@@ -16,6 +15,7 @@
 .active {
     background: #283547;
     border-color: #fff;
+    color: #fff;
 
     &:hover {
         background: #283547;

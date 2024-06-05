@@ -8,9 +8,10 @@ interface EditorProps {
     hideToolbar?: boolean;
     rows?: number;
     placeholder?: string;
+    toolbar?: string;
 }
 
-const CKEditorInput: React.FC<EditorProps> = ({ initialValue, onChange }) => {
+const CKEditorInput: React.FC<EditorProps> = ({ initialValue, onChange, toolbar }) => {
     return (
         <div>
             <CKEditor

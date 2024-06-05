@@ -89,6 +89,7 @@ const config: Config = {
           "Hiragino Kaku Gothic Pro",
         ],
         inter: ["Inter"],
+        poppins: ['Poppins', 'Arial', 'Helvetica', 'sans-serif'],
       },
     },
     screens: {

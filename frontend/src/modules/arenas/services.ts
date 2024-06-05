@@ -53,6 +53,26 @@ export const postArena = async (data: ArenaType | FormData): Promise<any> => {
     }
 };
 
+export const putArena = async (id: number, data: ArenaType | FormData): Promise<any> => {
+    try {
+        const response = await api.put('/arenas/' + id, data);
+        return response.data;
+    } catch (error) {
+        console.error('Call API Error:', error);
+        throw error;
+    }
+};
+
+export const deleteArena = async (id: number): Promise<any> => {
+    try {
+        const response = await api.delete('/arenas/' + id);
+        return response.data;
+    } catch (error) {
+        console.error('Call API Error:', error);
+        throw error;
+    }
+};
+
 export const postJoin = async (id: number, data: { password: string }): Promise<any> => {
     try {
         const response = await api.post(`/arenas/${id}/join`, data);

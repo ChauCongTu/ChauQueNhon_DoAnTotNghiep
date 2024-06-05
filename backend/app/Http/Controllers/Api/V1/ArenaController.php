@@ -33,9 +33,15 @@ class ArenaController extends Controller
         $sort = $request->input('sort', 'created_at');
         $order = $request->input('order', 'desc');
 
+        $subject = $request->input('subject', null);
+
         $query = Arena::query();
         if ($filterBy && $value) {
             $query->where($filterBy, $condition ?? '=', $value);
+        }
+
+        if ($subject) {
+            $query = $query->where('subject_id', $subject);
         }
 
         if (!empty($with)) {
@@ -49,6 +55,8 @@ class ArenaController extends Controller
             $value['users'] = count(explode(',', $value['users']));
             if ($value['subject_id']) {
                 $value['subject'] = Subject::find($value['subject_id']);
+                $value['joined'] = $value->joined();
+                $value['question_list'] = $value->questions();
             }
             $value['is_joined'] = $this->is_joined($value->id, (int) Auth::id());
         }
@@ -58,7 +66,6 @@ class ArenaController extends Controller
     public function store(StoreArenaRequest $request)
     {
         $data = $request->validated();
-        $data['questions'] = explode(',', $data['questions']);
         if (count($data['questions']) != $data['question_count']) {
             return Common::response(400, "Số câu hỏi đã nhập không đúng với số lượng câu hỏi.");
         }

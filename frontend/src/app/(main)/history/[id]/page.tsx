@@ -1,5 +1,6 @@
 'use client'
 import HistorySidebar from '@/components/main/history';
+import RenderContent from '@/components/main/renderQuestion';
 import SwiperExam from '@/components/main/swiper';
 import { getArena } from '@/modules/arenas/services';
 import { ArenaType } from '@/modules/arenas/types';
@@ -82,6 +83,7 @@ const HistoryDetail = ({ params }: { params: { id: number } }) => {
                         <div className="mt-20xs md:mt-20md mx-auto px-10xs md:px-40m text-16xs md:text-16md">
                             <div className="flex flex-wrap gap-20xs md:gap-20md justify-between">
                                 <main className="w-full flex-1 order-1 md:order-2 md:max-w-1000md">
+                                    
                                     <div className='text-24xs md:text-24md font-semibold'>[LỊCH SỬ] {history.model.name}</div>
                                     <div className='mt-20xs md:mt-20md'>
                                         <div className='flex flex-wrap justify-center text-center pb-20xs md:pb-20md border-b'>
@@ -108,22 +110,22 @@ const HistoryDetail = ({ params }: { params: { id: number } }) => {
                                                         <div key={value.id} className='py-10xs md:py-10md'>
                                                             <div>
                                                                 <div className='font-semibold'>Câu hỏi {index + 1}: {history.result.assignment[value.id].your_answer == null && <>(Bạn đã bỏ trống câu này)</>}</div>
-                                                                <><div className='font-semibold' dangerouslySetInnerHTML={{ __html: value.question }}></div></>
+                                                                <div className='font-semibold'><RenderContent content={value.question} /></div>
                                                             </div>
                                                             <div className='grid grid-cols grid-cols-1 md:grid-cols-2 gap-10xs md:gap-10md mt-5xs md:mt-5md'>
                                                                 {
                                                                     history.result.assignment[value.id].correct_answer.toString() == history.result.assignment[value.id].your_answer ?
                                                                         <>
-                                                                            <div className={`px-10xs md:px-10md py-5xs md:py-5md border rounded ${history.result.assignment[value.id].correct_answer == 1 ? 'border-green-600' : ''}`}>A. {value.answer_1}</div>
-                                                                            <div className={`px-10xs md:px-10md py-5xs md:py-5md border rounded ${history.result.assignment[value.id].correct_answer == 2 ? 'border-green-600' : ''}`}>B. {value.answer_2}</div>
-                                                                            <div className={`px-10xs md:px-10md py-5xs md:py-5md border rounded ${history.result.assignment[value.id].correct_answer == 3 ? 'border-green-600' : ''}`}>C. {value.answer_3}</div>
-                                                                            <div className={`px-10xs md:px-10md py-5xs md:py-5md border rounded ${history.result.assignment[value.id].correct_answer == 4 ? 'border-green-600' : ''}`}>D. {value.answer_4}</div>
+                                                                            <div className={`px-10xs md:px-10md py-5xs md:py-5md border rounded ${history.result.assignment[value.id].correct_answer == 1 ? 'border-green-600' : ''}`}>A. <RenderContent content={value.answer_1} /></div>
+                                                                            <div className={`px-10xs md:px-10md py-5xs md:py-5md border rounded ${history.result.assignment[value.id].correct_answer == 2 ? 'border-green-600' : ''}`}>B. <RenderContent content={value.answer_2} /></div>
+                                                                            <div className={`px-10xs md:px-10md py-5xs md:py-5md border rounded ${history.result.assignment[value.id].correct_answer == 3 ? 'border-green-600' : ''}`}>C. <RenderContent content={value.answer_3} /></div>
+                                                                            <div className={`px-10xs md:px-10md py-5xs md:py-5md border rounded ${history.result.assignment[value.id].correct_answer == 4 ? 'border-green-600' : ''}`}>D. <RenderContent content={value.answer_4} /></div>
                                                                         </> :
                                                                         <>
-                                                                            <div className={`px-10xs md:px-10md py-5xs md:py-5md border rounded ${history.result.assignment[value.id].correct_answer == 1 ? 'border-green-600' : ''} ${history.result.assignment[value.id].your_answer == "1" ? 'border-primary' : ''}`}>A. {value.answer_1}</div>
-                                                                            <div className={`px-10xs md:px-10md py-5xs md:py-5md border rounded ${history.result.assignment[value.id].correct_answer == 2 ? 'border-green-600' : ''} ${history.result.assignment[value.id].your_answer == "2" ? 'border-primary' : ''}`}>B. {value.answer_2}</div>
-                                                                            <div className={`px-10xs md:px-10md py-5xs md:py-5md border rounded ${history.result.assignment[value.id].correct_answer == 3 ? 'border-green-600' : ''} ${history.result.assignment[value.id].your_answer == "3" ? 'border-primary' : ''}`}>C. {value.answer_3}</div>
-                                                                            <div className={`px-10xs md:px-10md py-5xs md:py-5md border rounded ${history.result.assignment[value.id].correct_answer == 4 ? 'border-green-600' : ''} ${history.result.assignment[value.id].your_answer == "4" ? 'border-primary' : ''}`}>D. {value.answer_4}</div>
+                                                                            <div className={`px-10xs md:px-10md py-5xs md:py-5md border rounded ${history.result.assignment[value.id].correct_answer == 1 ? 'border-green-600' : ''} ${history.result.assignment[value.id].your_answer == "1" ? 'border-primary' : ''}`}>A. <RenderContent content={value.answer_1} /></div>
+                                                                            <div className={`px-10xs md:px-10md py-5xs md:py-5md border rounded ${history.result.assignment[value.id].correct_answer == 2 ? 'border-green-600' : ''} ${history.result.assignment[value.id].your_answer == "2" ? 'border-primary' : ''}`}>B. <RenderContent content={value.answer_2} /></div>
+                                                                            <div className={`px-10xs md:px-10md py-5xs md:py-5md border rounded ${history.result.assignment[value.id].correct_answer == 3 ? 'border-green-600' : ''} ${history.result.assignment[value.id].your_answer == "3" ? 'border-primary' : ''}`}>C. <RenderContent content={value.answer_3} /></div>
+                                                                            <div className={`px-10xs md:px-10md py-5xs md:py-5md border rounded ${history.result.assignment[value.id].correct_answer == 4 ? 'border-green-600' : ''} ${history.result.assignment[value.id].your_answer == "4" ? 'border-primary' : ''}`}>D. <RenderContent content={value.answer_4} /></div>
                                                                         </>
                                                                 }
 

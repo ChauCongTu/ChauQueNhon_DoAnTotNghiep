@@ -51,27 +51,6 @@ const ArenaDetail = ({ params }: { params: { id: number } }) => {
                             <main className="w-full flex-1">
                                 <ArenaRoomDetail setArena={setArena} arena={arena} />
                             </main>
-                            {/* <nav className="w-full md:w-310md order-3">
-                                <div>
-                                    <SwiperExam />
-                                </div>
-                                <div>
-                                    <div className='text-20xs md:text-20md font-bold'>Các thành viên đã tham gia</div>
-                                    <div className='mt-15xs md:mt-15md'>
-                                        {
-                                            arena?.joined && arena.joined.map((user) => (
-                                                <div key={user.id} className="flex items-center space-x-4 mb-10xs md:mb-10md">
-                                                    <img src={user?.avatar} alt={user?.name || user.username} className="w-42xs md:w-42md h-42xs md:h-42md rounded-full" />
-                                                    <div>
-                                                        <h3 className="font-semibold">{user.name || user.username}</h3>
-                                                        <p className="text-gray-600">@{user.username}</p>
-                                                    </div>
-                                                </div>
-                                            ))
-                                        }
-                                    </div>
-                                </div>
-                            </nav> */}
                         </div>
                     </div>
                 </>

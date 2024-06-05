@@ -58,8 +58,8 @@ const ChangeAvatar: React.FC<Props> = ({ user, setImageUrl }) => {
     else {
         return (
             <>
-                <button onClick={showModal}>
-                    <CameraOutlined className='text-white' />
+                <button onClick={showModal} className='btn-primary'>
+                    Đổi ảnh đại diện
                 </button>
                 <Modal title="" open={isModalOpen} footer={null} onOk={handleOk} onCancel={handleCancel}>
                     {/* Avatar hiện tại */}

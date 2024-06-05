@@ -60,8 +60,8 @@ const TargetSidebar = (props: Props) => {
     return (
         <div className='mt-10xs md:mt-10md'>
             <>                
-                <div className='border mt-10xs md:mt-18md rounded'>
-                    <div><img src="/cover.png" alt="" className='rounded border' /></div>
+                <div className='border border-black mt-10xs md:mt-18md'>
+                    <div><img src="/cover.png" alt="" className='border-b border-black' /></div>
                     <div className='flex items-center gap-10xs md:gap-10md my-20xs md:my-20md mx-15xs md:mx-15md'>
                         <div><Avatar src={user?.avatar} className='ring-2 ring-primary' size={'large'} /></div>
                         {
@@ -78,7 +78,7 @@ const TargetSidebar = (props: Props) => {
                 {
                     user && targets
                         ? <>
-                            <div className='border rounded mt-10xs md:mt-10md py-20xs md:py-20md px-15xs md:px-15md'>
+                            <div className='border border-black shadow mt-10xs md:mt-10md py-20xs md:py-20md px-15xs md:px-15md'>
                                 <div className='mb-10xs md:mb-10md font-bold flex justify-between items-center'>
                                     <span>MỤC TIÊU HÔM NAY</span>
                                     <span className='cursor-pointer md:hidden' onClick={handleMenuTarget}>

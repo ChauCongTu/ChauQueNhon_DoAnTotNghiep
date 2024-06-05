@@ -1,3 +1,4 @@
+"use client"
 import React, { useState, useEffect } from 'react';
 import { UpOutlined } from '@ant-design/icons';
 
@@ -33,7 +34,7 @@ const ToTop: React.FC = () => {
             {isVisible && (
                 <button
                     onClick={scrollToTop}
-                    className="z-50 fixed bottom-6 right-6 ring-2 bg-primary text-white py-3 px-4 rounded-full shadow-md transition duration-300 hover:bg-slate-300 focus:outline-none focus:ring-2 focus:ring-slate-300"
+                    className="fixed bottom-30xs md:bottom-30md z-50 right-30md bg-gray-800 px-10xs md:px-20md py-6xs md:py-15md transition-all opacity-30 hover:opacity-100"
                 >
                     <UpOutlined className='text-white' />
                 </button>

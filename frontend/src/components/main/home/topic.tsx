@@ -24,7 +24,7 @@ const MainTopic = (props: Props) => {
             <div className='mt-25xs md:mt-25md flex flex-wrap justify-between'>
                 {
                     topics && topics.map((vl) => (
-                        <div key={vl.id} className='w-full md:w-1/2'>
+                        <div key={vl.id} className='w-full'>
                             <div className='px-5xs md:px-5md'>
                                 <TopicItem topic={vl} />
                             </div>

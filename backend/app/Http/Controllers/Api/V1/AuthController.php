@@ -28,6 +28,16 @@ class AuthController extends Controller
     // Function for sign up
     public function signUp(RegisterRequest $request)
     {
+        $checkEmail = User::select('id')->where('email', $request->email)->count();
+        if ($checkEmail > 0) {
+            return Common::response(500, 'Địa chỉ email đã tồn tại.');
+        }
+
+        $checkUsername = User::select('id')->where('username', $request->username)->count();
+        if ($checkUsername > 0) {
+            return Common::response(500, 'Tên người dùng đã tồn tại.');
+        }
+
         $user = User::create($request->validated());
 
         if ($user) {

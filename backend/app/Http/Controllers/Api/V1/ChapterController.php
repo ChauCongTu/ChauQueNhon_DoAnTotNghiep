@@ -45,6 +45,7 @@ class ChapterController extends Controller
         $chapter = Chapter::create($newChapter);
 
         if ($chapter) {
+            $chapter['subject'] = $chapter->subject;
             return Common::response(201, "Tạo chương mới thành công.", $chapter);
         }
 
@@ -63,8 +64,7 @@ class ChapterController extends Controller
 
         if (Chapter::where('name', $chapterData['name'])->where('id', '!=', $id)->doesntExist()) {
             $chapter->name = $chapterData['name'];
-            $chapter->slug = Str::slug($chapterData['name']);
-            $chapter->content = $chapterData['content'];
+            $chapter->subject_id = $chapterData['subject_id'];
             $chapter->save();
 
             return Common::response(200, "Cập nhật chương thành công", $chapter);

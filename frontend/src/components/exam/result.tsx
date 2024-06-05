@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import { ExamDid, ExamResultType, ExamType } from '../../modules/exams/types';
 import { Button, Modal, Result } from 'antd';
 import { PracticeType } from '@/modules/practices/types';
+import RenderContent from '../main/renderQuestion';
 
 type Props = {
     result: ExamResultType,
@@ -71,7 +72,7 @@ const ExamResult: React.FC<Props> = ({ result, examDid, exam, setResult }) => {
                             exam.question_list && exam.question_list.map((value: any, index) => (
                                 <div key={value.id} className='py-10xs md:py-10md'>
                                     <div className='font-semibold'>Câu {index + 1}.</div>
-                                    <div className='font-semibold' dangerouslySetInnerHTML={{ __html: value.question }}></div>
+                                    <div className='font-semibold'><RenderContent content={value.question} /></div>
                                     <div>Đáp án của bạn: {value[`answer_${result.assignment[value.id].your_answer}`] || 'Bỏ trống'}</div>
                                     {
                                         result.assignment[value.id].your_answer == result.assignment[value.id].correct_answer.toString()

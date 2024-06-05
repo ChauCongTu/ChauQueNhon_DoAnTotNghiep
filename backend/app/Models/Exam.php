@@ -34,4 +34,9 @@ class Exam extends Model
         $questionIds = explode(',', $this->questions);
         return Question::whereIn('id', $questionIds)->get();
     }
+
+    public function join_count()
+    {
+        return History::where('model', 'App\Models\Exam')->where('foreign_id', $this->id)->count();
+    }
 }

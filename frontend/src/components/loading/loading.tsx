@@ -1,18 +1,22 @@
 import React from 'react';
+import './style.scss'; // Đảm bảo bạn đã import file CSS
 
 type Props = {
-    loading: boolean
+    loading: boolean;
 };
 
 const Loading: React.FC<Props> = ({ loading }) => {
+    if (!loading) return null;
+
+    const text = "Đang chuẩn bị tài nguyên cho trang web ...";
+    const textArray = text.split("");
+
     return (
-        <>
-            {
-                loading && <div className="fixed top-0 left-0 w-full h-full flex items-center justify-center backdrop-filter backdrop-blur-md z-[9999]">
-                    <div className="animate-spin rounded-full h-20 w-20 border-b-2 border-gray-900"></div>
-                </div>
-            }
-        </>
+        <div className='loading'>
+            <svg className="spinner" viewBox="0 0 50 50">
+                <circle className="path" cx="25" cy="25" r="20" fill="none" stroke-width="5"></circle>
+            </svg>
+        </div>
     );
 };
 

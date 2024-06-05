@@ -40,7 +40,11 @@ class SubjectController extends Controller
     public function store(StoreSubjectRequest $request)
     {
         $newSubject = $request->validated();
-        $newSubject['slug'] = Str::slug($newSubject['name']);
+        $newSubject['slug'] = Str::slug($newSubject['name'] . '-lop-' . $newSubject['grade']);
+        $existsSubject = Subject::where('slug', $newSubject['slug'])->get();
+        if ($existsSubject && count($existsSubject)) {
+            return Common::response(400, "Khối lớp đã có môn học này.", $existsSubject);
+        }
         $subject = Subject::create($newSubject);
         if ($subject) {
             return Common::response(201, "Tạo môn học mới thành công.", $subject);
@@ -50,9 +54,13 @@ class SubjectController extends Controller
     public function update(int $id, UpdateSubjectRequest $request)
     {
         $subject = Subject::find($id);
-        if (Subject::where('name', $request->name)->where('id', '!=', $id)->doesntExist()) {
+        if ($subject) {
             $subject->name = $request->name;
-            $subject->slug = Str::slug($request->name);
+            $subject->slug = Str::slug($subject->name . '-lop-' . $subject->grade);
+            $existsSubject = Subject::where('slug', $subject->slug)->where('id', '!=', $id)->get();
+            if ($existsSubject && count($existsSubject)) {
+                return Common::response(400, "Khối lớp đã có môn học này.", $existsSubject);
+            }
             $subject->grade = $request->grade;
             $subject->save();
             return Common::response(200, "Cập nhật môn học thành công", $subject);

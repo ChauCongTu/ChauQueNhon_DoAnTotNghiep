@@ -17,10 +17,10 @@ const HomeSlider = () => {
                 loop={true}
                 autoplay={{ delay: 3000 }}
                 modules={[Pagination, Autoplay]}
-                className="!w-full !border !rounded-xl"
+                className="!w-full !h-180xs md:!h-280md"
             >
-                <SwiperSlide className='!h-full'><img src='/banner-2.jpg' className='!w-full !h-auto' /></SwiperSlide>
-                <SwiperSlide className='!h-full'><img src='/banner-1.jpg' className='!w-full !h-auto' /></SwiperSlide>
+                <SwiperSlide className='!h-full'><img src='/banner-2.jpg' className='!w-full !h-full' /></SwiperSlide>
+                <SwiperSlide className='!h-full'><img src='/banner-1.jpg' className='!w-full !h-full' /></SwiperSlide>
             </Swiper>
         </>
     )

@@ -8,9 +8,14 @@ use App\Http\Requests\GetQuestionsRequest;
 use App\Http\Requests\QueryRequest;
 use App\Http\Requests\Question\StoreQuestionRequest;
 use App\Http\Requests\Question\UpdateQuestionRequest;
+use App\Models\Arena;
+use App\Models\Exam;
+use App\Models\Practice;
 use App\Models\Question;
 use App\Models\Subject;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 
 class QuestionController extends Controller
@@ -26,6 +31,10 @@ class QuestionController extends Controller
         $sort = $request->input('sort', 'created_at');
         $order = $request->input('order', 'desc');
         $q = $request->input('q', null);
+        $grade = $request->input('grade', null);
+        $subject = $request->input('subject', null);
+        $chapter = $request->input('chapter', null);
+        $myquestion = $request->input('myquestion', false);
 
         $query = Question::query();
         if ($filterBy && $value) {
@@ -36,10 +45,23 @@ class QuestionController extends Controller
             $query->with($with);
         }
 
+        if (!empty($grade)) {
+            $query->where('grade', $grade);
+        }
+        if (!empty($subject)) {
+            $query->where('subject_id', $subject);
+        }
+        if (!empty($chapter)) {
+            $query->where('chapter_id', $chapter);
+        }
+        if ($myquestion) {
+            $query->where('created_by', Auth::id());
+        }
+
         if (!empty($q)) {
             $query->where(function ($subQuery) use ($q) {
                 $subQuery->where('id', $q)
-                         ->orWhere('question', 'LIKE', '%' . $q . '%');
+                    ->orWhere('question', 'LIKE', '%' . $q . '%');
             });
         }
 
@@ -56,32 +78,48 @@ class QuestionController extends Controller
     public function getQuestions(GetQuestionsRequest $request)
     {
         $numb = $request->input('numb');
-        $subject_id = $request->input('subject_id');
-        $chapter_id = $request->input('chapter_id');
+        $subject_id = $request->input('subject', null);
+        $chapter_id = $request->input('chapter', null);
         $grade = $request->input('grade');
         $level = $request->input('level');
         $data = $request->input('data');
-        $questionIdsInData = collect($data)->pluck('id')->toArray();
 
         $query = Question::query();
 
-        if (!is_null($chapter_id)) {
-            $query->where('chapter_id', $chapter_id);
-        }
-
-        if (!is_null($grade)) {
-            if (!is_null($subject_id)) {
-                $query->where('subject_id', $subject_id);
-            } else {
-                $query->where('grade', $grade);
+        if ($chapter_id) {
+            if ($chapter_id == 0) {
+                $query->where("chapter_id", null);
+            }
+            else {
+                $query->where("chapter_id", $chapter_id);
             }
         }
+        else if ($subject_id){
+            $query->where("subject_id", $subject_id);
+        }
+
+        // if (!is_null($chapter_id)) {
+        //     $query->where('chapter_id', $chapter_id);
+        // } else {
+        //     if (!is_null($grade)) {
+        //         if (!is_null($subject_id)) {
+        //             $query->where('subject_id', $subject_id);
+        //         } else {
+        //             $query->where('grade', $grade);
+        //         }
+        //     }
+        // }
+
 
         if (!is_null($level)) {
             $query->where('level', $level);
         }
-        $additionalQuestions = $query->whereNotIn('id', $questionIdsInData)
-            ->inRandomOrder()
+
+        if ($data) {
+            $query->whereNotIn('id', $data);
+        }
+
+        $additionalQuestions = $query->inRandomOrder()
             ->limit(max(0, $numb))
             ->get();
 
@@ -94,6 +132,9 @@ class QuestionController extends Controller
     {
         $validatedData = $request->validated();
         $question = Question::create($validatedData);
+
+        $question['subject'] = Subject::find($question['subject_id']);
+        $question['chapter'] = Subject::find($question['chapter_id']);
 
         return $question
             ? Common::response(201, "Tạo câu hỏi mới thành công.", $question)
@@ -117,10 +158,48 @@ class QuestionController extends Controller
     public function destroy(int $id)
     {
         try {
+            // DB::beginTransaction();
+            Practice::select('id', 'questions', 'question_count')->chunk(100, function ($practices) use ($id) {
+                foreach ($practices as $practice) {
+                    $questions = explode(',', $practice->questions);
+                    if (in_array($id, $questions)) {
+                        $questions = array_diff($questions, array($id));
+                        $practice->questions = implode(',', $questions);
+                        $practice->question_count = count($questions);
+                        $practice->save();
+                    }
+                }
+            });
+
+            Exam::select('id', 'questions', 'question_count')->chunk(100, function ($exams) use ($id) {
+                foreach ($exams as $exam) {
+                    $questions = explode(',', $exam->questions);
+                    if (in_array($id, $questions)) {
+                        $questions = array_diff($questions, array($id));
+                        $exam->questions = implode(',', $questions);
+                        $exam->question_count = count($questions);
+                        $exam->save();
+                    }
+                }
+            });
+
+            Arena::select('id', 'questions', 'question_count')->chunk(100, function ($arenas) use ($id) {
+                foreach ($arenas as $arena) {
+                    $questions = explode(',', $arena->questions);
+                    if (in_array($id, $questions)) {
+                        $questions = array_diff($questions, array($id));
+                        $arena->questions = implode(',', $questions);
+                        $arena->question_count = count($questions);
+                        $arena->save();
+                    }
+                }
+            });
             Question::destroy($id);
+            // DB::commit();
             return Common::response(200, "Xóa câu hỏi thành công.");
         } catch (\Throwable $th) {
-            return Common::response(400, "Có lỗi xảy ra, vui lòng thử lại.");
+            // DB::rollBack();
+            return Common::response(400, "Có lỗi xảy ra, vui lòng thử lại.", $th->getMessage());
         }
     }
 
