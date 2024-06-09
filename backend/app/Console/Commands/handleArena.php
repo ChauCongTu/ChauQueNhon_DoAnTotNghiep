@@ -31,9 +31,30 @@ class handleArena extends Command
         $pendingArenas = Arena::where('status', 'pending')->get();
         $pendingArenas->each(function ($item) {
             if (Carbon::parse($item->start_at) <= now()) {
-                $item->status = "started";
-                $item->save();
-                Redis::publish('tick', json_encode(array('event' => 'MessagePushed', 'data' => json_encode(['status' => $item->status, 'arena' => $item]))));
+                $questions = $item->questions();
+
+                $result = [
+                    'time' => 0,
+                    'res' => [],
+                    'current' => 0,
+                    'question' => (array) $questions[0],
+                ];
+
+                foreach ($questions as $question) {
+                    $result['res'][] = [$question->id => ''];
+                }
+
+                // $item->status = "started";
+                // $item->save();
+
+                Redis::setex('result_room_' . $item->id, 500, json_encode($result));
+
+                Redis::publish('tick', json_encode(array('event' => 'MessagePushed', 'data' => json_encode([
+                    'arenaStart' => $item->id,
+                    'message' => 'Bắt đầu thi đấu :Fighting:',
+                    'questionKey' => 1,
+                    'question' => $questions[0],
+                ]))));
             }
         });
 

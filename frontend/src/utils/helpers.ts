@@ -74,3 +74,16 @@ export const showTime = (inputTime: string): string => {
 
     return result;
 }
+
+export const renderType = (type: string) => {
+    switch (type) {
+        case 'pending':
+            return 'Đang chờ'
+        case 'started':
+            return 'Đang diễn ra'
+        case 'completed':
+            return 'Đã kết thúc'
+        default:
+            return '';
+    }
+}

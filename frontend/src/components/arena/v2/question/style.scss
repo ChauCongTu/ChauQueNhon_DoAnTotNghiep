@@ -1,0 +1,46 @@
+.render-answer {
+    text-align: left;
+    border-width: 1px;
+    border-color: black;
+    padding: 4px;
+  
+    @media (min-width: 768px) {
+      padding: 16px;
+    }
+  
+    border-radius: 0.375rem;
+    font-size: 0.75rem;
+  
+    @media (min-width: 768px) {
+      font-size: 1rem;
+    }
+  
+    display: flex;
+    gap: 4px;
+  
+    @media (min-width: 768px) {
+      gap: 16px;
+    }
+  
+    font-weight: 600;
+  
+    &:hover {
+      background-color: #2563eb;
+      color: white;
+      border-color: #2563eb;
+    }
+  
+    &.disabled, &[disabled] {
+      background-color: #e5e7eb;
+      color: #9ca3af;
+      border-color: #d1d5db;
+      cursor: not-allowed;
+      
+      &:hover {
+        background-color: #e5e7eb;
+        color: #9ca3af;
+        border-color: #d1d5db;
+      }
+    }
+  }
+  

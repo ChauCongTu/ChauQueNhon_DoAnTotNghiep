@@ -102,6 +102,26 @@ export const postStart = async (id: number): Promise<any> => {
     }
 };
 
+export const postStartV2 = async (id: number): Promise<any> => {
+    try {
+        const response = await api.post(`/arenas/new/${id}/start`);
+        return response.data;
+    } catch (error) {
+        console.error('Call API Error:', error);
+        throw error;
+    }
+};
+
+export const postSubmitV2 = async (id: number, data: { question_id: number, answer: number }): Promise<any> => {
+    try {
+        const response = await api.post(`/arenas/new/${id}/next`, data);
+        return response.data;
+    } catch (error) {
+        console.error('Call API Error:', error);
+        throw error;
+    }
+};
+
 export const postRemain = async (id: number): Promise<any> => {
     try {
         const response = await api.post(`/arenas/${id}/remain`);

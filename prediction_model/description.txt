@@ -1,0 +1,43 @@
+===========================================================
+COLLUMN DESCRIPTION:
+Basic Info:
+1. Age: Độ tuổi của người dùng (Từ 16 đến 20) (tập trung chính vào 2 đối tượng 18 và 19 tuổi)
+2. Grade: Khối lớp hiện tại của người dùng
+    + 10: Lớp 10
+    + 11: Lớp 11
+    + 12: Lớp 12
+    + 13: Thí sinh tự do
+3. StudyTime: Thời gian trung bình học mỗi ngày (tính bằng giờ) (chỉ tính thời gian học chính khóa và bổ túc trên trường)
+4. OnlineCourse: Có đăng ký khóa luyện thi trên mạng không không (0 - KHÔNG, 1 - CÓ)
+5. SchoolType: Loại trường THPT    
+    + private: tư thục: 1
+    + public: công lập: 2
+    + specialized: trường chuyên: 3
+6. ClassType:
+    + normal: Lớp thường: 1
+    + gifted: Lớp chọn: 2
+7. SelfStudy: Tần suất tự học (từ 1 - rất ít đến 5 - rất nhiều)
+8. GoingOut: Tần suất đi chơi với bạn bè (từ 1 - rất ít đến 5 - rất nhiều)
+9. Health: Tình trạng sức khỏe chung (từ 1 - rất kém đến 5 - rất tốt)
+10. LatestScore: Điểm  năm học trước đó (thang 0 - 10)
+---------------------------------------------
+Web Data:
+11 DailyTimeSpent: Thời gian dành cho web mỗi ngày (tối đa 6-8 tiếng 1 ngày (mật độ 6-8 sẽ thấp hơn từ 0 -6))
+12 DayActive: Số ngày đã hoạt động trên web
+13 ResourceAccessed: Số lượng tài nguyên học tập đã truy cập
+14 ForumParticipationFrequency: Tần suất tham gia thảo luận trên diễn đàn (từ 1 - rất ít đến 5 - rất tích cực)
+15 HelpfulAnswers: Số câu trả lời được đánh giá là hữu ích
+16 ExercisesCompleted: Số bài tập đã làm
+17 AverageExerciseScore: Điểm trung bình các bài tập
+18 TestsCompleted: Số bài kiểm tra đã làm
+19 AverageTestScore: Điểm trung bình các bài kiểm tra
+20 AverageTestCompletionTime: Thời lượng làm bài trung bình 1 lần thi (tính theo %)
+21 ArenaParticipation: Số lần tham gia đấu trường
+22 ArenaQuestionsAnsweredPercentage: Phần trăm câu hỏi trả lời được trong đấu trường (thường từ 5 - 50% thôi vì nhiều người sẽ cùng tham gia 1 bài)
+23 BestOfArenaCount: Số lần top 1 trong đấu trường
+24 AverageArenaRanking: Vị trí trung bình trong đấu trường (từ 1 - rất thấp đến 5 - rất cao)
+25 MostTime: Thời gian ôn luyện thường trên web (day, night)
+26 Xu hướng hoạt động (increase: gần đây càng nhiều hơn, decrease: gần đầy càng ít hơn)
+
+
+

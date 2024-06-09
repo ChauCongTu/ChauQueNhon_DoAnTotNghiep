@@ -21,7 +21,7 @@ class ProfileController extends Controller
         $profile = $request->validated();
         $profile['test_class'] = implode(',', $profile['test_class']);
         User::where('id', $user_id)->update($profile);
-        $user = User::find(1);
+        $user = User::find(Auth::id());
         $user['test_class'] = explode(',', $user['test_class']);
         $user['role'] = $user->getRoleNames();
         return Common::response(200, "Thành công", $user);

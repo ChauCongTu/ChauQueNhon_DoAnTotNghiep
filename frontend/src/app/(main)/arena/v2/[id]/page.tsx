@@ -1,5 +1,5 @@
 'use client'
-import ArenaRoomDetail from '@/components/arena/item/page'
+import ArenaRoomDetail from '@/components/arena/v2/page'
 import HistorySidebar from '@/components/main/history'
 import SwiperExam from '@/components/main/swiper'
 import TrailerEmbeded from '@/components/main/trailer'

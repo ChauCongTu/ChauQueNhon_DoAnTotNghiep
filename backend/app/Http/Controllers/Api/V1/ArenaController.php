@@ -207,6 +207,7 @@ class ArenaController extends Controller
             return Common::response(400, 'Trạng thái hiện tại không thể bắt đầu.');
         }
 
+
         $arena->status = 'started';
         $arena->start_at = now();
         $arena->save();

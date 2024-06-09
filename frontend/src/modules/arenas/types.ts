@@ -40,3 +40,41 @@ export interface ArenaDid {
         [key: string]: string | null;
     };
 }
+
+export interface UserMin {
+    id: number;
+    name: string;
+    username: string;
+    avatar: string;
+}
+
+export interface UserScore {
+    user: UserMin;
+    total_score: number;
+}
+
+export interface Question {
+    id: number;
+    question: string;
+    answer_1: string;
+    answer_2: string;
+    answer_3: string;
+    answer_4: string;
+    answer_correct: number;
+    answer_detail: string | null;
+    subject_id: number;
+    grade: number;
+    chapter_id: number | null;
+    level: number;
+    created_at: string;
+    created_by: string | null;
+    updated_at: string;
+}
+
+export interface StartSocket {
+    arenaStart: number;
+    message: string;
+    questionKey: number;
+    question: Question;
+    users: UserScore[];
+}

@@ -15,6 +15,7 @@ use App\Http\Controllers\Api\V1\StatisticController;
 use App\Http\Controllers\Api\V1\SubjectController;
 use App\Http\Controllers\Api\V1\TargetController;
 use App\Http\Controllers\Api\V1\TopicController;
+use App\Http\Controllers\Api\V2\ArenaController as V2ArenaController;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -132,7 +133,12 @@ Route::prefix('/v1')->group(function () {
         Route::get('/history/{id}', [ArenaController::class, 'history'])->name('history')->middleware(['auth:api']);
         Route::get('/histories/{id}', [ArenaController::class, 'histories'])->name('histories')->middleware(['auth:api']);
         Route::post('/check-conflict/{id}', [ArenaController::class, 'conflictTime'])->name('conflict')->middleware(['auth:api']);
+        Route::prefix('/new')->name('new.')->group(function () {
+            Route::post('/{id}/start', [V2ArenaController::class, 'start'])->name('start')->middleware(['auth:api']);
+            Route::post('/{id}/next', [V2ArenaController::class, 'next'])->name('next')->middleware(['auth:api']);
+        });
     });
+
 
     Route::prefix('targets')->name('targets.')->group(function () {
         Route::get('/check', [TargetController::class, 'firstOfDay'])->name('check')->middleware(['auth:api']);

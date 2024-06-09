@@ -23,16 +23,17 @@ export default function AdminLayout({
                 <div className="flex gap-10xs md:gap-71md">
                     <div className="w-306xs md:w-306md">
                         <AdminNav />
-                    </div> 
+                    </div>
                     <div className="flex-1 mt-10xs md:mt-10md mr-10xs md:mr-71md">
                         <AdminHeader />
                         <div className="shadow rounded">{children}</div>
+                        <div className="flex justify-center p-30xs md:p-30md">
+                            <ToTop />
+                            <span className="text-15xs md:text-15md text-gray-700"><Link href='/'>GoUni</Link> Admin &copy; 2024</span>
+                        </div>
                     </div>
                 </div>
-                <div className="flex justify-center p-30xs md:p-30md">
-                    <ToTop />
-                    <span className="text-15xs md:text-15md text-gray-700"><Link href='/'>GoUni</Link> Admin &copy; 2024</span>
-                </div>
+
             </div>
             <Toaster />
         </>
