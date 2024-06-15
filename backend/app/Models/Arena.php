@@ -21,7 +21,8 @@ class Arena extends Model
         'start_at',
         'type',
         'password',
-        'status'
+        'status',
+        "mode",
     ];
 
     public function author()

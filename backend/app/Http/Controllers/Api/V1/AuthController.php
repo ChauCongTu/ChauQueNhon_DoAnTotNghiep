@@ -39,6 +39,7 @@ class AuthController extends Controller
         }
 
         $user = User::create($request->validated());
+        $user->assignRole('student');
 
         if ($user) {
             $credentials = $request->only('email', 'password');
@@ -106,6 +107,7 @@ class AuthController extends Controller
                     'password' => Random::generate(15),
                 ]
             );
+            $user->assignRole('student');
             Auth::login($user);
             $user = Auth::user();
             $token = $user->createToken('AccessToken')->accessToken;

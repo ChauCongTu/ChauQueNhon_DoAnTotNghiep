@@ -20,10 +20,6 @@ class ArenaController extends Controller
         if (!$arena) {
             return Common::response(404, 'Không tìm thấy phòng thi này.');
         }
-        $user_id = Auth::id();
-        if ($arena->author !== $user_id) {
-            return Common::response(403, 'Bạn không có quyền bắt đầu trận đấu.');
-        }
 
         if (!$arena) {
             return Common::response(404, 'Không tìm thấy phòng thi này.');
@@ -47,9 +43,9 @@ class ArenaController extends Controller
             ];
         }
 
-        // $arena->status = 'started';
-        // $arena->start_at = now();
-        // $arena->save();
+        $arena->status = 'started';
+        $arena->start_at = now();
+        $arena->save();
 
         $users = $arena->joined();
         $joined = [];
@@ -81,25 +77,23 @@ class ArenaController extends Controller
     public function next($roomId, Request $request)
     {
         $question_id = $request->input('question_id');
-        $user_id = Auth::id();
+        $user_id = $request->input('user_id', 0);
         $answer = $request->input('answer');
 
-        if (!$question_id || !$user_id || !$answer) {
-            return Common::response(400, 'Vui lòng truyền body: `question_id`, `answer`.');
+        if (!$question_id) {
+            return Common::response(400, 'Vui lòng truyền body: `question_id`.');
         }
 
         $arena = Arena::find($roomId);
         if (!$arena) {
             return Common::response(404, 'Không tìm thấy phòng thi này.');
         }
-        $user_id = Auth::id();
-        // if ($arena->status !== 'started') {
-        //     return Common::response(400, 'Yêu cầu không hợp lệ.');
-        // }
+
+        if ($arena->status !== 'started') {
+            return Common::response(400, 'Yêu cầu không hợp lệ.');
+        }
 
         $result = json_decode(Redis::get('result_room_' . $roomId));
-
-        // $result->res = (array) $request->res;
 
         if (!$arena) {
             return Common::response(404, 'Không tìm thấy phòng thi này.');
@@ -117,8 +111,10 @@ class ArenaController extends Controller
             return Common::response(400, 'Tiếc quá! bạn đã chậm 1 bước rồi.');
         }
 
-        if ($answer !== $data->question->answer_correct) {
-            return Common::response(400, 'Đáp án không hợp lệ.');
+        if ($answer) {
+            if ($answer !== $data->question->answer_correct) {
+                return Common::response(400, 'Đáp án không hợp lệ.');
+            }
         }
 
         $result->res[$data->current - 1]->user = $user_id;
@@ -127,22 +123,44 @@ class ArenaController extends Controller
 
         $questions = $arena->questions()->toArray();
 
-        if ($data->current <= $arena->question_count) {
+        if ($data->current < $arena->question_count) {
             $data->question = $questions[$data->current];
             $data->message = 'Đã sang câu tiếp theo';
             $data->current += 1;
             $data->arenaStart = 0;
 
             $data->arenaNext = $arena->id;
-
             $dataUser = collect($data->users);
-
             $userNeedChange = $dataUser->firstWhere('user.id', $user_id);
-
-            $userNeedChange->total_score += 3;
+            if ($userNeedChange) {
+                $userNeedChange->total_score += 3;
+            }
         } else {
             // Xử lý khi câu cuối
+            $data->question = null;
+            $data->message = 'Trận đấu đã kết thúc';
+            $data->current = 0;
 
+            $data->arenaStart = 0;
+            $data->arenaNext = 0;
+            $data->arenaEnd = $arena->id;
+
+            $dataUser = collect($data->users);
+            $userNeedChange = $dataUser->firstWhere('user.id', $user_id);
+            if ($userNeedChange) {
+                $userNeedChange->total_score += 3;
+            }
+
+            $arena->status = 'completed';
+            $arena->start_at = now();
+            $arena->save();
+
+            // return response()->json($dataUser[0]->user->id);
+
+            foreach ($dataUser as $user) {
+                // return response()->json($user->user->id);
+                Common::saveHistory($user->user->id, 'Arena', $arena->id, json_encode($data), json_encode($result));
+            }
         }
 
         Redis::setex('data_room_' . $roomId, 43200, json_encode($data));
@@ -150,6 +168,22 @@ class ArenaController extends Controller
         Redis::publish('tick', json_encode(array('event' => 'MessagePushed', 'data' => json_encode($data))));
 
         return Common::response(200, 'Thành công', $result);
+    }
+
+    public function load(int $id)
+    {
+        $data = json_decode(Redis::get('data_room_' . $id));
+        // Redis::publish('tick', json_encode(array('event' => 'MessagePushed', 'data' => json_encode($data))));
+        return Common::response(200, 'Thành công', $data);
+    }
+
+    public function history(int $id) {
+        $data = History::where('model', 'App\Models\Arena')->where('foreign_id', $id)->first();
+        if ($data) {
+            $data->result = json_decode($data->result);
+            return Common::response(200, 'Thành công', $data);
+        }
+        return Common::response(404, 'Ko tìm thấy lịch sử phòng này');
     }
 
     public function result(int $id, GetResultRequest $request)

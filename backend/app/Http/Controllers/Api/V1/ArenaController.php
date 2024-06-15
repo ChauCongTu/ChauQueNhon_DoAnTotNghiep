@@ -92,6 +92,8 @@ class ArenaController extends Controller
         }
 
         $validatedData = $request->validated();
+
+        $validatedData['questions'] = implode(',', $validatedData['questions']);
         Arena::where('id', $id)->update($validatedData);
 
         return Common::response(200, "Cập nhật phòng thi thành công", $arena);

@@ -32,6 +32,7 @@ class UpdateArenaRequest extends FormRequest
             'type' => 'required',
             'subject_id' => 'nullable',
             'password' => 'nullable|min:6',
+            'mode' => 'nullable'
         ];
     }
 

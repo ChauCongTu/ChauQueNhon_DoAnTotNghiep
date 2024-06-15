@@ -4,6 +4,7 @@ use App\Helpers\Common;
 use App\Http\Controllers\Api\V1\ArenaController;
 use App\Http\Controllers\Api\V1\AuthController;
 use App\Http\Controllers\Api\V1\ChapterController;
+use App\Http\Controllers\Api\V1\DashboardController;
 use App\Http\Controllers\Api\V1\ExamController;
 use App\Http\Controllers\Api\V1\FileController;
 use App\Http\Controllers\Api\V1\HistoryController;
@@ -15,16 +16,15 @@ use App\Http\Controllers\Api\V1\StatisticController;
 use App\Http\Controllers\Api\V1\SubjectController;
 use App\Http\Controllers\Api\V1\TargetController;
 use App\Http\Controllers\Api\V1\TopicController;
+use App\Http\Controllers\Api\V1\UserController;
 use App\Http\Controllers\Api\V2\ArenaController as V2ArenaController;
 use App\Models\User;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/set-role', function () {
     return User::first()->assignRole('super admin');
 });
-
 
 Route::get('/get-token', function () {
     $token = User::first()->createToken('AccessToken')->accessToken;
@@ -34,7 +34,6 @@ Route::get('/get-token', function () {
 Route::get('/demo', function () {
     return User::first()->getAllPermissions();
 })->middleware('auth:api');
-
 
 Route::prefix('/v1')->group(function () {
 
@@ -61,6 +60,7 @@ Route::prefix('/v1')->group(function () {
         Route::post('/avatar', [ProfileController::class, 'avatar'])->middleware('auth:api')->name('avatar');
         Route::get('/list', [ProfileController::class, 'list'])->middleware('auth:api')->name('list');
         Route::get('/{username}', [ProfileController::class, 'index'])->middleware('auth:api')->name('index');
+        Route::post('/{id}/assign', [UserController::class, 'assignRoles'])->name('assign_roles')->middleware('auth:api');
     });
 
     // Subject Routing
@@ -107,6 +107,7 @@ Route::prefix('/v1')->group(function () {
         Route::delete('/{id}', [PracticeController::class, 'destroy'])->name('destroy')->middleware(['auth:api']);
         Route::get('/{slug}', [PracticeController::class, 'detail'])->name('detail');
     });
+
     Route::prefix('exams')->name('exams.')->group(function () {
         Route::get('/', [ExamController::class, 'index'])->name('index');
         Route::post('/', [ExamController::class, 'store'])->name('store')->middleware(['auth:api']);
@@ -136,9 +137,11 @@ Route::prefix('/v1')->group(function () {
         Route::prefix('/new')->name('new.')->group(function () {
             Route::post('/{id}/start', [V2ArenaController::class, 'start'])->name('start')->middleware(['auth:api']);
             Route::post('/{id}/next', [V2ArenaController::class, 'next'])->name('next')->middleware(['auth:api']);
+            Route::post('/{id}/load', [V2ArenaController::class, 'load'])->name('load')->middleware(['auth:api']);
+
+            Route::get('/{id}/history', [V2ArenaController::class, 'history'])->name('history')->middleware(['auth:api']);
         });
     });
-
 
     Route::prefix('targets')->name('targets.')->group(function () {
         Route::get('/check', [TargetController::class, 'firstOfDay'])->name('check')->middleware(['auth:api']);
@@ -177,4 +180,15 @@ Route::prefix('/v1')->group(function () {
 
     Route::post('upload', [FileController::class, 'upload'])->name('upload')->middleware('auth:api');
     Route::post('upload-image', [FileController::class, 'uploadImage'])->name('upload.image');
+
+    Route::prefix('dashboard')->name('dashboards.')->group(function () {
+        Route::get('/overview', [DashboardController::class, 'getOverview'])->middleware('auth:api')->name('overview');
+        Route::get('/vibrant', [DashboardController::class, 'getVibrantStudents'])->middleware('auth:api')->name('vibrant');
+        Route::get('/user-role', [DashboardController::class, 'getUserRolePieChart'])->middleware('auth:api')->name('role');
+        Route::get('/user-registration-stats', [DashboardController::class, 'getUserRegistrationStats'])->middleware('auth:api')->name('reg.date');
+        Route::get('/trend', [DashboardController::class, 'getTrend'])->middleware('auth:api')->name('trend');
+        Route::get('/statistics', [DashboardController::class, 'statistics'])->middleware('auth:api')->name('statistics');
+        Route::get('/users/filtered', [DashboardController::class, 'getUserFiltered'])->middleware('auth:api')->name('getUserFiltered');
+        Route::get('/lessons/most-viewed', [DashboardController::class, 'getMostViewedLessons'])->middleware('auth:api')->name('lesson.most-viewed');
+    });
 })->name('api_v1.');

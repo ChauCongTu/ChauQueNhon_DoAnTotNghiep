@@ -16,7 +16,8 @@ class StoreTargetRequest extends FormRequest
     public function rules()
     {
         return [
-            'total_time' => 'required|numeric',
+            'id' => 'nullable|numeric',
+            'totalTimeInMinute' => 'required|numeric',
             'total_exams' => 'nullable|numeric',
             'total_practices' => 'nullable|numeric',
             'total_arenas' => 'nullable|numeric',
@@ -27,7 +28,7 @@ class StoreTargetRequest extends FormRequest
 
     public function attributes(): array {
         return [
-            'total_time' => 'Tổng thời gian học (phút)',
+            'totalTimeInMinute' => 'Tổng thời gian học (phút)',
             'total_exams' => 'Tổng số lượng bài kiểm tra',
             'total_practices' => 'Tổng số lượng bài tập',
             'total_arenas' => 'Tổng số lượng trận đấu',

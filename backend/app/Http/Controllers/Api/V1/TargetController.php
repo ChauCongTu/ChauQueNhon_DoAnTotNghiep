@@ -7,7 +7,6 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreTargetRequest;
 use App\Http\Requests\UpdateTargetRequest;
 use App\Models\History;
-use Illuminate\Http\Request;
 use App\Models\UserTarget;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
@@ -25,21 +24,27 @@ class TargetController extends Controller
     public function store(StoreTargetRequest $request)
     {
         $user_id = Auth::id();
-        if ($this->is_first($user_id)) {
-            return Common::response(400, "Bạn đã đặt target cho ngày hôm nay rồi.");
-        }
+        // if ($this->is_first($user_id)) {
+        //     return Common::response(400, "Bạn đã đặt target cho ngày hôm nay rồi.");
+        // }
         $validatedData = $request->validated();
         $validatedData['user_id'] = $user_id;
-        $validatedData['total_time'] = $validatedData['total_time'] * 60;
+        $validatedData['total_time'] = $validatedData['totalTimeInMinute'] * 60;
         $validatedData['day_targets'] = Carbon::today()->toDateString();
 
-        $target = UserTarget::create($validatedData);
+        unset($validatedData['totalTimeInMinute']);
+        if (isset($validatedData['id']) && $validatedData['id']) {
+            UserTarget::where('id', $validatedData['id'])->update($validatedData);
+            $target = UserTarget::find($validatedData['id']);
+        } else {
+            $target = UserTarget::create($validatedData);
+        }
 
         $target['total_time'] = $target['total_time'] / 60;
 
         return $target ?
-            Common::response(201, "Tạo mục tiêu mới thành công.", $target) :
-            Common::response(400, "Có lỗi xảy ra, vui lòng thử lại.");
+        Common::response(201, "Tạo mục tiêu mới thành công.", $target) :
+        Common::response(400, "Có lỗi xảy ra, vui lòng thử lại.");
     }
 
     public function update(UpdateTargetRequest $request, int $id)
@@ -88,6 +93,8 @@ class TargetController extends Controller
         $target = UserTarget::where('user_id', Auth::id())
             ->where('day_targets', $date)
             ->first();
+
+        $target['totalTimeInMinute'] = $target->total_time / 60;
 
         if ($target) {
             return Common::response(200, "Lấy danh sách target thành công.", $target);

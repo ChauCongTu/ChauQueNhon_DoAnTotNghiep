@@ -78,6 +78,10 @@ class ProfileController extends Controller
             $users = $query->paginate($perPage, ['*'], 'page', $page);
         }
 
+        foreach ($users as $user) {
+            $user['role'] = $user->getRoleNames();
+        }
+
         return Common::response(200, 'Lấy danh sách người dùng thành công', $users);
     }
     public function index(string $username = null)
