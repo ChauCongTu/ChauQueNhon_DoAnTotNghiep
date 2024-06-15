@@ -19,12 +19,12 @@ const MainTopic = (props: Props) => {
         });
     }, []);
     return (
-        <div className='border-y-2 border-primary mt-40xs md:mt-40md'>
-            <div className='mt-20xs md:mt-20md text-24xs md:text-24md leading-27xs md:leading-27md font-bold'>CÙNG THẢO LUẬN NHÉ</div>
+        <div className='border px-10xs md:px-16md border-primary mt-40xs md:mt-40md'>
+            <div className='mt-20xs md:mt-20md text-24xs md:text-22md border-b border-black pb-10xs md:pb-10md leading-27xs md:leading-27md font-bold'>CÙNG THẢO LUẬN NHÉ</div>
             <div className='mt-25xs md:mt-25md flex flex-wrap justify-between'>
                 {
                     topics && topics.map((vl) => (
-                        <div key={vl.id} className='w-full'>
+                        <div key={vl.id} className='w-full md:w-1/2'>
                             <div className='px-5xs md:px-5md'>
                                 <TopicItem topic={vl} />
                             </div>

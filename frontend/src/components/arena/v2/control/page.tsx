@@ -38,7 +38,7 @@ const ArenaControl: React.FC<Props> = ({ arena, setArena, isStart, handleStart, 
         <>
             <div>
                 <div className='bg-white shadow rounded border border-black w-full md:w-380md h-full'>
-                    <div className='p-20xs md:p-20md'>
+                    <div className='p-20xs md:p-20md flex flex-col'>
                         <div className='text-21xs md:text-21md font-bold'>Thông tin phòng thi</div>
                         <div className='flex justify-center mt-10xs md:mt-10md'><img src="https://cdn-icons-png.freepik.com/512/6162/6162583.png?uid=R124828073&ga=GA1.1.1459343358.1716478985" className="w-3/5 object-contain" alt="img quiz" /></div>
                         <div>

@@ -72,7 +72,7 @@ const config: Config = {
         return stroke;
       })(),
       colors: {
-        primary: "#f14600",
+        primary: "#2c3e50",
         secondary: "#40e2f9",
         link: "#3979E1",
       },

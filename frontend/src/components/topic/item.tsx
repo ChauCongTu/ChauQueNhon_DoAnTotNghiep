@@ -10,7 +10,7 @@ type Props = {
 
 const TopicItem: React.FC<Props> = ({ topic }) => {
     return (
-        <div className="bg-white rounded-xl border p-4 mb-4 h-auto">
+        <div className="bg-white rounded border-black border p-4 mb-4 h-auto">
             <div className="flex items-center mb-2">
                 <img
                     src={topic.author.avatar}
@@ -28,7 +28,7 @@ const TopicItem: React.FC<Props> = ({ topic }) => {
                     </div>
                 </div>
             </div>
-            <h3 className="text-20xs md:text-24md font-semibold text-gray-900 mb-2"><Link href={`/topic/${topic.slug}`}>{topic.title}</Link></h3>
+            <h3 className="text-20xs md:text-24md font-semibold text-gray-900 mb-2 line-clamp-1 text-left"><Link href={`/topic/${topic.slug}`}>{topic.title}</Link></h3>
             <div className="text-gray-700 line-clamp-3 mb-2 text-justify" dangerouslySetInnerHTML={{ __html: topic.content }} />
         </div>
     );

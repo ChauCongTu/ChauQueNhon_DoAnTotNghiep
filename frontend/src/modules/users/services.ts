@@ -62,6 +62,16 @@ export const postReset = async (request: { token: string, email: string, passwor
     }
 };
 
+export const postAssign = async (user_id: number | undefined, data: { roles: string[] }) => {
+    try {
+        const response = await api.post(`/profiles/${user_id}/assign`, data);
+        return response.data;
+    } catch (error) {
+        console.error('Get Posts Error:', error);
+        throw error;
+    }
+};
+
 export const getProfile = async (username: string) => {
     try {
         const response = await api.get(`/profiles/${username}`);

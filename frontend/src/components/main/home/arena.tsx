@@ -17,7 +17,7 @@ const MainArena: React.FC<Props> = ({ user }) => {
     const [arenas, setArenas] = useState<ArenaType[]>();
     useEffect(() => {
         if (user && user.grade) {
-            getArenas({ filterBy: 'grade', value: user.grade, perPage: 10 }).then((res) => {
+            getArenas({ filterBy: 'status', value: 'pending', perPage: 10 }).then((res) => {
                 if (res.status && res.status.code === 200) {
                     setArenas(res.data[0].data);
                 }
@@ -32,9 +32,9 @@ const MainArena: React.FC<Props> = ({ user }) => {
         }
     }, [user, user?.grade]);
     return (
-        <div className='border-y-2 border-primary mt-40xs md:mt-40md'>
-            <div className='flex items-center justify-between mt-20xs md:mt-20md'>
-                <div className=' text-24xs md:text-24md leading-27xs md:leading-27md font-bold uppercase'>Phòng thi dành cho bạn</div>
+        <div className='border px-10xs md:px-16md border-primary mt-40xs md:mt-40md'>
+            <div className='mt-20xs md:mt-20md border-b border-black pb-10xs md:pb-10md leading-27xs md:leading-27md font-bold flex justify-between'>
+                <div className='text-24xs md:text-22md leading-27xs md:leading-27md font-bold uppercase'>Phòng thi dành cho bạn</div>
                 <Link className=' leading-27xs md:leading-27md' href={'/arena'}>Xem thêm</Link>
             </div>
             <div className='py-16xs md:py-16md'>

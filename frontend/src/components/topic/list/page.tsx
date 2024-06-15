@@ -15,7 +15,7 @@ const MainTopicPage: React.FC<Props> = ({ topics }) => {
             <div className='text-24xs md:text-24md font-bold'>THẢO LUẬN</div>
             <div className='mt-10xs md:mt-10md flex items-center gap-7xs md:gap-7md'>
                 <div>
-                    <Link href={'/topic/new'} className='btn-primary btn-lg'>Tạo chủ đề</Link>
+                    <Link href={'/topic/new'} className='btn-primary'>Tạo chủ đề</Link>
                 </div>
                 <div>
                     <Button>Đã like</Button>

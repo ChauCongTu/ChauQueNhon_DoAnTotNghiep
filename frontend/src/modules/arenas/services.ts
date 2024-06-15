@@ -112,7 +112,27 @@ export const postStartV2 = async (id: number): Promise<any> => {
     }
 };
 
-export const postSubmitV2 = async (id: number, data: { question_id: number, answer: number }): Promise<any> => {
+export const postLoadV2 = async (id: number): Promise<any> => {
+    try {
+        const response = await api.post(`/arenas/new/${id}/load`);
+        return response.data;
+    } catch (error) {
+        console.error('Call API Error:', error);
+        throw error;
+    }
+};
+
+export const getHistoryV2 = async (id: number): Promise<any> => {
+    try {
+        const response = await api.get(`/arenas/new/${id}/history`);
+        return response.data;
+    } catch (error) {
+        console.error('Call API Error:', error);
+        throw error;
+    }
+};
+
+export const postSubmitV2 = async (id: number, data: { question_id: number, answer?: number, user_id?: number }): Promise<any> => {
     try {
         const response = await api.post(`/arenas/new/${id}/next`, data);
         return response.data;

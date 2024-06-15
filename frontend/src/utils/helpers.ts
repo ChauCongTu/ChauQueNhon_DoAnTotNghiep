@@ -87,3 +87,7 @@ export const renderType = (type: string) => {
             return '';
     }
 }
+
+export const ROLE_TEXT_MAP = [
+    'student', 'teacher', 'admin', 'vip', 'super admin'
+];

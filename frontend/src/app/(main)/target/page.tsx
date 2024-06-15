@@ -1,6 +1,7 @@
 "use client"
 import Loading from '@/components/loading/loading';
 import ProfileMenu from '@/components/profile/menu/page';
+import TargetPage from '@/components/target/page';
 import TargetSidebar from '@/components/target/sidebar';
 import { User } from '@/modules/users/type';
 import { useAuth } from '@/providers/authProvider';
@@ -31,7 +32,7 @@ const page = (props: Props) => {
                     </div>
                     <div className='flex-1 md:w-full overflow-hidden'>
                         <div className='shadow p-10xs md:p-30md bg-white border border-black rounded'>
-                            <TargetSidebar />
+                            <TargetPage />
                         </div>
                     </div>
                 </div>

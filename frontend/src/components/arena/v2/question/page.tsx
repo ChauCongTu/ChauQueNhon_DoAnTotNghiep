@@ -9,12 +9,12 @@ import './style.scss';
 type Props = {
     user: User | null;
     question: QuestionType | null,
-    key: number,
+    current: number,
     disable: boolean;
     handleChangeAnswer: (questionId: number, answer: number, user_id: number | undefined) => void
 }
 
-const QuestionShow: React.FC<Props> = ({ question, handleChangeAnswer, key, user, disable }) => {
+const QuestionShow: React.FC<Props> = ({ question, handleChangeAnswer, current, user, disable }) => {
     if (!question || handleChangeAnswer == undefined || !user || user.id == undefined) {
         return <>Có lỗi với câu hỏi</>
     }
@@ -24,7 +24,7 @@ const QuestionShow: React.FC<Props> = ({ question, handleChangeAnswer, key, user
     return (
         <div>
             <div className='flex justify-between items-center'>
-                <div>Câu {key}</div>
+                <div>Câu {current}</div>
                 <><QuestionReport questions={question} /></>
             </div>
             <><div className='font-bold text-24xs md:text-24md'><RenderContent content={question.question} /></div></>

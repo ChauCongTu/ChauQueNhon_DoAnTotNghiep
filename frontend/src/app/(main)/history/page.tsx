@@ -10,9 +10,11 @@ import React, { useEffect, useState } from 'react';
 import { ClockCircleOutlined, FormOutlined, CalendarOutlined, FileDoneOutlined, PicLeftOutlined, OrderedListOutlined } from '@ant-design/icons';
 import { convertTimeString } from '@/utils/time';
 
-type Props = {}
+type Props = {
+    isTab?: boolean | null
+}
 
-const HistoryPage = (props: Props) => {
+const HistoryPage: React.FC<Props> = ({ isTab }) => {
     const { isLoggedIn, user } = useAuth();
     const [histories, setHistories] = useState<HistoryType[]>();
     const [total, setTotal] = useState(0);
@@ -63,19 +65,25 @@ const HistoryPage = (props: Props) => {
             {
                 isLoggedIn
                     ? <>
-                        <div className="mt-20xs md:mt-20md mx-auto px-10xs md:px-40m text-16xs md:text-16md">
-                            <Breadcrumb items={[
-                                {
-                                    title: <Link href={'/'}>Trang Chủ</Link>,
-                                },
-                                {
-                                    title: <Link href={'/'}>Cá nhân</Link>,
-                                },
-                                {
-                                    title: <>Lịch sử của tôi</>,
-                                }
-                            ]} />
-                        </div>
+                        {
+                            isTab
+                                ? <></>
+                                : <>
+                                    <div className="mt-20xs md:mt-20md mx-auto px-10xs md:px-40m text-16xs md:text-16md">
+                                        <Breadcrumb items={[
+                                            {
+                                                title: <Link href={'/'}>Trang Chủ</Link>,
+                                            },
+                                            {
+                                                title: <Link href={'/'}>Cá nhân</Link>,
+                                            },
+                                            {
+                                                title: <>Lịch sử của tôi</>,
+                                            }
+                                        ]} />
+                                    </div>
+                                </>
+                        }
                         <div className="mt-20xs md:mt-20md mx-auto px-10xs md:px-40m text-16xs md:text-16md">
                             <div className="flex flex-wrap gap-20xs md:gap-20md justify-between">
                                 <main className="w-full flex-1 order-1 md:order-2 md:max-w-1000md">
@@ -127,11 +135,15 @@ const HistoryPage = (props: Props) => {
                                     </div>
                                     <div className="mt-4 flex justify-end"><Pagination hideOnSinglePage onChange={handleChangePage} pageSize={12} current={current} total={total} /></div>
                                 </main>
-                                <nav className="w-full md:w-310md order-3">
-                                    <div>
-                                        <SwiperExam />
-                                    </div>
-                                </nav>
+                                {
+                                    isTab ? <></> : <>
+                                        <nav className="w-full md:w-310md order-3">
+                                            <div>
+                                                <SwiperExam />
+                                            </div>
+                                        </nav>
+                                    </>
+                                }
                             </div>
                         </div>
                     </>

@@ -10,19 +10,24 @@ import { DateTime } from 'luxon';
 import { useAuth } from '@/providers/authProvider';
 import Loading from '../loading/loading';
 import FirstLoading from '../loading/firstLoading';
+import { getCookie, setCookie, setCookieToDay } from '@/utils/cookie';
 
 const Header = () => {
     const [hasTarget, setHasTarget] = useState(false);
     const { loading } = useAuth();
     useEffect(() => {
-        getTargetCheck().then((res) => {
-            if (res.status && res.status.code === 200) {
-                setHasTarget(true);
-            }
-            else {
-                setHasTarget(false);
-            }
-        });
+        const ignoreTarget = getCookie('ignoreTarget');
+
+        if (!ignoreTarget) {
+            getTargetCheck().then((res) => {
+                if (res.status && res.status.code === 200) {
+                    setHasTarget(true);
+                }
+                else {
+                    setHasTarget(false);
+                }
+            });
+        }
     }, []);
     useEffect(() => {
         const interval = setInterval(() => {
@@ -40,6 +45,11 @@ const Header = () => {
 
         return () => clearInterval(interval);
     }, []);
+    const onIgnore = () => {
+        setCookieToDay('ignoreTarget', true);
+        setHasTarget(!hasTarget);
+    }
+
     const onFinish = (values: any) => {
         // setHasTarget(false);
         postSetTarget(values).then((res) => {
@@ -94,12 +104,16 @@ const Header = () => {
                 </nav>
             </header>
             <Modal
-                title={<h1 className='text-18xs md:text-18md font-bold py-10xs md:py-10md text-center'>Thiết lập mục tiêu ôn thi hôm nay của bạn</h1>}
+                title={<h1 className=''>Thiết lập mục tiêu ôn thi hôm nay của bạn</h1>}
                 open={hasTarget}
                 footer={null}
+                onCancel={() => setHasTarget(!hasTarget)}
             >
-                <div>
-                    <Form
+                <div className='flex flex-col justify-start gap-8xs md:gap-8md'>
+                    <Link href={'/'}>Click vào đây để thiết lập Target hôm nay</Link>
+
+                    <div onClick={onIgnore} className='cursor-pointer'>Hôm nay không hiển thị lại</div>
+                    {/* <Form
                         name="basic"
                         layout='vertical'
                         onFinish={onFinish}
@@ -157,7 +171,7 @@ const Header = () => {
                                 Thiết lập
                             </Button>
                         </Form.Item>
-                    </Form>
+                    </Form> */}
                 </div>
             </Modal>
         </>

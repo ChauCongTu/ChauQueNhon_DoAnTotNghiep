@@ -9,7 +9,7 @@ import { postExamSubmit } from '@/modules/exams/services';
 import toast from 'react-hot-toast';
 import Countdown, { CountdownProps } from 'react-countdown';
 import Echo from 'laravel-echo';
-import { getArenaHistory, postArenaSubmit, postGet, postSet, postStart, postStartV2, postSubmitV2 } from '@/modules/arenas/services';
+import { getArenaHistory, getHistoryV2, postArenaSubmit, postGet, postLoadV2, postSet, postStart, postStartV2, postSubmitV2 } from '@/modules/arenas/services';
 import Loading from '@/components/loading/loading'
 import { getHistory } from '@/modules/histories/services'
 import Link from 'next/link'
@@ -32,12 +32,12 @@ type Props = {
 const ArenaRoomDetail: React.FC<Props> = ({ arena, setArena }) => {
     const router = useRouter();
     const [isStart, setIsStart] = useState(false);
-    const [load, setLoad] = useState(false);
+    const [load, setLoad] = useState(true);
     const [timeLoad, setTimeLoad] = useState(0);
     const [questionKey, setQuestionKey] = useState(0);
     const [question, setQuestion] = useState<QuestionType>();
     const { user, isLoggedIn, loading } = useAuth();
-    const [time, setTime] = useState(0);
+    const [time, setTime] = useState(9999);
     const [disable, setDisable] = useState(false);
     const [labels, setLabels] = useState<string[]>([]);
     const [values, setValues] = useState<number[]>([]);
@@ -64,126 +64,136 @@ const ArenaRoomDetail: React.FC<Props> = ({ arena, setArena }) => {
         }
     }
 
+    const updateUsers = (users: any) => {
+        const userLabels = users.map((userScore: any) => userScore.user.name);
+        const userValues = users.map((userScore: any) => userScore.total_score);
+        const userIcons = users.map((userScore: any) => userScore.user.avatar);
+
+        setLabels(userLabels);
+        setValues(userValues);
+        setIcons(userIcons);
+    };
+
+    useEffect(()=> {
+        setLoad(false);
+    }, []);
+
     useEffect(() => {
         const echo = new Echo({
             broadcaster: 'socket.io',
-            host: window.location.hostname + ':6001',
+            host: `${window.location.hostname}:6001`,
         });
-        echo.channel('gouni_database_tick').listen('.MessagePushed', (data: any) => {
-            console.log(data);
-            const parseObject: { arenaStart: number, arenaNext?: number, arenaEnd?: number, message: string, current: number, question: QuestionType, users: any } = JSON.parse(data);
-            if (parseObject.arenaStart == arena.id) {
-                toast.success('Thi đấu sẽ sớm bắt đầu');
-                const userLabels = parseObject.users.map((userScore: any) => userScore.user.name);
-                const userValues = parseObject.users.map((userScore: any) => userScore.total_score);
-                const userIcons = parseObject.users.map((userScore: any) => userScore.user.avatar);
 
-                setLabels(userLabels);
-                setValues(userValues);
-                setIcons(userIcons);
+        const channel = echo.channel('gouni_database_tick');
+
+        const handleMessage = (data: string) => {
+            console.log(data);
+            const parseObject = JSON.parse(data);
+
+            if (parseObject.arenaStart === arena.id) {
+                toast.success('Thi đấu sẽ sớm bắt đầu');
+                setDisable(true)
+                updateUsers(parseObject.users);
                 delayAction(() => {
+                    setDisable(false);
                     toast.success(parseObject.message);
-                    setQuestionKey(parseObject.current)
+                    setQuestionKey(parseObject.current);
                     setQuestion(parseObject.question);
                     setTime(arena.time * 60000);
                     setIsStart(true);
-
-                }, 4000, (timeRemaining) => setTimeLoad(timeRemaining / 1000))
+                }, 4000, (timeRemaining) => setTimeLoad(timeRemaining / 1000));
             }
-            if (parseObject.arenaNext == arena.id) {
-                toast.success('Sẽ sang câu tiếp theo');
-                const userLabels = parseObject.users.map((userScore: any) => userScore.user.name);
-                const userValues = parseObject.users.map((userScore: any) => userScore.total_score);
-                const userIcons = parseObject.users.map((userScore: any) => userScore.user.avatar);
 
-                setLabels(userLabels);
-                setValues(userValues);
-                setIcons(userIcons);
+            if (parseObject.arenaNext === arena.id) {
+                toast.success('Sẽ sang câu tiếp theo');
+                setDisable(true)
+                updateUsers(parseObject.users);
                 delayAction(() => {
+                    setDisable(false);
                     toast.success(parseObject.message);
-                    setQuestionKey(parseObject.current)
+                    setQuestionKey(parseObject.current);
                     setQuestion(parseObject.question);
                     setTime(arena.time * 60000);
-
                     setDisable(false);
-                }, 4000, (timeRemaining) => setTimeLoad(timeRemaining / 1000))
+                }, 4000, (timeRemaining) => setTimeLoad(timeRemaining / 1000));
             }
-        });
-    }, []);
+
+            if (parseObject.arenaEnd === arena.id) {
+                toast.success('Trận đấu đã kết thúc');
+                setDisable(true)
+                setIsStart(false);
+                updateUsers(parseObject.users);
+                const updateArena = arena;
+                updateArena.status = 'completed';
+                setArena(updateArena);
+            }
+        };
+
+        channel.listen('.MessagePushed', handleMessage);
+
+        return () => {
+            channel.stopListening('.MessagePushed', handleMessage);
+            echo.disconnect();
+        };
+    }, [arena.id, setLabels, setValues, setIcons, delayAction, setQuestionKey, setQuestion, setTime, setIsStart, setDisable, setTimeLoad]);
 
     useEffect(() => {
-        // if (arena) {
-        //     calcTimeEnd();
-        //     if (arena.status != 'pending') {
-        //         setLoading(true);
-        //         postGet({ arenaId: arena.id }).then((res) => {
-        //             if (res.status && res.status.code === 200) {
-        //                 const now = DateTime.local();
-        //                 var ExamDidObject: ExamDid = JSON.parse(res.data[0]);
-        //                 const startAt = DateTime.fromISO(ExamDidObject.start_at);
-        //                 if (startAt.isValid) {
-        //                     const endAt = startAt.plus({ minutes: arena.time });
-        //                     const diffInSeconds = endAt.diff(now).as('seconds');
-        //                     const diffInMinutes = diffInSeconds / 60;
-        //                     if (diffInMinutes >= 0) {
-        //                         setExamDid(ExamDidObject);
-        //                         setTimeToEnd(diffInMinutes * 60)
-        //                     }
-        //                 }
-        //             }
-        //         }).finally(() => setLoading(false))
-        //         setIsStart(true);
-        //     }
-        //     else {
-        //         setIsStart(false);
-        //     }
-        // }
-    }, []);
-    useEffect(() => {
-        // const resultString = localStorage.getItem(`arena_${arena.id}_result`);
-        // calcTimeEnd();
-        // if (resultString) {
-        //     setResult(JSON.parse(resultString));
-        //     setIsStart(false);
-        //     console.log("đây");
-        // }
-        // else {
-        //     getArenaHistory(arena.id).then((res) => {
-        //         if (res.status && res.status.code === 200) {
-        //             setResult(res.data[0].result);
-        //             setIsStart(false);
-        //             console.log("đây");
+        if (arena.status == 'started') {
+            const loadProgress = async () => {
+                setLoad(true);
+                postLoadV2(arena.id).then((res) => {
+                    const data = res.data[0];
 
-        //         }
-        //     });
-        // }
-        // if (arena.status !== 'started') {
-        //     setIsStart(false);
-        // }
+                    if (data.question && (data.current != 0)) {
+                        setIsStart(true);
+                        setQuestion(data.question);
+                        setQuestionKey(data.current);
+                        updateUsers(data.users);
+                        setTime(arena.time);
+                    }
+                }).finally(() => setLoad(false))
+            }
+            loadProgress();
+        }
+        else if (arena.status == 'completed') {
+            const getHistory = async () => {
+                const res = await getHistoryV2(arena.id);
+                const data = res.data[0].result;
+                updateUsers(data.users)
+            }
+            getHistory();
+        }
     }, []);
 
     const handleStart = async () => {
         if (user && user.id && !isStart && arena && arena.id) {
             const res = await postStartV2(arena.id);
+            const updateArena = arena;
+            updateArena.status = 'started';
+            setArena(updateArena);
             if (res.status.code !== 200) {
                 toast.error(res.status.message)
             }
         }
     }
 
-    const handleSubmit = async (questionId: number, answer: number, userId: number | undefined) => {
-        if (userId == undefined) {
-            return 'Lỗi';
-        }
+    const handleSubmit = async (questionId: number, answer?: number, userId?: number) => {
         if (answer != question?.answer_correct) {
             setDisable(true);
             toast.error("Bạn đã bị mất lượt!");
         }
         else if (answer == question?.answer_correct) {
-            const res = await postSubmitV2(arena.id, { question_id: questionId, answer: answer });
+            const res = await postSubmitV2(arena.id, { question_id: questionId, answer: answer, user_id: userId });
             if (res.status.code !== 200) {
                 toast.error(res.status.message)
             }
+        }
+    }
+
+    const autoNext = async (questionId: number) => {
+        const res = await postSubmitV2(arena.id, { question_id: questionId });
+        if (res.status.code !== 200) {
+            toast.error(res.status.message)
         }
     }
 
@@ -208,24 +218,24 @@ const ArenaRoomDetail: React.FC<Props> = ({ arena, setArena }) => {
                 {
                     !isStart &&
                     <div className='w-full md:flex-1 shadow rounded border border-black'>
-                        <PrepareArena arena={arena} handleStart={handleStart} user={user} />
+                        {
+                            arena.status == 'pending' && <PrepareArena arena={arena} handleStart={handleStart} user={user} />
+                        }
+                        {
+                            arena.status == 'completed' && <AfterArena arena={arena} user={user} labels={labels} values={values} icons={icons} />
+                        }
                     </div>
                 }
-                {/* {
-                    result || arena.status == 'completed' ?
-                        <div className="w-full flex-1 shadow rounded"><AfterArena arena={arena} user={user} /></div>
-                        : <>
-                            {!isStart && !result && <><div className="w-full flex-1 shadow rounded"><PrepareArena arena={arena} handleStartServer={handleStartServer} user={user} /></div></>}
-                        </>
-                } */}
                 {
                     isStart
                         ? <>
-                            <div className='w-full md:w-620md'>
+                            <div className='w-full flex-1'>
                                 {
                                     isStart && <div className='bg-primary px-20xs md:px-20md py-10xs md:py-10md font-bold text-white rounded flex justify-between'>
-                                        <div>Điểm số của bạn: </div>
-                                        <Countdown date={Date.now() + time} renderer={render} />
+                                        <div>Điểm số của bạn</div>
+                                        {
+                                            question && question.id && !load && <Countdown date={Date.now() + time} renderer={render} onComplete={() => autoNext(question.id)} />
+                                        }
                                     </div>
                                 }
                                 <div>
@@ -234,11 +244,11 @@ const ArenaRoomDetail: React.FC<Props> = ({ arena, setArena }) => {
                             </div>
                             {
                                 arena.is_joined &&
-                                <div className="w-full flex-1 border border-black rounded">
+                                <div className="w-full md:w-620md border border-black rounded">
                                     <div className='p-20xs md:p-20md'>
                                         {
                                             question && <>
-                                                <QuestionShow key={questionKey} user={user} question={question} handleChangeAnswer={handleSubmit} disable={disable} />
+                                                <QuestionShow current={questionKey} user={user} question={question} handleChangeAnswer={handleSubmit} disable={disable} />
                                             </>
                                         }
                                     </div>
@@ -248,7 +258,7 @@ const ArenaRoomDetail: React.FC<Props> = ({ arena, setArena }) => {
                             {
                                 !arena.is_joined && <>
                                     <div className="w-full flex-1 shadow rounded">
-                                        <AfterArena arena={arena} user={user} />
+                                        <PrepareArena arena={arena} handleStart={handleStart} user={user} />
                                     </div>
                                 </>
                             }

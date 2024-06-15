@@ -1,6 +1,7 @@
 export interface UserTarget {
     id: number,
     user_id: number,
+    totalTimeInMinute: number,
     total_time: number,
     total_exams: number | null,
     total_practices: number | null,

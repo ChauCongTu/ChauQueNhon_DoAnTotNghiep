@@ -19,6 +19,7 @@ export interface ArenaType {
     start_at: string,
     type: string,
     password: string | null,
+    mode: number,
     status: string,
     created_at: string,
     updated_at: string,

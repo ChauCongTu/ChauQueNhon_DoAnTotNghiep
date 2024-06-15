@@ -39,18 +39,6 @@ const colors = [
 
 const getRandomColor = () => colors[Math.floor(Math.random() * colors.length)];
 
-const loadIcons = async (iconPaths: string[]) => {
-    const icons = await Promise.all(iconPaths.map(path => {
-        return new Promise<HTMLImageElement>((resolve, reject) => {
-            const img = new Image();
-            img.src = path;
-            img.onload = () => resolve(img);
-            img.onerror = reject;
-        });
-    }));
-    return icons;
-};
-
 const BarChart: React.FC<BarChartProps> = ({ labels, values, icons }) => {
     const { user, loading } = useAuth();
     const backgroundColors = labels.map(() => getRandomColor());
@@ -60,7 +48,7 @@ const BarChart: React.FC<BarChartProps> = ({ labels, values, icons }) => {
         labels,
         datasets: [
             {
-                label: 'Dataset',
+                label: 'Điểm',
                 data: values,
                 backgroundColor: backgroundColors,
                 borderColor: borderColors,
@@ -77,44 +65,16 @@ const BarChart: React.FC<BarChartProps> = ({ labels, values, icons }) => {
             },
             title: {
                 display: true,
-                text: 'Custom Bar Chart with Icons',
+                text: 'Kết quả thi đấu',
             },
         },
     };
 
-    const iconPlugin: Plugin<'bar'> = {
-        id: 'iconPlugin',
-        afterDatasetsDraw: async (chart) => {
-            const ctx = chart.ctx;
-            const loadedIcons = await loadIcons(icons);
-
-            const iconSize = 20; // Kích thước của icon
-
-            chart.data.datasets.forEach((dataset, datasetIndex) => {
-                const meta = chart.getDatasetMeta(datasetIndex);
-
-                meta.data.forEach((bar, index) => {
-                    const icon = loadedIcons[index];
-                    if (icon) {
-                        const x = bar.x - iconSize / 2;
-                        const y = bar.y - iconSize - 10; // Đặt icon cao hơn trên cột để không che dữ liệu
-
-                        // Tạo hình tròn
-                        ctx.save();
-                        ctx.beginPath();
-                        ctx.arc(x + iconSize / 2, y + iconSize / 2, iconSize / 2, 0, Math.PI * 2);
-                        ctx.clip();
-                        ctx.drawImage(icon, x, y, iconSize, iconSize);
-                        ctx.restore();
-                    }
-                });
-            });
-        },
-    };
+    
 
     return <>
         {
-            !loading && <Bar data={data} options={options} plugins={[iconPlugin]} />
+            !loading && <Bar data={data} options={options} />
         }
     </>;
 };

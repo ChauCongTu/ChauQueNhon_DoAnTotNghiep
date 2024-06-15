@@ -19,7 +19,7 @@ const CategorySideComponent: React.FC<Props> = ({ user }) => {
     }, [user])
     return (
         <div>
-            <div className='text-18xs md:text-18md font-bold mb-7xs md:mb-7md'>Môn học</div>
+            <div className='text-18xs md:text-18md font-bold mb-7xs md:mb-7md mt-10xs md:mt-10md'>Môn học</div>
             <div>
                 {
                     subjects

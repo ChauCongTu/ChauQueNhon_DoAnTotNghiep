@@ -33,15 +33,22 @@ const HistorySidebar = (props: Props) => {
         }
     }
     return (
-        <div className='border-t-4 border-primary'>
+        <div className='border border-black'>
             <Loading loading={loading} />
-            <h3 className='leading-27xs md:leading-27md pt-20xs md:pt-20md font-bold text-20xs md:text-20md'><Link href="/history">Lịch sử của tôi</Link></h3>
-            <div className='mt-30xs md:mt-30md'>
+            <h3 className='leading-27xs md:leading-27md pt-10xs md:pt-10md font-bold text-20xs md:text-20md px-10xs md:px-10md'><Link href="/history">Lịch sử của tôi</Link></h3>
+            {
+                histories.length == 0 && <>
+                    <div className='px-10md'>
+                        Bạn chưa tham gia hoạt động thi cử nào.
+                    </div>
+                </>
+            }
+            <div className='pb-10xs md:pb-10md px-10md'>
                 {
                     histories.map((value) => (
-                        <>  
+                        <>
                             {
-                                value.model && <div key={value.id} className='mt-20xs md:mt-20md border-t pt-20xs md:pt-20md'>
+                                value.model && <div key={value.id} className='mt-20xs md:mt-10md border-t border-black pt-20xs md:pt-10md'>
                                     <div><Link href={`/history/${value.id}`} className='text-16xs md:text-16md font-semibold hover:text-slate-700 line-clamp-1'>{value.model.name}</Link></div>
                                     <div className='flex justify-between text-13xs md:text-13md'>
                                         <div>{renderHistoryType(value.type)}</div>

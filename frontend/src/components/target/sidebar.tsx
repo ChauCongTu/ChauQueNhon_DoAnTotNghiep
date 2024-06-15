@@ -92,10 +92,10 @@ const TargetSidebar = (props: Props) => {
                                         mobileShow && <>
                                             <div>
                                                 <div className='font-semibold'>Thời gian ôn luyện</div>
-                                                <div>{timeOnline} / {targets.total_time / 60} phút</div>
+                                                <div>{timeOnline} / {targets.totalTimeInMinute} phút</div>
                                                 <div>
-                                                    <Progress percent={calcProgress(timeOnline, targets.total_time / 60)}
-                                                        status={calcProgress(timeOnline, targets.total_time / 60) >= 100 ? 'success' : 'active'} />
+                                                    <Progress percent={calcProgress(timeOnline, targets.totalTimeInMinute)}
+                                                        status={calcProgress(timeOnline, targets.totalTimeInMinute) >= 100 ? 'success' : 'active'} />
                                                 </div>
                                             </div>
 

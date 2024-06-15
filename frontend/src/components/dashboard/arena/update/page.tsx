@@ -172,6 +172,17 @@ const UpdateArena: React.FC<Props> = ({ arena, arenas, setArenas, subjectId, pag
                                 >
                                     <Input type="number" placeholder="Nhập thời gian làm bài" />
                                 </Form.Item>
+
+                                <Form.Item
+                                    label="Chế độ phòng"
+                                    name="mode"
+                                    rules={[{ required: true, message: 'Vui lòng chọn chế độ!' }]}
+                                >
+                                    <Select placeholder={'Chọn chế độ'}>
+                                        <Select.Option value="0">Cổ điển</Select.Option>
+                                        <Select.Option value="1">Đối kháng <span className='text-red-600'>(new)</span></Select.Option>
+                                    </Select>
+                                </Form.Item>
                                 <Form.Item
                                     label="Loại phòng"
                                     name="type"
@@ -275,6 +286,13 @@ const UpdateArena: React.FC<Props> = ({ arena, arenas, setArenas, subjectId, pag
                         </>
                     }
                     {error && <div className="text-red-500">{error}</div>}
+                    <div>
+                        <div>Lưu ý:</div>
+                        <div>
+                            <p>- Với chế độ phòng thi cổ điển, hãy nhập tổng thời gian cho tất cả thí sinh hoàn thành bài thi.</p>
+                            <p>- Với chế độ đối kháng, hãy nhập thời gian tối đa cho mỗi câu.</p>
+                        </div>
+                    </div>
                 </Form>
             </Drawer>
         </div>

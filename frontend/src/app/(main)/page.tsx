@@ -22,7 +22,7 @@ export default function Home() {
               <div>
                 <SwiperExam />
               </div>
-              <div>
+              <div className="mt-12xs md:mt-16md">
                 {
                   isLoggedIn && <HistorySidebar />
                 }

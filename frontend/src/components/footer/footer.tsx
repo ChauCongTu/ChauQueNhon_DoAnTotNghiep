@@ -11,9 +11,6 @@ const Footer = () => {
       <ToTop />
       <QuickLink />
       <div className="relative mt-16 bg-primary">
-        <svg className="absolute top-0 w-full h-6 -mt-5 sm:-mt-10 sm:h-16 text-deep-purple-accent-400" preserveAspectRatio="none" viewBox="0 0 1440 54">
-          <path fill="#f14600" d="M 0 22 L 120 16.7 C 240 11 480 1 720 -7 C 960 1 1200 11 1320 16.7 L 1440 22 V 54 H 1320 C 1200 54 960 54 720 54 C 480 54 240 54 120 54 H 0 V 22 Z" />
-        </svg>
         <div className="px-4 pt-12 mx-auto sm:max-w-xl md:max-w-full lg:max-w-screen-xl md:px-24 lg:px-8">
           <div className="grid gap-16 row-gap-10 mb-8 lg:grid-cols-6">
             <div className="md:max-w-md lg:col-span-2">

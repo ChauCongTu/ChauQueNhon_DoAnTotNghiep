@@ -37,9 +37,6 @@ const RoomList = (props: Props) => {
                 arenas && <>
                     <div className='flex justify-between items-center'>
                         <div className='flex items-center gap-7xs md:gap-7md'>
-                            <div>
-                                <CreateArena arenas={arenas} setArenas={setArenas} />
-                            </div>
                             <div><Button>Tất cả</Button></div>
                             <div><Button>Của tôi</Button></div>
                             <div><Button>Sắp diễn ra</Button></div>

@@ -17,9 +17,17 @@ a {
     @apply py-10xs md:py-10md text-16xs md:text-16md;
 }
 
-nextjs-portal {
+/* nextjs-portal {
     display: none;
+} */
+
+.db-badge{
+    background: #16a085;
+    color: #fff;
+    padding: 1px 20px;
+    border-radius: 9999px;
 }
+
 /* custom-pagination.css */
 .ant-pagination{
     @apply font-sans;

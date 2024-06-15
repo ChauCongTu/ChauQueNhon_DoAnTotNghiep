@@ -58,13 +58,15 @@ const NewTopic = (props: Props) => {
                                 <TargetSidebar />
                             </aside>
                             <main className="w-full flex-1 order-1 md:order-2 md:max-w-720md">
-                                <div className='mt-18xs md:mt-18md shadow px-20xs md:px-20md py-10xs md:py-10md'>
+                                <div className='mt-18xs md:mt-18md border border-black px-20xs md:px-20md py-10xs md:py-10md'>
+                                    <div className='py-10xs md:py-16md text-18xs md:text-22md font-bold uppercase'>
+                                        Tạo chủ đề thảo luận mới
+                                    </div>
                                     {
                                         fail && <div className='bg-red-200 px-20xs md:px-20md py-10xs md:py-10md text-red-700 rounded mb-10xs md:mb-10md'>
                                             <div>{fail}</div>
                                         </div>
                                     }
-                                    {/* Tạo Form tại đây */}
                                     <Form
                                         name="new_topic"
                                         layout="vertical"
@@ -93,7 +95,7 @@ const NewTopic = (props: Props) => {
                                         </Form.Item>
 
                                         <Form.Item>
-                                            <Button className='btn-primary btn-lg' htmlType="submit" loading={loading}>
+                                            <Button className='btn-primary' htmlType="submit" loading={loading}>
                                                 Đăng
                                             </Button>
                                         </Form.Item>

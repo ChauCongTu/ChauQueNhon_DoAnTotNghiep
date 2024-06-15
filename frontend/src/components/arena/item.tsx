@@ -42,15 +42,24 @@ const ArenaItem: React.FC<Props> = ({ arena }) => {
                         <span className="text-sm md:text-base">Loại phòng:</span>
                         <span className="text-sm md:text-base">{arena.type === 'private' ? 'VIP' : 'Tự do'}</span>
                     </div>
+
+                    <div className="flex items-center gap-2 text-15xs md:text-15md">
+                        <span className="text-sm md:text-base">Chế độ:</span>
+                        <span className="text-sm md:text-base">{arena.mode === 0 ? 'Cổ điển' : 'Đối kháng'}</span>
+                    </div>
                 </div>
 
                 <div>
-                    {arena && arena.status && arena.status === 'pending' && <span className='text-16xs md:text-16md font-semibold text-green-600'>Đang chờ</span>}
+                    {arena && arena.status && arena.status === 'pending' && <span className='text-16xs md:text-16md font-semibold text-blue-600'>Đang chờ</span>}
                     {arena && arena.status && arena.status === 'started' && <span className='text-16xs md:text-16md font-semibold text-red-700'>Đang thi</span>}
                     {arena && arena.status && arena.status === 'completed' && <span className='text-16xs md:text-16md font-semibold text-green-600'>Đã thi xong</span>}
                 </div>
                 <div className='flex justify-end'>
-                    <Link href={`arena/${arena.id}`} className='hover:text-black hover:underline text-13xs md:text-14md'>Đi đến <SwapRightOutlined /></Link>
+                    {
+                        arena.mode == 0
+                            ? <><Link href={`arena/${arena.id}`} className='hover:text-black hover:underline text-13xs md:text-14md'>Đi đến <SwapRightOutlined /></Link></>
+                            : <><Link href={`arena/v2/${arena.id}`} className='hover:text-black hover:underline text-13xs md:text-14md'>Đi đến <SwapRightOutlined /></Link></>
+                    }
                 </div>
             </div>
         </div>

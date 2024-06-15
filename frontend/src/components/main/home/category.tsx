@@ -21,8 +21,8 @@ const MainCategory: React.FC<Props> = ({ user }) => {
         }
     }, [user])
     return (
-        <div className='border-y-2 border-primary mt-40xs md:mt-40md'>
-            <div className='mt-20xs md:mt-20md text-24xs md:text-24md leading-27xs md:leading-27md font-bold'>DANH MỤC</div>
+        <div className='border px-10xs md:px-16md border-primary mt-40xs md:mt-40md'>
+            <div className='mt-20xs md:mt-20md text-24xs md:text-22md border-b border-black pb-10xs md:pb-10md leading-27xs md:leading-27md font-bold'>DANH MỤC</div>
             {
                 !user?.grade && <div className='mt-25xs md:mt-25md flex justify-center'><p>Vui lòng đăng nhập và thiết lập thông tin cá nhân để ôn luyện hiệu quả hơn</p></div>
             }

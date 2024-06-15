@@ -27,7 +27,8 @@ const SubjectMainSection: React.FC<Props> = ({ subject }) => {
             {
                 chapter
                     ? <>
-                        <div className='mt-18xs md:mt-18md border py-10xs md:py-10md px-15xs md:px-15md rounded h-auto'>
+                        <div className='mt-18xs md:mt-18md border border-black py-10xs md:py-10md px-15xs md:px-15md rounded h-auto'>
+                            
                             <h1 className='text-18xs md:text-18md font-bold uppercase'>{subject.name}</h1>
                             <div className='my-10xs md:my-10md space-x-2 border-b pb-18xs md:pb-18md'>
                                 <Button onClick={() => setMode('lesson')} className={`${mode == 'lesson' ? 'bg-primary text-white' : ''} rounded-none border-black`}>Bài học</Button>

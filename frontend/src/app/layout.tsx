@@ -21,7 +21,7 @@ export default function RootLayout({
   return (
     <AuthProvider>
       <html lang="vi">
-        <body className="font-poppins">
+        <body>
           <Providers>{children}</Providers>
           <script src="http://localhost:6001/socket.io/socket.io.js"></script>
         </body>

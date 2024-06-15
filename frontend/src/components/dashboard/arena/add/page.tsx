@@ -78,7 +78,7 @@ const CreateArena: React.FC<Props> = ({ arenas, setArenas, subjectId }) => {
                 Thêm mới
             </Button>
             <Drawer
-                title="Thêm bài tập mới"
+                title="Thêm phòng thi đấu"
                 open={open}
                 onClose={() => setOpen(false)}
                 width={640}
@@ -109,7 +109,7 @@ const CreateArena: React.FC<Props> = ({ arenas, setArenas, subjectId }) => {
                         (step == 0) && (
                             <>
                                 <Form.Item
-                                    label="Tên đề thi"
+                                    label="Tên phòng"
                                     name="name"
                                     rules={[
                                         { required: true, message: 'Vui lòng nhập tên đề thi!' },
@@ -158,6 +158,16 @@ const CreateArena: React.FC<Props> = ({ arenas, setArenas, subjectId }) => {
                                     ]}
                                 >
                                     <Input type="number" placeholder="Nhập thời gian làm bài" />
+                                </Form.Item>
+                                <Form.Item
+                                    label="Chế độ phòng"
+                                    name="mode"
+                                    rules={[{ required: true, message: 'Vui lòng chọn chế độ!'}]}
+                                >
+                                    <Select placeholder={'Chọn chế độ'}>
+                                        <Select.Option value="0">Cổ điển</Select.Option>
+                                        <Select.Option value="1">Đối kháng <span className='text-red-600'>(new)</span></Select.Option>
+                                    </Select>
                                 </Form.Item>
                                 <Form.Item
                                     label="Loại phòng"
@@ -262,6 +272,14 @@ const CreateArena: React.FC<Props> = ({ arenas, setArenas, subjectId }) => {
 
 
                     {error && <div className="text-red-500">{error}</div>}
+
+                    <div>
+                        <div>Lưu ý:</div>
+                        <div>
+                            <p>- Với chế độ phòng thi cổ điển, hãy nhập tổng thời gian cho tất cả thí sinh hoàn thành bài thi.</p>
+                            <p>- Với chế độ đối kháng, hãy nhập thời gian tối đa cho mỗi câu.</p>
+                        </div>
+                    </div>
                 </Form>
             </Drawer>
         </div>

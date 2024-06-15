@@ -50,12 +50,11 @@ const SubjectPage = ({ params }: { params: { slug: string } }) => {
                                 <SubjectMainSection subject={subject} />
                             </main>
                             <nav className="w-full md:w-310md order-3">
-                                <div className='mx-15xs md:mx-18md'>
-                                    <CategorySideComponent user={user} />
-                                </div>
-
-                                <div className='border-t mt-10xs md:mt-10md'>
+                                <div className='mt-10xs md:mt-10md'>
                                     <SwiperExam />
+                                </div>
+                                <div className='mt-12xs md:mt-16md'>
+                                    <CategorySideComponent user={user} />
                                 </div>
                             </nav>
                         </div>

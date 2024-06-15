@@ -12,6 +12,7 @@ import './style.scss';
 import CategorySideComponent from '@/components/category/component'
 import TrailerEmbeded from '@/components/main/trailer'
 import TargetSidebar from '@/components/target/sidebar'
+import HistoryPage from '../history/page'
 
 const onChange = (key: string) => {
     console.log(key);
@@ -31,7 +32,7 @@ const items: TabsProps['items'] = [
     {
         key: '3',
         label: <div className='text-primary border-b-primary font-semibold text-18xs md:text-18md'>Lịch sử</div>,
-        children: 'Content of Tab Pane 3',
+        children: <><HistoryPage isTab={true} /></>,
     },
 ];
 
@@ -61,18 +62,15 @@ const ArenaDetail = () => {
                 <div className="flex flex-wrap gap-20xs md:gap-20md justify-between">
                     <div className='w-full md:w-280md'>
                         <TargetSidebar />
-                        <div className='mt-10xs md:mt-20md w-full'>
-                            <CategorySideComponent user={user} />
-                        </div>
                     </div>
-                    <main className="w-full flex-1 order-1 md:order-2 md:max-w-720md">
+                    <main className="w-full flex-1 order-1 md:order-2 md:max-w-720md border border-black mt-18xs md:mt-18md px-10xs md:px-20md py-10xs md:py-16md">
                         <Tabs defaultActiveKey="1" items={items} onChange={onChange} />
                     </main>
                     <nav className="w-full md:w-310md order-3">
                         <div>
                             <SwiperExam />
                         </div>
-                        <div>
+                        <div className='mt-10xs md:mt-18md'>
                             {
                                 isLoggedIn && <HistorySidebar />
                             }

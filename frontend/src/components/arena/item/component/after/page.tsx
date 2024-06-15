@@ -1,3 +1,4 @@
+import LineChart from '@/components/chart/ranking/page'
 import { getArenaHistories } from '@/modules/arenas/services'
 import { ArenaType } from '@/modules/arenas/types'
 import { getHistories } from '@/modules/histories/services'
@@ -11,10 +12,13 @@ import Countdown from 'react-countdown'
 
 type Props = {
     arena: ArenaType,
-    user: User | null
+    user: User | null,
+    labels: string[];
+    values: number[];
+    icons: string[];
 }
 
-const AfterArena: React.FC<Props> = ({ arena, user }) => {
+const AfterArena: React.FC<Props> = ({ arena, user, labels, values, icons }) => {
     const [histories, setHistories] = useState<HistoryType[]>([]);
 
     useEffect(() => {
@@ -59,9 +63,6 @@ const AfterArena: React.FC<Props> = ({ arena, user }) => {
                                         <div className='font-bold'>{joinedUser.name}</div>
                                         <div className='text-13xs md:text-14md'>
                                             <span>@{joinedUser.username}</span>
-                                            <div className={`animate-pulse ${isSubmitted ? 'text-green-600' : 'text-primary'}`}>
-                                                {isSubmitted ? 'Đã nộp bài' : 'Đang thi'}
-                                            </div>
                                         </div>
                                     </div>
                                 </Link>
@@ -69,6 +70,9 @@ const AfterArena: React.FC<Props> = ({ arena, user }) => {
                         </div>
                     );
                 })}
+            </div>
+            <div className='w-full'>
+                <LineChart labels={labels} values={values} icons={icons} />
             </div>
         </div>
     )
