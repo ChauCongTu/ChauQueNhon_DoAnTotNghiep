@@ -4,7 +4,7 @@ namespace App\Helpers;
 
 use App\Models\Subject;
 
-class Constant
+class QNHelper
 {
     private $class = [
         'A' => [

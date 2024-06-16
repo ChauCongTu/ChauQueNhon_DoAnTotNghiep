@@ -160,6 +160,8 @@ Route::prefix('/v1')->group(function () {
 
     Route::prefix('statistics')->name('statistics.')->middleware('auth:api')->group(function () {
         Route::get('/', [StatisticController::class, 'index'])->name('index');
+        Route::get('/predict-data', [StatisticController::class, 'getPredictData'])->name('predict');
+        Route::get('/subject/{user_id}', [StatisticController::class, 'getUserSubjects'])->name('subject');
     });
 
     Route::prefix('topics')->name('topics.')->group(function () {

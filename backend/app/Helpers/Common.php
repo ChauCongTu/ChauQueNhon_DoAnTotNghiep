@@ -3,11 +3,11 @@
 namespace App\Helpers;
 
 use App\Models\History;
+use App\Models\Subject;
 use App\Models\User;
+use function Laravel\Prompts\note;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Carbon;
-
-use function Laravel\Prompts\note;
 
 class Common
 {
@@ -33,13 +33,13 @@ class Common
         $response['status'] = [
             'code' => $code,
             'success' => $success,
-            'message' => $message
+            'message' => $message,
         ];
         if ($data) {
             if ($paginateData) {
                 $resData = [
                     'data' => $data,
-                    'paginateData' => $paginateData
+                    'paginateData' => $paginateData,
                 ];
             } else {
                 $resData = [$data];
@@ -80,7 +80,7 @@ class Common
             'model' => 'App\Models\\' . $model,
             'foreign_id' => $foreignKey,
             'result' => $result,
-            'note' => $note
+            'note' => $note,
         ]);
         $history['user'] = User::find($history['user_id']);
         $history['result'] = json_decode($history['result']);
@@ -160,6 +160,66 @@ class Common
         return (int) $time;
     }
 
+    /**
+     * Calculate the percentage of questions answered in the arena.
+     *
+     * This method calculates the percentage of questions answered by a user in an arena.
+     *
+     * @param collection $history_arena The result data containing user performance details.
+     * @return int The percentage of questions answered in the arena.
+     */
+    public static function getArenaQuestionsAnsweredPercentage($history)
+    {
+        $model = $history->model;
+        $user_id = $history->user_id;
+        $result = $history->result->users;
+        $score = 0;
+        foreach ($result as $value) {
+            if ($value->user->id == $user_id) {
+                $score = $value->total_score;
+            }
+        }
+
+        $percent = 0;
+        if ($score != 0) {
+            $score = $score / 3;
+            $percent = ($score / $model['question_count']) * 100;
+        }
+        return $percent;
+    }
+
+    /**
+     * check is best in the arena.
+     *
+     * This method calculates the besst of questions answered by a user in an arena.
+     *
+     * @param collection $history_arena The result data containing user performance details.
+     * @return 1 if is best
+     * @return 0 if not
+     */
+
+    public static function getBestOfArenaCount($history)
+    {
+        $model = $history->model;
+        $user_id = $history->user_id;
+        $result = $history->result->users;
+        $max_score = 0;
+        $my_score = 0;
+        foreach ($result as $value) {
+            if ($value->user->id == $user_id) {
+                $my_score = $value->total_score;
+            }
+            if ($max_score < $value->total_score) {
+                $max_score = $value->total_score;
+            }
+        }
+        return ($max_score == $my_score) ? 1 : 0;
+    }
+    public static function getArenaRanking($result)
+    {
+        return rand(1, 5);
+    }
+
     public static function stringToDatetime($dateTimeString)
     {
         return Carbon::parse($dateTimeString);
@@ -171,5 +231,83 @@ class Common
     public static function timestampToDatetime($timestamp)
     {
         return Carbon::createFromTimestamp($timestamp);
+    }
+
+    private $class = [
+        'A' => [
+            'Toán Học', 'Vật Lý', 'Hóa Học',
+        ],
+        'A1' => [
+            'Toán Học', 'Vật Lý', 'Tiếng Anh',
+        ],
+        'B' => [
+            'Toán Học', 'Hóa Học', 'Sinh Học',
+        ],
+        'C' => [
+            'Ngữ Văn', 'Lịch Sử', 'Địa Lý',
+        ],
+        'D' => [
+            'Toán Học', 'Ngữ Văn', 'Tiếng Anh',
+        ],
+    ];
+    public static function getSubjectFromClass(array $classList): array
+    {
+        $instance = new self();
+        $allSubjects = [];
+
+        foreach ($classList as $class) {
+            if (isset($instance->class[$class])) {
+                $allSubjects = array_merge($allSubjects, $instance->class[$class]);
+            }
+        }
+        $uniqueSubjects = array_unique($allSubjects);
+
+        return $uniqueSubjects;
+    }
+
+    public static function getSubjectIds(array $subjectList, $grade): array
+    {
+        $data = [];
+        foreach ($subjectList as $subject) {
+            $data[] = Subject::select('id', 'name')
+                ->whereRaw('LOWER(name) = ?', [strtolower($subject)])
+                ->where('grade', $grade)
+                ->first();
+        }
+
+        return $data;
+    }
+
+    public static function isSubjectInMyClass(array $classList, int $subject_id): bool
+    {
+        $subject = Subject::find($subject_id);
+
+        if (!$subject) {
+            return false;
+        }
+
+        $subjectArray = self::getSubjectFromClass($classList);
+
+        $subjectNameLower = strtolower($subject->name);
+        $subjectArrayLower = array_map('strtolower', $subjectArray);
+
+        return in_array($subjectNameLower, $subjectArrayLower);
+    }
+
+    public static function getForumParticipationFrequency($number)
+    {
+        if ($number >= 0 && $number <= 6) {
+            return ['id' => 1, 'name' => 'rất thấp'];
+        } elseif ($number >= 7 && $number <= 13) {
+            return ['id' => 2, 'name' => 'thấp'];
+        } elseif ($number >= 14 && $number <= 19) {
+            return ['id' => 3, 'name' => 'trung bình'];
+        } elseif ($number >= 20 && $number <= 26) {
+            return ['id' => 4, 'name' => 'cao'];
+        } elseif ($number > 26) {
+            return ['id' => 5, 'name' => 'rất cao'];
+        } else {
+            return ['id' => 0, 'name' => 'không xác định'];
+        }
     }
 }
