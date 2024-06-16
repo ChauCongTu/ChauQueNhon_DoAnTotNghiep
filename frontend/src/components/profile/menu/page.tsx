@@ -19,7 +19,7 @@ const ProfileMenu = (props: Props) => {
                 {
                     props.myprofile && (<>
                         <ProfileMenuItem title='Mục tiêu ôn tập' url='/target' icon='target' isActive={props.active == 'target'} />
-                        <ProfileMenuItem title='Thống kê của tôi' url='/statistical' icon='stats' isActive={props.active == 'stats'} />
+                        <ProfileMenuItem title='Thống kê của tôi' url={`/statistics/${props.user.username}`} icon='stats' isActive={props.active == 'stats'} />
                     </>)
                 }
             </div>

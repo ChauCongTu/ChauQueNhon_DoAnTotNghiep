@@ -1,0 +1,34 @@
+.performance-indicator {
+    display: inline-block;
+    padding: 16px 24px; /* Tăng padding để làm nổi bật hơn */
+    border-radius: 12px; /* Bo góc */
+    font-weight: bold;
+    text-transform: uppercase;
+    text-align: center;
+    font-size: 36px; /* Kích thước chữ lớn hơn */
+}
+
+.grade-f {
+    background-color: #ff4444; /* Đỏ */
+    color: white;
+}
+
+.grade-d {
+    background-color: #ffbb33; /* Cam */
+    color: black;
+}
+
+.grade-c {
+    background-color: #ffee44; /* Vàng */
+    color: black;
+}
+
+.grade-b {
+    background-color: #66bb6a; /* Xanh lá cây */
+    color: white;
+}
+
+.grade-a {
+    background-color: #00c853; /* Xanh lá cây cân bằng */
+    color: white;
+}

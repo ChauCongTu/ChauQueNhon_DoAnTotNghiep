@@ -47,28 +47,8 @@ const PersonalPage = ({ params }: { params: { username: string } }) => {
 
     const handleEditClick = () => {
         router.push('#edit');
-        setTimeout(() => scrollToEditSection(), 0); // Ensure scroll after routing
+        setTimeout(() => scrollToEditSection(), 0);
     };
-
-    const calculateCompletionPercentage = (): number => {
-        if (!profile) return 0;
-
-        const totalFields = Object.keys(profile).length;
-        let completedFields = 0;
-
-        Object.values(profile).forEach(value => {
-            if (value !== undefined && value !== null && value !== '') {
-                completedFields++;
-            }
-        });
-        return Math.ceil((completedFields / totalFields) * 100);
-    };
-
-    const handleCloseEdit = () => {
-        setAllowEdit(false);
-    };
-
-    const completionPercentage = calculateCompletionPercentage();
 
     return (
         <>
@@ -93,14 +73,23 @@ const PersonalPage = ({ params }: { params: { username: string } }) => {
                             <div className='border border-black rounded px-20xs md:px-20md py-30xs md:py-30md'>
                                 <div className='flex justify-between items-center'>
                                     <div className='text-18xs md:text-18md font-semibold'>Tổng quan</div>
-                                    {
-                                        (user && user.id == profile.id) && <Button
-                                            type="primary"
-                                            icon={<EditOutlined />}
-                                            onClick={handleEditClick}>
-                                            Chỉnh sửa
-                                        </Button>
-                                    }
+                                    <div>
+                                        {
+                                            (user && user.id == profile.id) && <Button
+                                                type="primary"
+                                                icon={<EditOutlined />}
+                                                onClick={handleEditClick}>
+                                                Chỉnh sửa
+                                            </Button>
+                                        }
+                                        <div>
+                                            {
+                                                (((user && user.id) != profile.id) && (user?.role.includes('teacher') || user?.role.includes("admin"))) && (<Link href={`/statistics/${profile.username}`}>
+                                                    Thống kê học tập
+                                                </Link>)
+                                            }
+                                        </div>
+                                    </div>
 
                                 </div>
                                 <div className='flex items-center'>
@@ -152,6 +141,13 @@ const PersonalPage = ({ params }: { params: { username: string } }) => {
                                             <div className='md:col-span-3'>
                                                 <div className='font-semibold text-gray-800'>Địa chỉ</div>
                                                 <div>{profile.address}</div>
+                                            </div>
+                                            <div className='md:col-span-4 flex flex-wrap gap-7xs md:gap-10md'>
+                                                {
+                                                    profile.role && profile.role.map((role, index: number) => (
+                                                        <div key={index} className='border border-primary bg-indigo-100 font-semibold text-14xs md:text-14md rounded-lg capitalize text-primary px-12xs md:px-20md'>{role}</div>
+                                                    ))
+                                                }
                                             </div>
                                         </div>
                                     </div>
