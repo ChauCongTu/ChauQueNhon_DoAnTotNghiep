@@ -71,7 +71,7 @@ const ControlExam: React.FC<Props> = ({ user, exam, questionDone, time, handleSu
                 <div className='flex justify-between px-20xs md:px-20md pb-10xs md:pb-10md mt-15xs md:mt-15md'>
                     <div className='text-center'>
                         <div className='text-13xs md:text-14md'>Đã làm</div>
-                        <div className='text-20xs md:text-20md font-semibold'>{questionDone}/{exam.question_count}</div>
+                        <div className='text-20xs md:text-20md font-semibold'>{questionDone}/{exam.question_list?.length}</div>
                     </div>
                     <div className='text-center'>
                         <div className='text-13xs md:text-14md'>Thời gian làm bài</div>

@@ -109,23 +109,23 @@ const HistoryDetail = ({ params }: { params: { id: number } }) => {
                                                     model && model.question_list && model.question_list.map((value, index) => (
                                                         <div key={value.id} className='py-10xs md:py-10md'>
                                                             <div>
-                                                                <div className='font-semibold'>Câu hỏi {index + 1}: {history.result.assignment[value.id].your_answer == null && <>(Bạn đã bỏ trống câu này)</>}</div>
+                                                                <div className='font-semibold'>Câu hỏi {index + 1}: {history.result.assignment[value.id]?.your_answer == null && <>(Bạn đã bỏ trống câu này)</>}</div>
                                                                 <div className='font-semibold'><RenderContent content={value.question} /></div>
                                                             </div>
                                                             <div className='grid grid-cols grid-cols-1 md:grid-cols-2 gap-10xs md:gap-10md mt-5xs md:mt-5md'>
                                                                 {
-                                                                    history.result.assignment[value.id].correct_answer.toString() == history.result.assignment[value.id].your_answer ?
+                                                                    history.result.assignment[value.id]?.correct_answer.toString() == history.result.assignment[value.id]?.your_answer ?
                                                                         <>
-                                                                            <div className={`px-10xs md:px-10md py-5xs md:py-5md border rounded ${history.result.assignment[value.id].correct_answer == 1 ? 'border-green-600' : ''}`}>A. <RenderContent content={value.answer_1} /></div>
-                                                                            <div className={`px-10xs md:px-10md py-5xs md:py-5md border rounded ${history.result.assignment[value.id].correct_answer == 2 ? 'border-green-600' : ''}`}>B. <RenderContent content={value.answer_2} /></div>
-                                                                            <div className={`px-10xs md:px-10md py-5xs md:py-5md border rounded ${history.result.assignment[value.id].correct_answer == 3 ? 'border-green-600' : ''}`}>C. <RenderContent content={value.answer_3} /></div>
-                                                                            <div className={`px-10xs md:px-10md py-5xs md:py-5md border rounded ${history.result.assignment[value.id].correct_answer == 4 ? 'border-green-600' : ''}`}>D. <RenderContent content={value.answer_4} /></div>
+                                                                            <div className={`px-10xs md:px-10md py-5xs md:py-5md border flex rounded ${history.result.assignment[value.id]?.correct_answer == 1 ? 'border-green-600' : ''}`}>A. <RenderContent content={value.answer_1} /></div>
+                                                                            <div className={`px-10xs md:px-10md py-5xs md:py-5md border flex rounded ${history.result.assignment[value.id]?.correct_answer == 2 ? 'border-green-600' : ''}`}>B. <RenderContent content={value.answer_2} /></div>
+                                                                            <div className={`px-10xs md:px-10md py-5xs md:py-5md border flex rounded ${history.result.assignment[value.id]?.correct_answer == 3 ? 'border-green-600' : ''}`}>C. <RenderContent content={value.answer_3} /></div>
+                                                                            <div className={`px-10xs md:px-10md py-5xs md:py-5md border flex rounded ${history.result.assignment[value.id]?.correct_answer == 4 ? 'border-green-600' : ''}`}>D. <RenderContent content={value.answer_4} /></div>
                                                                         </> :
                                                                         <>
-                                                                            <div className={`px-10xs md:px-10md py-5xs md:py-5md border rounded ${history.result.assignment[value.id].correct_answer == 1 ? 'border-green-600' : ''} ${history.result.assignment[value.id].your_answer == "1" ? 'border-primary' : ''}`}>A. <RenderContent content={value.answer_1} /></div>
-                                                                            <div className={`px-10xs md:px-10md py-5xs md:py-5md border rounded ${history.result.assignment[value.id].correct_answer == 2 ? 'border-green-600' : ''} ${history.result.assignment[value.id].your_answer == "2" ? 'border-primary' : ''}`}>B. <RenderContent content={value.answer_2} /></div>
-                                                                            <div className={`px-10xs md:px-10md py-5xs md:py-5md border rounded ${history.result.assignment[value.id].correct_answer == 3 ? 'border-green-600' : ''} ${history.result.assignment[value.id].your_answer == "3" ? 'border-primary' : ''}`}>C. <RenderContent content={value.answer_3} /></div>
-                                                                            <div className={`px-10xs md:px-10md py-5xs md:py-5md border rounded ${history.result.assignment[value.id].correct_answer == 4 ? 'border-green-600' : ''} ${history.result.assignment[value.id].your_answer == "4" ? 'border-primary' : ''}`}>D. <RenderContent content={value.answer_4} /></div>
+                                                                            <div className={`px-10xs md:px-10md py-5xs md:py-5md border flex rounded ${history.result.assignment[value.id]?.correct_answer == 1 ? 'border-green-600' : ''} ${history.result.assignment[value.id].your_answer == "1" ? 'border-primary' : ''}`}>A. <RenderContent content={value.answer_1} /></div>
+                                                                            <div className={`px-10xs md:px-10md py-5xs md:py-5md border flex rounded ${history.result.assignment[value.id]?.correct_answer == 2 ? 'border-green-600' : ''} ${history.result.assignment[value.id].your_answer == "2" ? 'border-primary' : ''}`}>B. <RenderContent content={value.answer_2} /></div>
+                                                                            <div className={`px-10xs md:px-10md py-5xs md:py-5md border flex rounded ${history.result.assignment[value.id]?.correct_answer == 3 ? 'border-green-600' : ''} ${history.result.assignment[value.id].your_answer == "3" ? 'border-primary' : ''}`}>C. <RenderContent content={value.answer_3} /></div>
+                                                                            <div className={`px-10xs md:px-10md py-5xs md:py-5md border flex rounded ${history.result.assignment[value.id]?.correct_answer == 4 ? 'border-green-600' : ''} ${history.result.assignment[value.id].your_answer == "4" ? 'border-primary' : ''}`}>D. <RenderContent content={value.answer_4} /></div>
                                                                         </>
                                                                 }
 
@@ -145,7 +145,7 @@ const HistoryDetail = ({ params }: { params: { id: number } }) => {
                                     <div>
                                         <SwiperExam />
                                     </div>
-                                    <div>
+                                    <div className='mt-10xs md:mt-18md'>
                                         {
                                             isLoggedIn && <HistorySidebar />
                                         }

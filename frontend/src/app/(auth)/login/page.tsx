@@ -9,6 +9,7 @@ import Link from 'next/link';
 import { LoginRequest } from '@/modules/users/type';
 import { useRouter } from 'next/navigation';
 import FirstLoading from '@/components/loading/firstLoading';
+import Image from 'next/image';
 
 const LoginPage = () => {
     const router = useRouter();

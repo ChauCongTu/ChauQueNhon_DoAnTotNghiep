@@ -60,7 +60,7 @@ const TargetPage = (props: Props) => {
 
     const onFinish = (values: any) => {
         // setHasTarget(false);
-        postSetTarget(values).then((res) => {
+        postSetTarget({ ...values, id: targets?.id }).then((res) => {
         }).finally(() => {
             toast.success("Thiết lập mục tiêu hằng ngày thành công.");
             // setHasTarget(false);

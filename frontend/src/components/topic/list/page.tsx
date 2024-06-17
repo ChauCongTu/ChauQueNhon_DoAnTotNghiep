@@ -24,7 +24,7 @@ const MainTopicPage: React.FC<Props> = ({ topics }) => {
                     <Button onClick={() => setTutorial(true)}>Hướng dẫn</Button>
                 </div>
             </div>
-            <div className='mt-12xs md:mt-12md'>
+            <div className='mt-12xs md:mt-18md border-t pt-16xs md:pt-16md border-black'>
                 <div>
                     {
                         topics.map((value) => (

@@ -1,6 +1,7 @@
 import { DateTime } from "luxon";
 import { HistoryType } from "../histories/types";
 import { QuestionType } from "../questions/types";
+import { SubjectType } from "../subjects/types";
 
 export interface ExamType {
     id: number,
@@ -16,6 +17,7 @@ export interface ExamType {
     chapter_id: number | null,
     created_at: string | null,
     updated_at: string | null,
+    subject?: SubjectType,
     histories: HistoryType[] | null
 }
 

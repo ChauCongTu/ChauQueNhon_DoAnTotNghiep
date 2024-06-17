@@ -92,7 +92,7 @@ const ArenaRoomDetail: React.FC<Props> = ({ arena, setArena }) => {
                     if (res.status && res.status.code === 200) {
                         const now = DateTime.local();
                         var ExamDidObject: ExamDid = JSON.parse(res.data[0]);
-                        const startAt = DateTime.fromISO(ExamDidObject.start_at);
+                        const startAt = DateTime.fromISO(ExamDidObject.start_at.toString());
                         if (startAt.isValid) {
                             const endAt = startAt.plus({ minutes: arena.time });
                             const diffInSeconds = endAt.diff(now).as('seconds');
@@ -114,7 +114,7 @@ const ArenaRoomDetail: React.FC<Props> = ({ arena, setArena }) => {
             console.log(parseObject);
         });
     }, []);
-    
+
     useEffect(() => {
         if (arena) {
             calcTimeEnd();
@@ -124,7 +124,7 @@ const ArenaRoomDetail: React.FC<Props> = ({ arena, setArena }) => {
                     if (res.status && res.status.code === 200) {
                         const now = DateTime.local();
                         var ExamDidObject: ExamDid = JSON.parse(res.data[0]);
-                        const startAt = DateTime.fromISO(ExamDidObject.start_at);
+                        const startAt = DateTime.fromISO(ExamDidObject.start_at.toString());
                         if (startAt.isValid) {
                             const endAt = startAt.plus({ minutes: arena.time });
                             const diffInSeconds = endAt.diff(now).as('seconds');
@@ -232,7 +232,7 @@ const ArenaRoomDetail: React.FC<Props> = ({ arena, setArena }) => {
                 if (res.status && res.status.code === 200) {
                     const now = DateTime.local();
                     var ExamDidObject: ExamDid = JSON.parse(res.data[0]);
-                    ExamDidObject.time = now.diff(DateTime.fromISO(ExamDidObject.start_at)).as('seconds');
+                    ExamDidObject.time = now.diff(DateTime.fromISO(ExamDidObject.start_at.toString())).as('seconds');
                     console.log(ExamDidObject);
                     postArenaSubmit(arena.id, ExamDidObject).then((res) => {
                         console.log(res);
@@ -288,7 +288,7 @@ const ArenaRoomDetail: React.FC<Props> = ({ arena, setArena }) => {
                 />
                 {
                     result || arena.status == 'completed' ?
-                        <div className="w-full flex-1 shadow rounded"><AfterArena arena={arena} user={user} /></div>
+                        <div className="w-full flex-1 shadow rounded"><AfterArena icons={[]} arena={arena} user={user} /></div>
                         : <>
                             {!isStart && !result && <><div className="w-full flex-1 shadow rounded"><PrepareArena arena={arena} handleStartServer={handleStartServer} user={user} /></div></>}
                         </>
@@ -315,7 +315,7 @@ const ArenaRoomDetail: React.FC<Props> = ({ arena, setArena }) => {
                             {
                                 !arena.is_joined && <>
                                     <div className="w-full flex-1 shadow rounded">
-                                        <AfterArena arena={arena} user={user} />
+                                        <AfterArena icons={[]} arena={arena} user={user} />
                                     </div>
                                 </>
                             }

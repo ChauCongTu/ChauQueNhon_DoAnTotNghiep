@@ -9,17 +9,21 @@ import { getExams } from '@/modules/exams/services';
 import Link from 'next/link';
 import { Image } from 'antd';
 import { ClockCircleOutlined, FileOutlined, UserOutlined } from '@ant-design/icons';
+import { useAuth } from '@/providers/authProvider';
 
 type Props = {}
 
 const SwiperExam = (props: Props) => {
     const [exams, setExams] = useState<ExamType[]>([]);
+    const [loading, setLoading] = useState(false);
+    const { user } = useAuth();
     useEffect(() => {
-        getExams({ perPage: 5 }).then((res) => {
+        setLoading(true);
+        getExams({ perPage: 15, test_class: user?.class }).then((res) => {
             if (res.data[0].data) {
                 setExams(res.data[0].data);
             }
-        });
+        }).finally(() => setLoading(false));
     }, []);
     return (
         <>
@@ -30,7 +34,7 @@ const SwiperExam = (props: Props) => {
                 className="mySwiper text-15xs md:text-15md !overflow-hidden !p-20xs md:!p-20md border border-black mt-18xs md:mt-18md"
             >
                 {
-                    exams
+                    exams && !loading
                         ? <>
                             {
                                 exams.map((exam) => (
@@ -40,8 +44,8 @@ const SwiperExam = (props: Props) => {
                                         </div>
                                         <div className='border-t border-black pt-10xs md:pt-10md'>
                                             <h3 className='flex-1'><Link href={`/exam/${exam.slug}`} className='font-semibold text-20xs md:text-20md leading-23xs md:leading-23md line-clamp-2 mt-5xs md:mt-5md text-justify'>{exam.name}</Link></h3>
-                                            <div className='text-primary font-semibold mt-5xs md:mt-5md text-18xs md:text-18md'>
-                                                {exam.subject_id}
+                                            <div className='text-orange-700 font-semibold mt-5xs md:mt-5md text-18xs md:text-18md'>
+                                                [{exam.subject?.name}]
                                             </div>
                                         </div>
                                         <div className='mt-15xs md:mt-15md'>

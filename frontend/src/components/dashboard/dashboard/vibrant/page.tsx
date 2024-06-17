@@ -6,6 +6,7 @@ import React, { useEffect, useState } from 'react'
 import { NodeExpandOutlined } from '@ant-design/icons'
 import { DateTime } from 'luxon';
 import Link from 'next/link';
+import Image from 'next/image';
 
 type Props = {}
 
@@ -45,7 +46,7 @@ const VibrantTable: React.FC<Props> = () => {
             dataIndex: 'user',
             render: (_: any, record: VibrantTableType) => (
                 <div className='flex items-center gap-7xs md:gap-7md'>
-                    <img src={record.user.avatar} alt="avatar" width={'36px'} className='rounded-full ring-2' />
+                    <Image src={record.user.avatar} alt="avatar" width={36} height={36} className='!w-36md rounded-full ring-2' />
                     <Link href={`/personal/${record.user.username}`} target='_blank'>
                         {record.user.name}
                     </Link>

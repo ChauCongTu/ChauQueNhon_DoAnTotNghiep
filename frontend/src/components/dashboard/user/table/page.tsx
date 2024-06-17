@@ -9,6 +9,7 @@ import toast from 'react-hot-toast'
 import { ArrowRightOutlined } from '@ant-design/icons'
 import { User } from '@/modules/users/type'
 import AssignRoleModal from '../role/page'
+import Image from 'next/image'
 
 type Props = {
     users: User[],
@@ -33,6 +34,17 @@ const UserTable: React.FC<Props> = ({ users, setUsers, page, fetch }) => {
             title: 'Họ tên',
             dataIndex: 'name',
             key: 'name',
+            render: (_: any, user: User) => (
+                <Space>
+                    <Image className='rounded-full' width={32} height={32} src={user.avatar} alt={user.username ?? ''} />
+                    <span>{user.name}</span>
+                </Space>
+            )
+        },
+        {
+            title: 'Email',
+            dataIndex: 'email',
+            key: 'email',
         },
         {
             title: 'SĐT',
@@ -48,8 +60,11 @@ const UserTable: React.FC<Props> = ({ users, setUsers, page, fetch }) => {
                 <>
                     {role.map((tag: any) => {
                         let color = tag.length > 5 ? 'geekblue' : 'green';
-                        if (tag === 'loser') {
+                        if (tag === 'admin') {
                             color = 'volcano';
+                        }
+                        if (tag === 'teacher') {
+                            color = 'yellow';
                         }
                         return (
                             <Tag color={color} key={tag}>

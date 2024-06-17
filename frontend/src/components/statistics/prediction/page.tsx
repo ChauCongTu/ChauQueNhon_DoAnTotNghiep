@@ -15,9 +15,9 @@ const GouniPrediction: React.FC<Props> = ({ profile }) => {
     const [subjects, setSubjects] = useState<{ id: number; name: string }[]>([]);
     const [show, setShow] = useState(false);
     const [total, setTotal] = useState(0);
-    const [predictions, setPredictions] = useState<number[]>([]); // Mảng lưu trữ điểm dự đoán cho từng môn học
-    const [loadingIcon, setLoadingIcon] = useState(false); // State để điều khiển hiển thị icon loading
-    const [predicting, setPredicting] = useState(false); // State để điều khiển khi đang dự đoán lại
+    const [predictions, setPredictions] = useState<number[]>([]);
+    const [loadingIcon, setLoadingIcon] = useState(false);
+    const [predicting, setPredicting] = useState(false);
 
     // State cho modal
     const [modalVisible, setModalVisible] = useState(false);
@@ -28,9 +28,11 @@ const GouniPrediction: React.FC<Props> = ({ profile }) => {
 
     useEffect(() => {
         const getSubject = async () => {
-            const res = await getSubjectUser(profile.id);
-            if (res.status.success) {
-                setSubjects(res.data[0]);
+            if (profile.id) {
+                const res = await getSubjectUser(profile.id);
+                if (res.status.success) {
+                    setSubjects(res.data[0]);
+                }
             }
         };
         getSubject();
@@ -58,12 +60,13 @@ const GouniPrediction: React.FC<Props> = ({ profile }) => {
         for (let i = 0; i < subjects.length; i++) {
             try {
                 const predictRequest: PredictRequest | any = await getPredictRequest(subjects[i].id);
+                const headers = new Headers();
+                headers.append('Content-Type', 'application/json');
+                headers.append('x-api-key', process.env.NEXT_PUBLIC_API_KEY || ''); // Ensure x-api-key is not undefined
+
                 const response = await fetch('http://127.0.0.1:5000/api/v1/predict', {
                     method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'x-api-key': process.env.NEXT_PUBLIC_API_KEY
-                    },
+                    headers: headers,
                     body: JSON.stringify(predictRequest),
                 });
                 const data = await response.json();
@@ -135,7 +138,7 @@ const GouniPrediction: React.FC<Props> = ({ profile }) => {
             {/* Modal */}
             <Modal
                 title="Chi tiết dự đoán"
-                visible={modalVisible}
+                open={modalVisible}
                 onOk={handleOk}
                 onCancel={handleCancel}
                 footer={[

@@ -1,20 +1,21 @@
-import { QuestionType } from '@/modules/questions/types'
-import { SubjectType } from '@/modules/subjects/types'
-import { Popconfirm, Space, Table } from 'antd'
-import React from 'react'
-import UpdateQuestion from '../../question/update/page'
-import { deleteSubject } from '@/modules/subjects/services'
-import UpdateNewSubject from '../update/page'
-import Link from 'next/link'
+import { QuestionType } from '@/modules/questions/types';
+import { SubjectType } from '@/modules/subjects/types';
+import { Popconfirm, Space, Table, Tooltip, Button } from 'antd';
+import React from 'react';
+import { deleteSubject } from '@/modules/subjects/services';
+import Link from 'next/link';
+import { DeleteOutlined, BookOutlined } from '@ant-design/icons';
+import UpdateNewSubject from '../update/page';
 
 type Props = {
     subjects: SubjectType[],
-    setSubjects: (subjects: SubjectType[]) => void
+    setSubjects: (subjects: SubjectType[]) => void;
     page: number,
-    fetch: (page?: number) => void
-}
+    fetch: (page?: number) => void;
+    loading: boolean;
+};
 
-const SubjectTable: React.FC<Props> = ({ subjects, setSubjects, page, fetch }) => {
+const SubjectTable: React.FC<Props> = ({ subjects, setSubjects, page, fetch, loading }) => {
     const columns = [
         {
             title: 'ID',
@@ -32,7 +33,7 @@ const SubjectTable: React.FC<Props> = ({ subjects, setSubjects, page, fetch }) =
             key: 'icon',
             render: (_: any, record: SubjectType) => (
                 <Space size="middle">
-                    <img src={record.icon} className='w-32xs md:w-32md' />
+                    <img src={record.icon} className='w-32xs md:w-32md' alt="subject icon" />
                 </Space>
             ),
         },
@@ -42,7 +43,7 @@ const SubjectTable: React.FC<Props> = ({ subjects, setSubjects, page, fetch }) =
             key: 'grade',
             render: (_: any, record: SubjectType) => (
                 <Space size="middle">
-                    {record.grade == 0 || record.grade == 13 ? <>Tổng hợp</> : <>{record.grade}</>}
+                    {record.grade === 0 || record.grade === 13 ? <>Tổng hợp</> : <>{record.grade}</>}
                 </Space>
             ),
         },
@@ -52,33 +53,39 @@ const SubjectTable: React.FC<Props> = ({ subjects, setSubjects, page, fetch }) =
             render: (_: any, record: SubjectType) => (
                 <Space size="middle">
                     <UpdateNewSubject subjects={subjects} setSubjects={setSubjects} subject={record} page={page} fetch={fetch} />
-                    <Popconfirm
-                        title={'Xác nhận xóa'}
-                        onConfirm={() => handleDelete(record.id)}
-                        okText={'Xóa'}
-                        cancelText={'Hủy'}
-                    >
-                        <button>Xóa</button>
-
-                    </Popconfirm>
-                    <Link href={`/dashboard/chapter/${record.slug}`}>Chương</Link>
+                    <Tooltip title="Xóa">
+                        <Popconfirm
+                            title={'Xác nhận xóa'}
+                            onConfirm={() => handleDelete(record.id)}
+                            okText={'Xóa'}
+                            cancelText={'Hủy'}
+                        >
+                            <Button icon={<DeleteOutlined />} />
+                        </Popconfirm>
+                    </Tooltip>
+                    <Tooltip title="Quản lý chương/mục">
+                        <Link href={`/dashboard/chapter/${record.slug}`}>
+                            <Button icon={<BookOutlined />} />
+                        </Link>
+                    </Tooltip>
                 </Space>
             ),
         },
     ];
+
     const handleDelete = (id: number) => {
         deleteSubject(id).then((res) => {
             if (res.status.success) {
-                // setSubjects(prev => prev.filter(s => s.id !== id));
-                fetch(page)
+                fetch(page);
             }
-        })
-    }
+        });
+    };
+
     return (
         <div>
-            <Table dataSource={subjects} columns={columns} pagination={false} />
+            <Table dataSource={subjects} columns={columns} pagination={false} loading={loading} />
         </div>
-    )
-}
+    );
+};
 
-export default SubjectTable
+export default SubjectTable;

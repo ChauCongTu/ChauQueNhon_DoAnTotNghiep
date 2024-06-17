@@ -20,6 +20,7 @@ import { convertTimeString } from '@/utils/time'
 import toast from 'react-hot-toast'
 import { showTime } from '@/utils/helpers'
 import UpdateArena from '../update/page'
+import Image from 'next/image'
 
 type Props = {
     arenas: ArenaType[],
@@ -56,7 +57,7 @@ const ArenaTable: React.FC<Props> = ({ arenas, setArenas, page, fetch, subjectId
         {
             title: 'Người tạo',
             render: (_: any, record: ArenaType) => (<div className='flex items-center gap-10md'>
-                <img src={record.author.avatar} alt="" className='w-32md rounded-full ring-2 ring-primary' />
+                <Image width={32} height={32} src={record.author.avatar} alt="" className='!w-32md rounded-full ring-2 ring-primary' />
                 {record.author.name}
             </div>)
         },
@@ -81,7 +82,7 @@ const ArenaTable: React.FC<Props> = ({ arenas, setArenas, page, fetch, subjectId
         },
         {
             title: 'Trạng thái',
-            render: (_: any, record: ArenaType) => (<div className='flex items-center gap-10md'>
+            render: (_: any, record: ArenaType) => (<div className='bg-green-200 text-nowrap text-green-800 border border-green-800 px-5md rounded'>
                 {RenderStatus(record.status)}
             </div>)
         },

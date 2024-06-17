@@ -110,8 +110,8 @@ const LessonPage = ({ params }: { params: { slug: string } }) => {
                                 <TargetSidebar />
                             </aside>
                             <main className="w-full flex-1 order-1 md:order-2 md:max-w-720md mt-18xs md:mt-18md">
-                                <div className='border py-10xs md:py-10md px-15xs md:px-15md rounded h-auto'>
-                                    <div className='border-b pb-10xs md:pb-10md'>
+                                <div className='border border-black py-10xs md:py-10md px-15xs md:px-15md rounded h-auto'>
+                                    <div className='border-b border-black pb-10xs md:pb-18md'>
                                         <div>
                                             <div className='flex items-center justify-between flex-wrap'>
                                                 <div className='font-bold text-24xs md:text-32md'>{lesson.name}</div>
@@ -124,7 +124,7 @@ const LessonPage = ({ params }: { params: { slug: string } }) => {
 
                                                 </div>
                                             </div>
-                                            <div className='flex gap-2xs md:gap-10md text-13xs md:text-13md text-[#979797] items-center'>
+                                            <div className='flex gap-2xs md:gap-10md text-13xs md:text-13md text-[#979797] items-center mt-7xs md:mt-7md'>
                                                 <div>Cập nhật {DateTime.fromISO(lesson.updated_at).toFormat('dd/MM/yyyy')}</div>
                                                 <span>&#183;</span>
                                                 <div>

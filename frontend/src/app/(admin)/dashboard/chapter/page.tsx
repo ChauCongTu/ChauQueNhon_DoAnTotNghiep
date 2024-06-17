@@ -6,7 +6,8 @@ import SubjectTable from '@/components/dashboard/subject/table/page';
 import { getChapters, getSubjects } from '@/modules/subjects/services';
 import { ChapterType, SubjectType } from '@/modules/subjects/types';
 import { useAuth } from '@/providers/authProvider';
-import { Input, Pagination } from 'antd';
+import { Input, Pagination, Select } from 'antd';
+import { Option } from 'antd/es/mentions';
 import React, { useEffect, useState } from 'react'
 
 type Props = {}
@@ -52,7 +53,7 @@ const ChapterAdmin = (props: Props) => {
                             ? <>
                                 <div className='mb-5xs md:mb-5md flex justify-between items-center'>
                                     <div className='flex gap-7xs md:gap-7md items-center'>
-
+                                        
                                     </div>
                                     <div>
                                         <CreateChapter chapters={chapters} setChapters={setChapters} />

@@ -6,6 +6,7 @@ import { HistoryType } from '@/modules/histories/types'
 import { User } from '@/modules/users/type'
 import Echo from 'laravel-echo'
 import { DateTime } from 'luxon'
+import Image from 'next/image'
 import Link from 'next/link'
 import React, { useEffect, useState } from 'react'
 import Countdown from 'react-countdown'
@@ -13,8 +14,8 @@ import Countdown from 'react-countdown'
 type Props = {
     arena: ArenaType,
     user: User | null,
-    labels: string[];
-    values: number[];
+    labels?: string[];
+    values?: number[];
     icons: string[];
 }
 
@@ -58,7 +59,7 @@ const AfterArena: React.FC<Props> = ({ arena, user, labels, values, icons }) => 
                         <div className='group/item border py-24xs md:py-24md flex justify-between rounded hover:bg-primary hover:text-white' key={joinedUser.id}>
                             <div className='px-20xs md:px-20md'>
                                 <Link href={'/'} className='flex items-center gap-7xs md:gap-7md group-hover/item:text-white'>
-                                    <div><img src={joinedUser.avatar} className='w-42md rounded-full' /></div>
+                                    <div><Image src={joinedUser.avatar} alt='' width={42} height={42} className='w-42md h-auto rounded-full' /></div>
                                     <div>
                                         <div className='font-bold'>{joinedUser.name}</div>
                                         <div className='text-13xs md:text-14md'>
@@ -71,9 +72,12 @@ const AfterArena: React.FC<Props> = ({ arena, user, labels, values, icons }) => 
                     );
                 })}
             </div>
-            <div className='w-full'>
-                <LineChart labels={labels} values={values} icons={icons} />
-            </div>
+            {
+                (labels && values) && <div className='w-full'>
+                    <LineChart labels={labels} values={values} icons={icons} />
+                </div>
+            }
+
         </div>
     )
 }

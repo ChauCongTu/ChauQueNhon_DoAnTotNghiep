@@ -51,8 +51,6 @@ const PracticeDetail: React.FC<Props> = ({ practice }) => {
         }
     }, [user]);
     useEffect(() => {
-        // console.log(practice.question_list[0]);
-
         setFormattedTime(renderTime());
         const assign = localStorage.getItem(`PRACTICEDID_${user?.id}_${practice.id}`);
         if (assign) {
@@ -174,15 +172,21 @@ const PracticeDetail: React.FC<Props> = ({ practice }) => {
                     ? <>{examDid && <ExamResult setResult={setResult} exam={practice} result={result} examDid={examDid} />}</>
                     : <>
                         <div className='flex flex-wrap gap-26xs md:gap-26md'>
-                            <div className='w-250md'>
+                            <div className='w-250md sticky top-0'>
                                 <ControlExam user={user} exam={practice} questionDone={questionDone} time={formattedTime} handleSubmit={handleSubmit} mode={'Bài tập'} handleReset={handleReset} type={'practice'} />
                             </div>
-                            <div className="w-full flex-1 px-20xs md:px-20md py-10xs md:py-10md rounded mt-5xs md:mt-5md shadow">
-                                <QuestionShow questionList={practice?.question_list} selected={selected} examDid={examDid} handleChangeAnswer={handleChangeAnswer} />
-                                <div className='flex justify-between mt-10xs md:mt-10md pb-10xs md:pb-10md'>
+                            <div className="w-full flex-1 px-20xs md:px-20md py-10xs md:py-10md rounded mt-5xs md:mt-5md border shadow">
+                                {
+                                    practice.question_list && practice.question_list.map((question, index) => (
+                                        <>
+                                            <QuestionShow questionList={practice?.question_list} selected={index} examDid={examDid} handleChangeAnswer={handleChangeAnswer} />
+                                        </>
+                                    ))
+                                }
+                                {/* <div className='flex justify-between mt-10xs md:mt-10md pb-10xs md:pb-10md'>
                                     <button disabled={selected == 0} className='border px-20xs md:px-20md py-5xs md:py-5md rounded bg-primary text-white hover:bg-white hover:text-black disabled:bg-white disabled:text-black' onClick={() => setSelected(selected - 1)}>Trước</button>
                                     <button disabled={selected + 1 == practice.question_count} className='border px-20xs md:px-20md py-5xs md:py-5md rounded bg-primary text-white hover:bg-white hover:text-black disabled:bg-white disabled:text-black' onClick={() => setSelected(selected + 1)}>Sau</button>
-                                </div>
+                                </div> */}
                             </div>
                             {/*  */}
                             <QuestionList examDid={examDid} selected={selected} setSelected={setSelected} />

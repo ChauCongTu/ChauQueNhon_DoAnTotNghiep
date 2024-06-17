@@ -7,6 +7,7 @@ import { postForgot } from '@/modules/users/services';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { SwapLeftOutlined } from '@ant-design/icons';
+import Image from 'next/image';
 
 const ResetPasswordPage = () => {
     const router = useRouter();

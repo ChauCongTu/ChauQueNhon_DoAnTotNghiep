@@ -156,12 +156,12 @@ const ArenaRoomDetail: React.FC<Props> = ({ arena, setArena }) => {
             loadProgress();
         }
         else if (arena.status == 'completed') {
-            const getHistory = async () => {
+            const fetch = async () => {
                 const res = await getHistoryV2(arena.id);
                 const data = res.data[0].result;
                 updateUsers(data.users)
             }
-            getHistory();
+            fetch();
         }
     }, []);
 

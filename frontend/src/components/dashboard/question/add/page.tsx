@@ -25,7 +25,7 @@ const CreateNewQuestion: React.FC<Props> = ({ user, primary, questions, setQuest
                     ? <><button className='btn-primary' onClick={() => setOpen(true)}><PlusOutlined /></button></>
                     : <><Button icon={<PlusOutlined />} onClick={() => setOpen(true)}> Thêm câu hỏi</Button></>
             }
-            <Drawer title="Thêm câu hỏi mới" open={open} onClose={() => setOpen(false)}>
+            <Drawer title="Thêm câu hỏi mới" open={open} width={1000} onClose={() => setOpen(false)}>
                 <QuestionForm questions={questions} setQuestions={setQuestions} setOpen={setOpen} selectedQuestions={selectedQuestions} propSubjectId={propSubjectId} chapterId={chapterId} setSelectedQuestions={setSelectedQuestions} />
             </Drawer>
         </div>

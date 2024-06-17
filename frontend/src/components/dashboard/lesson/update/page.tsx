@@ -51,6 +51,7 @@ const UpdateLesson: React.FC<Props> = ({ lessons, setLessons, chapterId, lesson,
                 title="Cập nhật bài học"
                 open={open}
                 onClose={() => setOpen(false)}
+                width={640}
             >
                 <Form
                     form={form}

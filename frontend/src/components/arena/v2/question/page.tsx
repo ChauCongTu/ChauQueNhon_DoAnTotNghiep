@@ -23,7 +23,7 @@ const QuestionShow: React.FC<Props> = ({ question, handleChangeAnswer, current, 
     }
     return (
         <div>
-            <div className='flex justify-between items-center'>
+            <div className='flex justify-between items-center font-semibold'>
                 <div>Câu {current}</div>
                 <><QuestionReport questions={question} /></>
             </div>

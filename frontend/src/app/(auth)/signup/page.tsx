@@ -8,6 +8,7 @@ import { getGoogleUrl, postRegister } from '@/modules/users/services';
 import Link from 'next/link';
 import { RegisterRequest } from '@/modules/users/type';
 import { useRouter } from 'next/navigation';
+import Image from 'next/image';
 
 const SignupPage = () => {
     const router = useRouter();

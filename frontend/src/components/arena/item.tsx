@@ -15,7 +15,7 @@ const ArenaItem: React.FC<Props> = ({ arena }) => {
         <div className='flex border border-black rounded py-5xs md:py-5md cursor-pointer !h-auto'>
             <div className='w-2/5 flex flex-col items-center justify-center border-r border-black'>
                 <div className='w-24 flex-shrink-0'>
-                    <Image src='https://cdn-icons-png.freepik.com/512/6162/6162583.png?uid=R124828073&ga=GA1.1.1459343358.1716478985    ' preview={false} />
+                    <Image src='https://cdn-icons-png.freepik.com/512/6162/6162583.png?uid=R124828073&ga=GA1.1.1459343358.1716478985' preview={false} />
                 </div>
                 <div className='text-16xs md:text-16md font-semibold text-primary my-2 px-2 text-center'>{arena.name}</div>
             </div>

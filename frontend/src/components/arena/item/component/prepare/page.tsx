@@ -1,6 +1,7 @@
 import { ArenaType } from '@/modules/arenas/types'
 import { User } from '@/modules/users/type'
 import { DateTime } from 'luxon'
+import Image from 'next/image'
 import Link from 'next/link'
 import React from 'react'
 import Countdown from 'react-countdown'
@@ -19,7 +20,7 @@ const PrepareArena: React.FC<Props> = ({ arena, handleStartServer, user }) => {
                 <div className='flex items-center gap-7xs md:gap-7md'>
                     <div className='font-semibold'>Bắt đầu sau:</div>
                     <div>
-                        <div className='font-bold text-primary'><Countdown onComplete={handleStartServer} date={DateTime.fromFormat(arena.start_at, 'yyyy-MM-dd HH:mm:ss').ts} /></div>
+                        <div className='font-bold text-primary'><Countdown onComplete={handleStartServer} date={DateTime.fromFormat(arena.start_at, 'yyyy-MM-dd HH:mm:ss').toMillis()} /></div>
                     </div>
                 </div>
             </div>
@@ -30,7 +31,7 @@ const PrepareArena: React.FC<Props> = ({ arena, handleStartServer, user }) => {
                         <div className='group/item border py-24xs md:py-24md flex justify-between rounded hover:bg-primary hover:text-white' key={user.id}>
                             <div className='px-20xs md:px-20md'>
                                 <Link href={'/'} className='flex items-center gap-7xs md:gap-7md group-hover/item:text-white'>
-                                    <div><img src={user.avatar} className='w-42md rounded-full' /></div>
+                                    <div><Image src={user.avatar} width={42} height={42} alt='' className='w-42md rounded-full' /></div>
                                     <div>
                                         <div className='font-bold'>{user.name}</div>
                                         <div className='text-13xs md:text-14md flex items-center gap-7xs md:gap-7md'>

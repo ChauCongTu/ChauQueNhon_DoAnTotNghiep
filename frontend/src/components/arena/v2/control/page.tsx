@@ -36,7 +36,7 @@ const ArenaControl: React.FC<Props> = ({ arena, setArena, isStart, handleStart, 
     }
     return (
         <>
-            <div>
+            <div className='h-full'>
                 <div className='bg-white shadow rounded border border-black w-full md:w-380md h-full'>
                     <div className='p-20xs md:p-20md flex flex-col'>
                         <div className='text-21xs md:text-21md font-bold'>Thông tin phòng thi</div>

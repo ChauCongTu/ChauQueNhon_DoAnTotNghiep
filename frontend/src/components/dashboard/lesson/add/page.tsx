@@ -42,6 +42,7 @@ const CreateLesson: React.FC<Props> = ({ lessons, setLessons, chapterId }) => {
                 title="Thêm bài học mới"
                 open={open}
                 onClose={() => setOpen(false)}
+                width={640}
             >
                 <Form
                     form={form}

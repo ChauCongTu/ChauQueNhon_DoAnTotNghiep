@@ -1,12 +1,11 @@
 
-import { Button, Drawer, Form, Input, Select } from 'antd';
+import { Button, Drawer, Form, Input, Select, Tooltip } from 'antd';
 import React, { useState } from 'react';
-import { PlusOutlined } from '@ant-design/icons';
-import { QuestionType } from '@/modules/questions/types';
 import { User } from '@/modules/users/type';
 import { SubjectType } from '@/modules/subjects/types';
 import { SUBJECT_ICON } from '@/utils/constants';
 import { postSubject, putSubject } from '@/modules/subjects/services';
+import { EditOutlined } from '@ant-design/icons';
 
 type Props = {
     user?: User;
@@ -39,10 +38,12 @@ const UpdateNewSubject: React.FC<Props> = ({ user, primary, subjects, setSubject
 
     return (
         <div>
-
-            <button onClick={() => setOpen(true)}>
-                Sửa
-            </button>
+            <Tooltip title="Chỉnh sửa">
+                <Button
+                    icon={<EditOutlined />}
+                    onClick={() => setOpen(true)}
+                />
+            </Tooltip>
             <Drawer
                 title="Cập nhật môn học"
                 open={open}

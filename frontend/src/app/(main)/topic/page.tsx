@@ -1,5 +1,7 @@
 "use client"
 import CategorySideComponent from '@/components/category/component';
+import HistorySidebar from '@/components/main/history';
+import SwiperExam from '@/components/main/swiper';
 import CustomSkeleton from '@/components/skeleton/page';
 import TargetSidebar from '@/components/target/sidebar';
 import MainTopicPage from '@/components/topic/list/page';
@@ -59,13 +61,15 @@ const ChapterPage = (props: Props) => {
                             <aside className="w-full md:w-280md order-1">
                                 <TargetSidebar />
                             </aside>
-                            <main className="w-full flex-1 order-1 md:order-2 md:max-w-720md">
+                            <main className="w-full mt-12xs md:mt-18md flex-1 order-1 md:order-2 md:max-w-720md">
                                 {/* <SubjectMainSection subject={subject} /> */}
-                                {
-                                    loading
-                                        ? <><CustomSkeleton loading={loading} /></>
-                                        : <><MainTopicPage topics={topics} /></>
-                                }
+                                <div className='border border-black px-10xs md:px-18md'>
+                                    {
+                                        loading
+                                            ? <><CustomSkeleton loading={loading} /></>
+                                            : <><MainTopicPage topics={topics} /></>
+                                    }
+                                </div>
 
 
                                 <div className='flex justify-end'>
@@ -73,8 +77,11 @@ const ChapterPage = (props: Props) => {
                                 </div>
                             </main>
                             <nav className="w-full md:w-310md order-3">
-                                <div className='mx-15xs md:mx-18md'>
-                                    {/* <CategorySideComponent user={user} /> */}
+                                <div className=''>
+                                    <SwiperExam />
+                                </div>
+                                <div className='mt-10xs md:mt-16md'>
+                                    <HistorySidebar />
                                 </div>
                             </nav>
                         </div>
