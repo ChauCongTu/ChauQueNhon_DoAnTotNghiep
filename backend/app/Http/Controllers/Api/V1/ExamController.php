@@ -4,14 +4,13 @@ namespace App\Http\Controllers\Api\V1;
 
 use App\Helpers\Common;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\QueryRequest;
 use App\Http\Requests\Exam\StoreExamRequest;
 use App\Http\Requests\Exam\UpdateExamRequest;
 use App\Http\Requests\Practice\GetResultRequest;
+use App\Http\Requests\QueryRequest;
 use App\Models\Exam;
 use App\Models\History;
 use App\Models\User;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 
@@ -30,6 +29,7 @@ class ExamController extends Controller
         // = 0 lấy ra những thằng ko có chapter
         $subject = $request->input('subject', null);
         $chapter = $request->input('chapter', null);
+        $class = $request->input('test_class', null);
 
         $query = Exam::query();
         if ($filterBy && $value) {
@@ -37,7 +37,7 @@ class ExamController extends Controller
         }
         if ($chapter) {
             if ($chapter == 0) {
-                $query = $query->where('chapter_id', NULL);
+                $query = $query->where('chapter_id', null);
             } else {
                 $query = $query->where('chapter_id', $chapter);
             }
@@ -55,6 +55,7 @@ class ExamController extends Controller
         foreach ($exams as $exam) {
             $exam['join_count'] = $exam->join_count();
             $exam['question_list'] = $exam->questions();
+            $exam['subject'] = $exam->subject;
         }
 
         return Common::response(200, 'Lấy danh sách đề thi thành công', $exams);
@@ -72,9 +73,12 @@ class ExamController extends Controller
 
         $exam = Exam::create($data);
 
+        $exam['join_count'] = $exam->join_count();
+        $exam['question_list'] = $exam->questions();
+
         return $exam
-            ? Common::response(201, "Tạo đề thi mới thành công.", $exam)
-            : Common::response(400, "Có lỗi xảy ra, vui lòng thử lại.");
+        ? Common::response(201, "Tạo đề thi mới thành công.", $exam)
+        : Common::response(400, "Có lỗi xảy ra, vui lòng thử lại.");
     }
 
     public function update(int $id, UpdateExamRequest $request)
@@ -113,7 +117,7 @@ class ExamController extends Controller
     {
         $exam = Exam::where('slug', $slug)->first();
         if ($exam) {
-            $exam->question_list =  $exam->questions(); // Assuming `questions()` is a relationship method
+            $exam->question_list = $exam->questions(); // Assuming `questions()` is a relationship method
             $histories = History::where('model', 'App\Models\Exam')->where('foreign_id', $exam->id)->get();
             foreach ($histories as $history) {
                 $history->result = json_decode($history->result);
@@ -131,7 +135,6 @@ class ExamController extends Controller
 
         return Common::response(404, "Không tìm thấy đề thi này.");
     }
-
 
     public function result(int $id, GetResultRequest $request)
     {

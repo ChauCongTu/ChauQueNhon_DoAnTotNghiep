@@ -30,7 +30,7 @@ class ArenaController extends Controller
         $condition = $request->input('condition', null);
         $page = $request->input('page', 1);
         $perPage = $request->input('perPage', 0);
-        $sort = $request->input('sort', 'created_at');
+        $sort = $request->input('sort', 'start_at');
         $order = $request->input('order', 'desc');
 
         $subject = $request->input('subject', null);
