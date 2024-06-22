@@ -1,0 +1,44 @@
+import React from 'react';
+import './style.scss'; // File CSS để định dạng nổi bật và màu sắc
+
+interface PerformanceIndicatorProps {
+    score: number;
+}
+
+const Performance10: React.FC<PerformanceIndicatorProps> = ({ score }) => {
+    let grade = ''; // Biến để lưu ký tự xếp loại
+
+    // Đánh giá xếp loại dựa trên điểm số
+    if (score >= 9) {
+        grade = 'A+';
+    } else if (score >= 8) {
+        grade = 'A';
+    } else if (score >= 6) {
+        grade = 'B';
+    } else if (score >= 4.5) {
+        grade = 'C';
+    } else {
+        grade = 'D';
+    }
+
+    let className = 'performance-indicator';
+    if (grade === 'F') {
+        className += ' grade-f';
+    } else if (grade === 'D' || grade === 'D-' || grade === 'D+') {
+        className += ' grade-d';
+    } else if (grade === 'C' || grade === 'C-' || grade === 'C+') {
+        className += ' grade-c';
+    } else if (grade === 'B' || grade === 'B-' || grade === 'B+') {
+        className += ' grade-b';
+    } else if (grade === 'A' || grade === 'A-' || grade === 'A+') {
+        className += ' grade-a';
+    }
+
+    return (
+        <div className={className}>
+            {grade}
+        </div>
+    );
+};
+
+export default Performance10;

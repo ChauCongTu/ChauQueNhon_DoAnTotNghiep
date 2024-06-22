@@ -178,7 +178,7 @@ const TargetSidebar = (props: Props) => {
 
                                     <div>
                                         <div className='font-semibold'>Số phòng thi đã tham gia</div>
-                                        <div>{reality?.total_arenas} / {targets.total_arenas || ''}</div>
+                                        <div>{reality?.total_arenas} / {targets.total_arenas || 'Chưa thiết lập'}</div>
                                         <div>
                                             <Progress
                                                 percent={calcProgress(reality?.total_arenas, targets.total_arenas)}
@@ -189,7 +189,7 @@ const TargetSidebar = (props: Props) => {
 
                                     <div>
                                         <div className='font-semibold'>Điểm số tối thiểu</div>
-                                        <div>{reality?.min_score} / {targets.min_score}</div>
+                                        <div>{reality?.min_score} / {targets.min_score ?? 'Chưa thiết lập'}</div>
                                         <div>
                                             <Progress percent={calcProgress(reality?.min_score, targets.min_score)}
                                                 status={calcProgress(reality?.min_score, targets.min_score) >= 100 ? 'success' : 'active'} />
@@ -198,7 +198,7 @@ const TargetSidebar = (props: Props) => {
 
                                     <div>
                                         <div className='font-semibold'>Tỉ lệ làm đúng</div>
-                                        <div>{reality?.accuracy} / {targets.accuracy}%</div>
+                                        <div>{reality?.accuracy} / {targets.accuracy ?? 'Chưa thiết lập'}%</div>
                                         <div>
                                             <Progress percent={calcProgress(reality?.accuracy, targets.accuracy)}
                                                 status={calcProgress(reality?.accuracy, targets.accuracy) >= 100 ? 'success' : 'active'} />

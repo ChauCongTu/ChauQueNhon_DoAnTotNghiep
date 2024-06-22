@@ -9,6 +9,6 @@ Artisan::command('inspire', function () {
 })->purpose('Display an inspiring quote')->hourly();
 
 
-Schedule::command('route:cache')->everySecond();
+// Schedule::command('route:cache')->everySecond();
 Schedule::command('app:handle-arena')->everyMinute();
 Schedule::command('daily_stats')->daily();

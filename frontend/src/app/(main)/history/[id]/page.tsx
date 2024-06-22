@@ -134,7 +134,7 @@ const HistoryDetail = ({ params }: { params: { id: number } }) => {
                                                     ))
                                                 }
 
-                                            </div>
+                                            </div>  
                                         </div>
                                         <div className='border-t'>
                                             {history.note}

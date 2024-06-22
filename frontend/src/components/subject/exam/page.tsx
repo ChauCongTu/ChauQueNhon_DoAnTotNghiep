@@ -26,31 +26,6 @@ const ExamComponent: React.FC<Props> = ({ chapter, subject_id }) => {
     }
     return (
         <div>
-            {
-                chapter.map((value, index) => (
-                    <div key={value.id}>
-                        <div className='font-semibold mt-10xs md:mt-10md'>
-                            <div className='flex justify-between cursor-pointer items-center gap-20xs md:gap-20md'>
-                                <span>
-                                    Chương {index + 1}. {value.name}
-                                </span>
-                                <span>
-                                    <RightOutlined />
-                                </span>
-                            </div>
-                        </div>
-                        <div>
-                            {value.exams.map((exam, i) => (
-                                <div key={exam.id} className='my-10xs md:my-10md'>
-                                    <Link href={`/exam/${exam.slug}`}>
-                                        Đề {i + 1}. {exam.name}
-                                    </Link>
-                                </div>
-                            ))}
-                        </div>
-                    </div>
-                ))
-            }
             <>
                 <div className='font-semibold mt-10xs md:mt-10md'>
                     <div className='flex justify-between cursor-pointer'>

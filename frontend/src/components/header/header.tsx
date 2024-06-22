@@ -11,6 +11,7 @@ import { useAuth } from '@/providers/authProvider';
 import Loading from '../loading/loading';
 import FirstLoading from '../loading/firstLoading';
 import { getCookie, setCookie, setCookieToDay } from '@/utils/cookie';
+import Notification from './notification/page';
 
 const Header = () => {
     const [hasTarget, setHasTarget] = useState(false);
@@ -72,9 +73,9 @@ const Header = () => {
                             <ul className='flex justify-between text-slate-700 font-semibold'>
                                 <li><Link href={'/'} className='flex items-center gap-8md hover:text-primary'><HomeOutlined className='text-18xs md:text-18md' />Trang chủ</Link></li>
                                 <li><Link href={'/topic'} className='flex items-center gap-8md hover:text-primary'><WechatWorkOutlined className='text-18xs md:text-18md' />Hỏi đáp</Link></li>
-                                <li><Link href={'/'} className='flex items-center gap-8md hover:text-primary'><FileOutlined className='text-18xs md:text-18md' />Danh mục</Link></li>
+                                <li><Link href={'#danh-muc'} className='flex items-center gap-8md hover:text-primary'><FileOutlined className='text-18xs md:text-18md' />Danh mục</Link></li>
                                 <li><Link href={'/arena'} className='flex items-center gap-8md hover:text-primary'><InsertRowBelowOutlined className='text-18xs md:text-18md' />Đấu trường</Link></li>
-                                <li><Link href={'/statistic'} className='flex items-center gap-8md hover:text-primary'><BarChartOutlined className='text-18xs md:text-18md' />Thống kê</Link></li>
+                                <li><Link href={'/statistics'} className='flex items-center gap-8md hover:text-primary'><BarChartOutlined className='text-18xs md:text-18md' />Thống kê</Link></li>
                             </ul>
                         </nav>
                         <div className='ml-20md w-180md'>
@@ -97,9 +98,9 @@ const Header = () => {
                     <ul className='flex justify-between text-slate-700 font-semibold'>
                         <li><Link href={'/'} className='flex items-center gap-8md hover:text-primary'><HomeOutlined className='text-lg' /></Link></li>
                         <li><Link href={'/topic'} className='flex items-center gap-8md hover:text-primary'><WechatWorkOutlined className='text-lg' /></Link></li>
-                        <li><Link href={'/'} className='flex items-center gap-8md hover:text-primary'><FileOutlined className='text-lg' /></Link></li>
+                        <li><Link href={'#danh-muc'} className='flex items-center gap-8md hover:text-primary'><FileOutlined className='text-lg' /></Link></li>
                         <li><Link href={'/arena'} className='flex items-center gap-8md hover:text-primary'><InsertRowBelowOutlined className='text-lg' /></Link></li>
-                        <li><Link href={'/statistic'} className='flex items-center gap-8md hover:text-primary'><BarChartOutlined className='text-lg' /></Link></li>
+                        <li><Link href={'/statistics'} className='flex items-center gap-8md hover:text-primary'><BarChartOutlined className='text-lg' /></Link></li>
                     </ul>
                 </nav>
             </header>
@@ -174,6 +175,7 @@ const Header = () => {
                     </Form> */}
                 </div>
             </Modal>
+            <Notification />
         </>
     )
 }

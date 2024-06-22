@@ -17,6 +17,7 @@ const QuestionAdmin = (props: Props) => {
   const [total, setTotal] = useState(0);
   const [grade, setGrade] = useState(0);
   const [subjectId, setSubjectId] = useState(0);
+  const [loading, setLoading] = useState(false);
   useEffect(() => {
     fetchData();
   }, []);
@@ -29,6 +30,7 @@ const QuestionAdmin = (props: Props) => {
     fetchData(null, q);
   }
   const fetchData = (page?: number | null, search?: string | null, grade?: string | null, subject?: string | null) => {
+    setLoading(true);
     const params: { perPage: number; page?: number; q?: string, grade?: string, subject?: string } = { perPage: 12 };
 
     if (page !== undefined && page !== null) {
@@ -52,7 +54,7 @@ const QuestionAdmin = (props: Props) => {
         setCurrent(res.data[0].current_page);
         setTotal(res.data[0].total);
       }
-    })
+    }).finally(() => setLoading(false));
   }
   return (
     <div className='bg-white rounded mr-5xs md:mr-5md mt-5xs md:mt-5md'>
@@ -73,7 +75,7 @@ const QuestionAdmin = (props: Props) => {
                 </div>
               </div>
               {
-                questions && <QuestionTable fetchData={fetchData} page={current} loading={true} questions={questions} setQuestions={setQuestions} />
+                questions && <QuestionTable fetchData={fetchData} page={current} loading={loading} questions={questions} setQuestions={setQuestions} />
               }
               <div className="py-10xs md:py-10md flex justify-end">
                 <Pagination current={current} total={total} pageSize={12} onChange={handleChangePage} hideOnSinglePage />

@@ -5,6 +5,7 @@ import { User } from '@/modules/users/type';
 import { getPredictionRequest, getSubjectUser } from '@/modules/predictions/services';
 import { PredictRequest } from '@/modules/predictions/type';
 import { LoadingOutlined, ReloadOutlined } from '@ant-design/icons'; // Import ReloadOutlined từ Ant Design Icons
+import Performance10 from '../pane/performance/typeten';
 
 type Props = {
     profile: User;
@@ -39,7 +40,6 @@ const GouniPrediction: React.FC<Props> = ({ profile }) => {
     }, []);
 
     useEffect(() => {
-        // Tính tổng điểm khi có sự thay đổi trong predictions
         const totalScore = predictions.reduce((acc, score) => acc + score, 0);
         setTotal(totalScore);
     }, [predictions]);
@@ -60,6 +60,9 @@ const GouniPrediction: React.FC<Props> = ({ profile }) => {
         for (let i = 0; i < subjects.length; i++) {
             try {
                 const predictRequest: PredictRequest | any = await getPredictRequest(subjects[i].id);
+                if (predictRequest.ExercisesCompleted == 0 && predictRequest.TestsCompleted == 0) {
+                    continue;
+                }
                 const headers = new Headers();
                 headers.append('Content-Type', 'application/json');
                 headers.append('x-api-key', process.env.NEXT_PUBLIC_API_KEY || ''); // Ensure x-api-key is not undefined
@@ -70,7 +73,7 @@ const GouniPrediction: React.FC<Props> = ({ profile }) => {
                     body: JSON.stringify(predictRequest),
                 });
                 const data = await response.json();
-                const predictionScore = data.prediction[0]; // Giả sử dữ liệu dự đoán trả về là một số điểm
+                const predictionScore = data.prediction[0];
                 predictionsArray.push(predictionScore);
 
                 await new Promise(resolve => setTimeout(resolve, 1000));
@@ -80,18 +83,17 @@ const GouniPrediction: React.FC<Props> = ({ profile }) => {
             }
         }
 
-        // Lưu trữ dự đoán vào state và tắt trạng thái loading
         setPredictions(predictionsArray);
         setLoading(false);
-        setLoadingIcon(false); // Tắt hiển thị icon loading
-        setShow(true); // Hiển thị kết quả
-        setPredicting(false); // Đặt lại trạng thái dự đoán lại về false
+        setLoadingIcon(false);
+        setShow(true);
+        setPredicting(false);
     };
 
     const handlePredictAgain = () => {
         setModalVisible(false);
-        setShow(false); // Ẩn kết quả hiện tại
-        setPredicting(true); // Bật trạng thái dự đoán lại
+        setShow(false);
+        setPredicting(true);
     };
 
     const showModal = () => {
@@ -158,12 +160,16 @@ const GouniPrediction: React.FC<Props> = ({ profile }) => {
                                     <li key={value.id} className="px-4 py-3 flex items-center justify-between">
                                         <div className="flex-1">
                                             <p className="text-lg font-medium text-primary">{value.name}</p>
-                                            <p className="text-sm text-gray-600">{predictions[index]}</p>
+                                            <p className="text-sm text-gray-600">{
+                                                predictions[index] ?? <>
+                                                    <div>Chưa đủ dữ liệu để dự đoán</div>
+                                                    <span>Vui lòng làm ít nhất 1 bài kiểm tra để đánh giá về môn học này</span>
+                                                </>}</p>
                                         </div>
                                         <div className="flex items-center">
-                                            <span className="text-xs text-gray-500">Điểm dự đoán</span>
+                                            <span className="text-xs text-gray-500">Hiệu suất</span>
                                             <span className="ml-2 text-gray-700">
-                                                <PerformanceIndicator score={predictions[index]} />
+                                                <Performance10 score={predictions[index]} />
                                             </span>
                                         </div>
                                     </li>

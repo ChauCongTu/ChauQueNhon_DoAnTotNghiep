@@ -172,7 +172,7 @@ class Common
     {
         $model = $history->model;
         $user_id = $history->user_id;
-        $result = $history->result->users;
+        $result = $history->result->users ?? [];
         $score = 0;
         foreach ($result as $value) {
             if ($value->user->id == $user_id) {
@@ -202,7 +202,7 @@ class Common
     {
         $model = $history->model;
         $user_id = $history->user_id;
-        $result = $history->result->users;
+        $result = $history->result->users ?? [];
         $max_score = 0;
         $my_score = 0;
         foreach ($result as $value) {

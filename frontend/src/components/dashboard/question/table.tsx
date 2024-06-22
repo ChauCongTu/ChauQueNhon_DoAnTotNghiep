@@ -7,11 +7,11 @@ import UpdateQuestion from './update/page'
 import RenderContent from '@/components/main/renderQuestion'
 
 type Props = {
-    questions: QuestionType[],
-    loading: boolean,
-    setQuestions: (questions: QuestionType[]) => void,
-    fetchData: (page?: number | null, search?: string | null) => void
-    page: number
+    questions: QuestionType[];
+    loading: boolean;
+    setQuestions: (questions: QuestionType[]) => void;
+    fetchData: (page?: number | null, search?: string | null) => void;
+    page: number;
 }
 
 const QuestionTable: React.FC<Props> = ({ questions, loading, setQuestions, fetchData, page }) => {
@@ -90,7 +90,7 @@ const QuestionTable: React.FC<Props> = ({ questions, loading, setQuestions, fetc
     ];
     return (
         <div>
-            <Table dataSource={questions} columns={columns} pagination={false} />
+            <Table dataSource={questions} columns={columns} pagination={false} loading={loading} />
         </div>
     )
 }

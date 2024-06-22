@@ -44,8 +44,8 @@ class handleArena extends Command
                     $result['res'][] = [$question->id => ''];
                 }
 
-                // $item->status = "started";
-                // $item->save();
+                $item->status = "started";
+                $item->save();
 
                 Redis::setex('result_room_' . $item->id, 500, json_encode($result));
 
@@ -60,6 +60,34 @@ class handleArena extends Command
 
         $pendingArenasV2 = Arena::where('status', 'pending')->where('mode', 1)->get();
         $pendingArenasV2->each(function ($item) {
+            $startTime = Carbon::parse($item->start_at);
+
+            $adjusted15StartTime = $startTime->copy()->subMinutes(15)->startOfMinute();
+            $adjusted5StartTime = $startTime->copy()->subMinutes(5)->startOfMinute();
+
+            $currentMinute = now()->startOfMinute();
+
+            if ($currentMinute->equalTo($adjusted15StartTime)) {
+                Redis::publish('tick', json_encode([
+                    'event' => 'MessagePushed',
+                    'type' => 'notification',
+                    'data' => json_encode([
+                        'message' => 'Phòng thi của bạn sẽ bắt đầu sau 15 phút nữa.',
+                        'data' => $item,
+                    ]),
+                ]));
+            }
+
+            if ($currentMinute->equalTo($adjusted5StartTime)) {
+                Redis::publish('tick', json_encode([
+                    'event' => 'MessagePushed',
+                    'type' => 'notification',
+                    'data' => json_encode([
+                        'message' => 'Phòng thi của bạn sẽ bắt đầu sau 5 phút nữa. Hãy chuẩn bị giấy bút cần thiết và chuẩn bị tinh thần thoải mái',
+                        'data' => $item,
+                    ]),
+                ]));
+            }
             if (Carbon::parse($item->start_at) <= now()) {
                 $questions = $item->questions();
 
@@ -103,6 +131,13 @@ class handleArena extends Command
                 Redis::setex('data_room_' . $item->id, 43200, json_encode($data));
 
                 Redis::publish('tick', json_encode(array('event' => 'MessagePushed', 'data' => json_encode($data))));
+            } else {
+                $endTime = Carbon::parse($item->start_at)->addMinutes($item->time * $item->question_count);
+                if ($endTime <= now()) {
+                    $item->status = "completed";
+                    $item->save();
+                    Redis::publish('tick', json_encode(array('event' => 'MessagePushed', 'data' => json_encode(['status' => $item->status, 'arena' => $item]))));
+                }
             }
         });
 
