@@ -6,7 +6,7 @@ import { getQuestions } from '@/modules/questions/services';
 import { QuestionType } from '@/modules/questions/types';
 import { useAuth } from '@/providers/authProvider';
 import { Button, Input, Pagination } from 'antd';
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react';
 
 type Props = {}
 
@@ -22,6 +22,14 @@ const QuestionAdmin = (props: Props) => {
     fetchData();
   }, []);
   const handleChangePage = (page: number) => {
+    if (grade) {
+      if (subjectId) {
+        fetchData(page, null, grade.toString(), subjectId.toString())
+        return;
+      }
+      fetchData(page, null, grade.toString())
+      return;
+    }
     fetchData(page);
   }
   const handleOnChange = (e: any) => {
@@ -67,7 +75,7 @@ const QuestionAdmin = (props: Props) => {
                 <div className='flex gap-7xs md:gap-7md items-center'>
                   <div className='w-280xs md:w-280md'><Input onChange={(e) => handleOnChange(e)} placeholder='Nhập mã/câu hỏi cần tìm' /></div>
                   <div>
-                    <QuestionFilter fetchData={fetchData} />
+                    <QuestionFilter subjectId={subjectId} setSubjectId={setSubjectId} grade={grade} setGrade={setGrade} fetchData={fetchData} />
                   </div>
                 </div>
                 <div>
@@ -78,7 +86,7 @@ const QuestionAdmin = (props: Props) => {
                 questions && <QuestionTable fetchData={fetchData} page={current} loading={loading} questions={questions} setQuestions={setQuestions} />
               }
               <div className="py-10xs md:py-10md flex justify-end">
-                <Pagination current={current} total={total} pageSize={12} onChange={handleChangePage} hideOnSinglePage />
+                <Pagination current={current} total={total} pageSize={12} onChange={handleChangePage} showSizeChanger={false} hideOnSinglePage />
               </div>
             </>
             : <>Bạn không có quyền truy cập vào nguồn tài nguyên này</>

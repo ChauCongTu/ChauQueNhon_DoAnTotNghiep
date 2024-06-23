@@ -15,7 +15,7 @@ const ExamComponent: React.FC<Props> = ({ chapter, subject_id }) => {
     const [exams, setExams] = useState<ExamType[]>();
 
     useEffect(() => {
-        getExams({ filterBy: 'subject_id', value: subject_id, chapter: 0 }).then((res) => {
+        getExams({ filter: 'subject_id', value: subject_id, chapter: 0 }).then((res) => {
             if (res.status && res.status.code == 200) {
                 setExams(res.data[0]);
             }

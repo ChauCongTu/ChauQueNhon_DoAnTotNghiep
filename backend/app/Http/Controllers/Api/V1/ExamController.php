@@ -35,6 +35,11 @@ class ExamController extends Controller
         if ($filterBy && $value) {
             $query->where($filterBy, $condition ?? '=', $value);
         }
+
+        if ($subject) {
+            $query = $query->where('subject_id', $subject);
+        }
+
         if ($chapter) {
             if ($chapter == 0) {
                 $query = $query->where('chapter_id', null);

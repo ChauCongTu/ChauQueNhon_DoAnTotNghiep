@@ -3,23 +3,31 @@ import { CommentOutlined } from '@ant-design/icons';
 import { TopicType } from '@/modules/topics/types';
 import { convertTimeString } from '@/utils/time';
 import Link from 'next/link';
+import DOMPurify from 'dompurify';
+
+const stripHtmlTags = (html: any) => {
+    const cleanHtml = DOMPurify.sanitize(html, { ALLOWED_TAGS: ['p'], ALLOWED_ATTR: [] });
+    return cleanHtml;
+};
 
 type Props = {
     topic: TopicType
 };
 
 const TopicItem: React.FC<Props> = ({ topic }) => {
+    const sanitizedContent = stripHtmlTags(topic.content);
+
     return (
-        <div className="bg-white rounded border-black border p-4 mb-4 h-auto">
-            <div className="flex items-center mb-2">
+        <div className="rounded border border-gray-300 p-6 mb-6 flex flex-col !h-auto">
+            <div className="flex items-center mb-4">
                 <img
                     src={topic.author.avatar}
                     alt="Author Avatar"
-                    className="w-32xs md:w-32md h-32xs md:h-32md rounded-full mr-8xs md:mr-8md"
+                    className="w-12 h-12 rounded-full mr-4 border-2 border-gray-300"
                 />
                 <div>
-                    <span className="text-gray-700 font-semibold">{topic.author.name}</span>
-                    <div className="flex items-center text-gray-600 text-sm">
+                    <Link href={`/personal/${topic.author.username}`} className="text-gray-800 font-semibold">{topic.author.name}</Link>
+                    <div className="flex items-center text-gray-500 text-sm">
                         <span className="mr-2">{convertTimeString(topic.created_at)}</span>
                         <span className="flex items-center">
                             <CommentOutlined className="mr-1" />
@@ -28,8 +36,15 @@ const TopicItem: React.FC<Props> = ({ topic }) => {
                     </div>
                 </div>
             </div>
-            <h3 className="text-20xs md:text-24md font-semibold text-gray-900 mb-2 line-clamp-1 text-left"><Link href={`/topic/${topic.slug}`}>{topic.title}</Link></h3>
-            <div className="text-gray-700 line-clamp-3 mb-2 text-justify" dangerouslySetInnerHTML={{ __html: topic.content }} />
+            <h3 className="text-xl font-semibold text-gray-900 mb-2 line-clamp-1">
+                <Link href={`/topic/${topic.slug}`} className="hover:text-primary transition-colors duration-300">
+                    {topic.title}
+                </Link>
+            </h3>
+            <div
+                className="text-gray-700 line-clamp-3 overflow-hidden text-justify flex-grow"
+                dangerouslySetInnerHTML={{ __html: sanitizedContent }}
+            />
         </div>
     );
 };

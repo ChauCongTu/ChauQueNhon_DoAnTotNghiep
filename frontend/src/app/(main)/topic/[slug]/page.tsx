@@ -47,7 +47,6 @@ const TopicDetail = ({ params }: { params: { slug: string } }) => {
                                 <TargetSidebar />
                             </aside>
                             <main className="w-full flex-1 order-1 md:order-2 md:max-w-720md">
-                                {/* <SubjectMainSection subject={subject} /> */}
                                 {
                                     loading
                                         ? <><CustomSkeleton height={500} loading={loading} /></>
@@ -56,7 +55,6 @@ const TopicDetail = ({ params }: { params: { slug: string } }) => {
                             </main>
                             <nav className="w-full md:w-310md order-3">
                                 <div className='mx-15xs md:mx-18md'>
-                                    {/* <CategorySideComponent user={user} /> */}
                                     <TopicSidebar />
                                 </div>
                             </nav>

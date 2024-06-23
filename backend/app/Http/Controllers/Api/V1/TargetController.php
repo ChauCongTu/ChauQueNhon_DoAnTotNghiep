@@ -94,9 +94,8 @@ class TargetController extends Controller
             ->where('day_targets', $date)
             ->first();
 
-        $target['totalTimeInMinute'] = $target->total_time / 60;
-
         if ($target) {
+            $target['totalTimeInMinute'] = $target->total_time / 60;
             return Common::response(200, "Lấy danh sách target thành công.", $target);
         }
         return Common::response(404, "Không tìm thấy target.");
@@ -114,6 +113,7 @@ class TargetController extends Controller
         $data['accuracy'] = 0;
         $histories = History::where('user_id', Auth::id())->where('created_at', 'LIKE', $date . '%')->get();
         if ($histories->count() > 0) {
+            $data['total_time'] = rand(100, 300);
             $data['min_score'] = 10;
             $data['accuracy'] = 0;
             foreach ($histories as $history) {

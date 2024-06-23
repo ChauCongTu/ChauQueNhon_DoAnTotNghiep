@@ -5,13 +5,15 @@ import { Option } from 'antd/es/mentions';
 import React, { useState } from 'react'
 
 type Props = {
+    subjectId: number;
+    setSubjectId: (subjectId: number) => void;
+    grade: number;
+    setGrade: (grade: number) => void;
     fetchData: (page?: number | null, search?: string | null, grade?: string | null, subject?: string | null) => void
 }
 
-const QuestionFilter: React.FC<Props> = ({ fetchData }) => {
-    const [grade, setGrade] = useState(0);
+const QuestionFilter: React.FC<Props> = ({ fetchData, setSubjectId, subjectId, grade, setGrade }) => {
     const [open, setOpen] = useState(false);
-    const [subjectId, setSubjectId] = useState(0);
     const [subjects, setSubjects] = useState<SubjectType[]>([]);
     const onChange = (e: any) => {
         setGrade(e);
@@ -33,7 +35,6 @@ const QuestionFilter: React.FC<Props> = ({ fetchData }) => {
             fetchData(1, null, grade.toString())
             return;
         }
-        // fetchData(1, null, grade.toString())
         setOpen(false);
     }
     const onClear = () => {
@@ -64,7 +65,7 @@ const QuestionFilter: React.FC<Props> = ({ fetchData }) => {
                         }
                     </Select>
                 </div>
-                <div className='mt-12xs md:mt-12md'>
+                <div className='mt-12xs md:mt-12md flex gap-10xs md:gap-10md'>
                     <Button onClick={onSubmit}>Xác nhận</Button>
                     <Button onClick={onClear}>Clear</Button>
                 </div>

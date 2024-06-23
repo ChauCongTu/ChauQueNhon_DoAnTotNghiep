@@ -67,15 +67,17 @@ const UserWithLogin = () => {
           <Menu.Item key="history" icon={<HistoryOutlined />}>
             <Link href="/history">Xem lịch sử ôn tập</Link>
           </Menu.Item>
-          <Menu.Item key="today-goals" icon={<ScheduleOutlined />}>
-            <Link href="/today-goals">Xem mục tiêu hôm nay</Link>
+          <Menu.Item key="target" icon={<ScheduleOutlined />}>
+            <Link href="/target">Xem mục tiêu hôm nay</Link>
           </Menu.Item>
-          <Menu.Item key="settings" icon={<SettingOutlined />}>
-            <Link href="/settings">Cài đặt</Link>
-          </Menu.Item>
-          <Menu.Item key="dashboard" icon={<SettingOutlined />}>
-            <Link href="/dashboard">Dashboard</Link>
-          </Menu.Item>
+          {
+            (user?.role.includes('admin') || user?.role.includes('teacher')) && (
+              <Menu.Item key="dashboard" icon={<SettingOutlined />}>
+                <Link href="/dashboard" target='_blank'>Dashboard</Link>
+              </Menu.Item>
+            )
+          }
+
           <Menu.Item key="logout" icon={<LogoutOutlined />} onClick={showLogoutModal}>
             Đăng xuất
           </Menu.Item>

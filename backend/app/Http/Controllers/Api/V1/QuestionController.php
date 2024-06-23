@@ -158,7 +158,6 @@ class QuestionController extends Controller
     public function destroy(int $id)
     {
         try {
-            // DB::beginTransaction();
             Practice::select('id', 'questions', 'question_count')->chunk(100, function ($practices) use ($id) {
                 foreach ($practices as $practice) {
                     $questions = explode(',', $practice->questions);
@@ -195,10 +194,8 @@ class QuestionController extends Controller
                 }
             });
             Question::destroy($id);
-            // DB::commit();
             return Common::response(200, "Xóa câu hỏi thành công.");
         } catch (\Throwable $th) {
-            // DB::rollBack();
             return Common::response(400, "Có lỗi xảy ra, vui lòng thử lại.", $th->getMessage());
         }
     }

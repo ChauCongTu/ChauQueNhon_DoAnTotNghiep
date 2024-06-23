@@ -4,18 +4,25 @@ import SwiperExam from '@/components/main/swiper';
 import { getHistories } from '@/modules/histories/services';
 import { HistoryType } from '@/modules/histories/types';
 import { useAuth } from '@/providers/authProvider';
-import { Breadcrumb, Pagination } from 'antd';
+import { Breadcrumb, Card, Pagination, Space } from 'antd';
 import Link from 'next/link';
 import React, { useEffect, useState } from 'react';
 import { ClockCircleOutlined, FormOutlined, CalendarOutlined, FileDoneOutlined, PicLeftOutlined, OrderedListOutlined } from '@ant-design/icons';
 import { convertTimeString } from '@/utils/time';
+import { Typography, Tag } from 'antd';
+import { FileTextOutlined } from '@ant-design/icons';
+
 
 type Props = {
     isTab?: boolean | null
 }
 
+const { Meta } = Card;
+const { Text, Paragraph } = Typography;
+
 const HistoryPage: React.FC<Props> = ({ isTab }) => {
     const { isLoggedIn, user } = useAuth();
+    const [loading, setLoading] = useState(false);
     const [histories, setHistories] = useState<HistoryType[]>();
     const [total, setTotal] = useState(0);
     const [current, setCurrent] = useState(1);
@@ -84,51 +91,68 @@ const HistoryPage: React.FC<Props> = ({ isTab }) => {
                                     </div>
                                 </>
                         }
-                        <div className="mt-20xs md:mt-20md mx-auto px-10xs md:px-40m text-16xs md:text-16md">
+                        <div className={`mt-20xs md:mt-20md mx-auto ${isTab ? '' : 'px-10xs md:px-40md'} text-16xs md:text-16md`}>
                             <div className="flex flex-wrap gap-20xs md:gap-20md justify-between">
                                 <main className="w-full flex-1 order-1 md:order-2 md:max-w-1000md">
-                                    <div className='text-24xs md:text-24md font-bold'>Lịch sử của tôi</div>
-                                    <div className="grid grid-col grid-cols-1 md:grid-cols-3 gap-10xs md:gap-10md mt-20xs md:mt-20md">
+                                    {
+                                        !isTab && <div className='text-24xs md:text-24md font-bold'>Lịch sử của tôi</div>
+                                    }
+
+                                    <div className={`grid grid-col grid-cols-1 ${isTab ? 'md:grid-cols-2' : 'md:grid-cols-3'} gap-10xs md:gap-10md mt-20xs md:mt-20md`}>
                                         {histories && histories.map(history => (
                                             <>
                                                 {
-                                                    (history && history.model) && (
-                                                        <Link href={`/history/${history.id}`} className="block border rounded-md hover:text-black hover:shadow" key={history.id}>
-                                                            <div key={history.id} className="flex flex-col content-between bg-white rounded p-4 h-auto">
-                                                                <div>
-                                                                    <img src={renderImage(history.type)} alt="" className='w-full' />
-                                                                </div>
-                                                                <div className="flex-1 items-center">
-                                                                    <span className='text-18xs md:text-18md text-justify line-clamp-2 font-bold hover:text-primary'>{history.model.name}</span>
-                                                                </div>
-                                                                <div className='flex justify-between mt-2'>
-                                                                    <div className="flex items-center justify-between">
-                                                                        <div className="flex items-center">
-                                                                            <FormOutlined className="text-gray-400" />
-                                                                            <span className='text-14xs md:text-14md'> Điểm:{history.result.total_score}</span>
-                                                                        </div>
-                                                                    </div>
-                                                                    <div className="flex items-center">
-                                                                        <CalendarOutlined className="text-gray-400" />
-                                                                        <span className='text-14xs md:text-14md'> {convertTimeString(history.created_at)}</span>
-                                                                    </div>
-                                                                </div>
+                                                    isTab && history.type != 'Arena'
+                                                        ? <></>
+                                                        : <>
+                                                            {
 
-                                                                <div className="flex justify-between mt-2">
-                                                                    <div className="flex items-center space-x-2">
-                                                                        <span className='text-14xs md:text-14md'>{renderHistoryType(history.type)}</span>
-                                                                    </div>
-
-                                                                    <div className="flex items-center space-x-2">
-                                                                        <ClockCircleOutlined className="text-gray-400" />
-                                                                        <span className='text-14xs md:text-14md'>Thời gian: {Math.ceil(history.result.time / 60)} phút</span>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </Link>
-                                                    )
+                                                                (history && history.model) && (
+                                                                    <Link href={`/history/${history.id}`} className="border hover:text-black border-black">
+                                                                        <Card
+                                                                            hoverable
+                                                                            className="w-full"
+                                                                            cover={<img alt={history.model.name} src={renderImage(history.type)} className="w-full h-249xs md:h-249md object-cover" />}
+                                                                        >
+                                                                            <div className="flex flex-col h-full justify-between">
+                                                                                <Meta
+                                                                                    title={
+                                                                                        <Space align="center">
+                                                                                            <FileTextOutlined style={{ fontSize: '20px', color: '#1890ff' }} />
+                                                                                            <Text className="text-xl font-bold">{history.model.name}</Text>
+                                                                                        </Space>
+                                                                                    }
+                                                                                    description={
+                                                                                        <Paragraph className="text-gray-600 line-clamp-2">
+                                                                                            {history.model.description}
+                                                                                        </Paragraph>
+                                                                                    }
+                                                                                />
+                                                                                <div className="flex justify-between mt-3">
+                                                                                    <div className="flex items-center space-x-2">
+                                                                                        <ClockCircleOutlined className="text-gray-400" />
+                                                                                        <Text className="text-sm text-gray-500">Thời gian: {Math.ceil(history.result.time / 60)} phút</Text>
+                                                                                    </div>
+                                                                                    <div className="flex items-center space-x-2">
+                                                                                        <CalendarOutlined className="text-gray-400" />
+                                                                                        <Text className="text-sm text-gray-500">{convertTimeString(history.created_at)}</Text>
+                                                                                    </div>
+                                                                                </div>
+                                                                                <div className="flex justify-between mt-2">
+                                                                                    <div className="flex items-center space-x-2">
+                                                                                        <Tag color="#108ee9">{renderHistoryType(history.type)}</Tag>
+                                                                                    </div>
+                                                                                    <div className="flex items-center space-x-2">
+                                                                                        <Text className="text-sm text-gray-500">Điểm: {history.result.total_score}</Text>
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
+                                                                        </Card>
+                                                                    </Link>
+                                                                )
+                                                            }
+                                                        </>
                                                 }
-
                                             </>
 
                                         ))}
@@ -137,7 +161,7 @@ const HistoryPage: React.FC<Props> = ({ isTab }) => {
                                 </main>
                                 {
                                     isTab ? <></> : <>
-                                        <nav className="w-full md:w-310md order-3">
+                                        <nav className="w-full md:w-340md order-3 mt-10xs md:mt-38md">
                                             <div>
                                                 <SwiperExam />
                                             </div>

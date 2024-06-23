@@ -1,6 +1,7 @@
 <?php
 
 use App\Helpers\Common;
+use App\Models\Arena;
 use App\Models\History;
 use App\Models\Statistic;
 use App\Models\User;
@@ -8,7 +9,6 @@ use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Redis;
 use Illuminate\Support\Facades\Route;
 use Symfony\Component\HttpFoundation\Response;
-use Illuminate\Support\Facades\Log;
 
 Route::get('/', function () {
     $message = 'Bạn không có quyền truy cập vào nguồn dữ liệu đã yêu cầu.';
@@ -92,12 +92,12 @@ Route::get('/statictis', function () {
                     'score' => $result->total_score,
                     'exam' => $history->foreign_id,
                     'time' => $result->time,
-                    'late' => $late
+                    'late' => $late,
                 ];
             }
 
             // - Tổng số câu làm.
-            $user_stats->total_questions_done += count((array)$result->assignment);
+            $user_stats->total_questions_done += count((array) $result->assignment);
 
             // - Tỷ lệ làm đúng
             $correct_question += $result->correct_count;
@@ -118,4 +118,37 @@ Route::get('/statictis', function () {
         $user_stats->day_stats = date('Y-m-d H:i:s', time());
         $user_stats->save();
     }
+});
+
+Route::get('/test-arena', function () {
+    $item = Arena::first();
+    $startTime = Carbon::parse($item->start_at);
+
+    $adjusted15StartTime = $startTime->copy()->subMinute(15)->startOfMinute()->toString();
+    $adjusted5StartTime = $startTime->copy()->subMinute(5)->startOfMinute()->toString();
+
+    $currentMinute = now()->startOfMinute()->toString();
+
+    if ($currentMinute == $adjusted15StartTime) {
+        Redis::publish('tick', json_encode([
+            'event' => 'MessagePushed',
+            'type' => 'notification',
+            'data' => json_encode([
+                'message' => 'Phòng thi của bạn sẽ bắt đầu sau 15 phút nữa.',
+                'data' => $item,
+            ]),
+        ]));
+    }
+
+    if ($currentMinute == $adjusted5StartTime) {
+        Redis::publish('tick', json_encode([
+            'event' => 'MessagePushed',
+            'type' => 'notification',
+            'data' => json_encode([
+                'message' => 'Phòng thi của bạn sẽ bắt đầu sau 5 phút nữa. Hãy chuẩn bị giấy bút cần thiết và chuẩn bị tinh thần thoải mái',
+                'data' => $item,
+            ]),
+        ]));
+    }
+    dd($startTime->copy()->subMinute(15)->startOfMinute()->toString(), now()->startOfMinute()->toString(), now()->startOfMinute() == now()->toString());
 });

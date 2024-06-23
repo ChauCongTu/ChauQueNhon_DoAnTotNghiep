@@ -57,7 +57,7 @@ const NewTopic = (props: Props) => {
                             <aside className="w-full md:w-310md order-1">
                                 <TargetSidebar />
                             </aside>
-                            <main className="w-full flex-1 order-1 md:order-2 md:max-w-720md">
+                            <main className="w-full flex-1 order-1 md:order-2">
                                 <div className='mt-18xs md:mt-18md border border-black px-20xs md:px-20md py-10xs md:py-10md'>
                                     <div className='py-10xs md:py-16md text-18xs md:text-22md font-bold uppercase'>
                                         Tạo chủ đề thảo luận mới
@@ -74,40 +74,38 @@ const NewTopic = (props: Props) => {
                                         onFinish={onFinish}
                                         onFinishFailed={onFinishFailed}
                                     >
-                                        <Form.Item
-                                            label="Tiêu đề"
-                                            name="title"
-                                            rules={titleRules}
-                                        >
-                                            <Input placeholder='Nhập tiêu đề' />
-                                        </Form.Item>
-
-                                        <Form.Item
-                                            label="Nội dung"
-                                            name="content"
-                                            rules={contentRules}
-                                        >
-                                            <CKEditorInput
-                                                initialValue=''
-                                                onChange={(data: string) => form.setFieldValue('content', data)}
-                                                placeholder='Nhập nội dung'
-                                            />
-                                        </Form.Item>
-
-                                        <Form.Item>
-                                            <Button className='btn-primary' htmlType="submit" loading={loading}>
-                                                Đăng
-                                            </Button>
-                                        </Form.Item>
+                                        <div className='flex gap-10xs md:gap-18md'>
+                                            <div className='w-full md:w-720md'>
+                                                <Form.Item
+                                                    label="Nội dung bài viết"
+                                                    name="content"
+                                                    rules={contentRules}
+                                                >
+                                                    <CKEditorInput
+                                                        initialValue=''
+                                                        onChange={(data: string) => form.setFieldValue('content', data)}
+                                                        placeholder='Nhập nội dung'
+                                                    />
+                                                </Form.Item>
+                                            </div>
+                                            <div className='w-full flex-1'>
+                                                <Form.Item
+                                                    label="Tiêu đề"
+                                                    name="title"
+                                                    rules={titleRules}
+                                                >
+                                                    <Input placeholder='Nhập tiêu đề' />
+                                                </Form.Item>
+                                                <Form.Item>
+                                                    <Button className='btn-primary' htmlType="submit" loading={loading}>
+                                                        Tạo chủ đề
+                                                    </Button>
+                                                </Form.Item>
+                                            </div>
+                                        </div>
                                     </Form>
-
                                 </div>
                             </main>
-                            <nav className="w-full md:w-310md order-3">
-                                <div className='mx-15xs md:mx-18md'>
-                                    <TopicSidebar />
-                                </div>
-                            </nav>
                         </div>
                     </div>
                 </>

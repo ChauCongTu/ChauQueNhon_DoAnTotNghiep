@@ -1,15 +1,11 @@
-import { getMostViewed, getVibrantStudents } from '@/modules/dashboard/services';
-import { VibrantTableType } from '@/modules/dashboard/type';
-import { Badge, Space, Table } from 'antd';
-import { CSVLink } from "react-csv";
-import React, { useEffect, useState } from 'react'
-import { NodeExpandOutlined } from '@ant-design/icons'
-import { DateTime } from 'luxon';
+import { getMostViewed } from '@/modules/dashboard/services';
+import { Space, Table } from 'antd';
+import { ExportOutlined } from '@ant-design/icons';
+import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
-import { ExportOutlined } from '@ant-design/icons'
 import { LessonType } from '@/modules/lessons/type';
 
-type Props = {}
+type Props = {};
 
 const VibrantTable: React.FC<Props> = () => {
     const [loading, setLoading] = useState(false);
@@ -23,7 +19,7 @@ const VibrantTable: React.FC<Props> = () => {
                 setData(res.data[0]);
                 setLoading(false);
             }
-        }
+        };
         fetch();
     }, []);
 
@@ -31,42 +27,47 @@ const VibrantTable: React.FC<Props> = () => {
         {
             title: 'ID',
             dataIndex: 'id',
-            key: 'id'
+            key: 'id',
+            width: 80,
         },
         {
             title: 'Bài học',
             dataIndex: 'user',
+            width: 500,
             render: (_: any, record: LessonType) => (
                 <div className='flex items-center gap-7xs md:gap-7md'>
                     {record.name}
                 </div>
-            )
+            ),
         },
         {
             title: 'Môn học',
             dataIndex: 'subject',
             render: (_: any, record: LessonType) => (
-                <Space className='db-badge'>
+                <Space className=''>
                     {record.subject?.name} {record.subject?.grade}
                 </Space>
-            )
+            ),
+            width: 150, 
         },
         {
             title: 'Lượt truy cập',
             dataIndex: 'view_count',
             key: 'view_count',
+            width: 120,
         },
         {
             title: '',
             dataIndex: 'web_point',
             key: 'web_point',
+            width: 100, 
             render: (_: any, record: LessonType) => (
                 <Space className='flex justify-center'>
-                    <Link href={'/'}>
+                    <Link href={`/lesson/${record.slug}`} target='_blank'>
                         <ExportOutlined />
                     </Link>
                 </Space>
-            )
+            ),
         },
     ];
 
@@ -74,8 +75,6 @@ const VibrantTable: React.FC<Props> = () => {
         <div className='mt-10xs md:mt-10md'>
             <div className='flex justify-between py-5xs md:py-5md items-center'>
                 <div className='font-bold text-21xs md:text-18md'>Tài liệu được xem và tải nhiều nhất</div>
-                <div>
-                </div>
             </div>
             <Table
                 dataSource={data}
@@ -88,7 +87,7 @@ const VibrantTable: React.FC<Props> = () => {
                 className='border rounded'
             />
         </div>
-    )
-}
+    );
+};
 
 export default VibrantTable;

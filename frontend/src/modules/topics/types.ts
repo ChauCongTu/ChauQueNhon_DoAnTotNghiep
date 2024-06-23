@@ -6,7 +6,7 @@ export interface CommentType {
     author: User,
     content: string,
     likes: User[] | string | null,
-    liked_list: User[],
+    liked_list: { name: string | null, username: string | null }[],
     created_at: string | null,
     updated_at: string | null,
     attachment: string | null

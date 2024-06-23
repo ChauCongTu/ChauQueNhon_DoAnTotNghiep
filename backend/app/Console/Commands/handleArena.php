@@ -62,14 +62,14 @@ class handleArena extends Command
         $pendingArenasV2->each(function ($item) {
             $startTime = Carbon::parse($item->start_at);
 
-            $adjusted15StartTime = $startTime->copy()->subMinutes(15)->startOfMinute();
-            $adjusted5StartTime = $startTime->copy()->subMinutes(5)->startOfMinute();
+            $adjusted15StartTime = $startTime->copy()->subMinute(15)->startOfMinute()->toString();
+            $adjusted5StartTime = $startTime->copy()->subMinute(5)->startOfMinute()->toString();
 
-            $currentMinute = now()->startOfMinute();
+            $currentMinute = now()->startOfMinute()->toString();
 
-            if ($currentMinute->equalTo($adjusted15StartTime)) {
+            if ($currentMinute == $adjusted15StartTime) {
                 Redis::publish('tick', json_encode([
-                    'event' => 'MessagePushed',
+                    'event' => 'NotificationPushed',
                     'type' => 'notification',
                     'data' => json_encode([
                         'message' => 'Phòng thi của bạn sẽ bắt đầu sau 15 phút nữa.',
@@ -78,9 +78,9 @@ class handleArena extends Command
                 ]));
             }
 
-            if ($currentMinute->equalTo($adjusted5StartTime)) {
+            if ($currentMinute == $adjusted5StartTime) {
                 Redis::publish('tick', json_encode([
-                    'event' => 'MessagePushed',
+                    'event' => 'NotificationPushed',
                     'type' => 'notification',
                     'data' => json_encode([
                         'message' => 'Phòng thi của bạn sẽ bắt đầu sau 5 phút nữa. Hãy chuẩn bị giấy bút cần thiết và chuẩn bị tinh thần thoải mái',

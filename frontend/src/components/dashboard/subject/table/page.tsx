@@ -1,16 +1,15 @@
-import { QuestionType } from '@/modules/questions/types';
-import { SubjectType } from '@/modules/subjects/types';
 import { Popconfirm, Space, Table, Tooltip, Button } from 'antd';
 import React from 'react';
 import { deleteSubject } from '@/modules/subjects/services';
 import Link from 'next/link';
 import { DeleteOutlined, BookOutlined } from '@ant-design/icons';
 import UpdateNewSubject from '../update/page';
+import { SubjectType } from '@/modules/subjects/types';
 
 type Props = {
-    subjects: SubjectType[],
+    subjects: SubjectType[];
     setSubjects: (subjects: SubjectType[]) => void;
-    page: number,
+    page: number;
     fetch: (page?: number) => void;
     loading: boolean;
 };
@@ -21,16 +20,19 @@ const SubjectTable: React.FC<Props> = ({ subjects, setSubjects, page, fetch, loa
             title: 'ID',
             dataIndex: 'id',
             key: 'id',
+            width: 80, // Fixed width for ID column
         },
         {
             title: 'Môn học',
             dataIndex: 'name',
             key: 'name',
+            width: 200, // Fixed width for Môn học column
         },
         {
             title: '',
             dataIndex: 'icon',
             key: 'icon',
+            width: 100, // Fixed width for icon column
             render: (_: any, record: SubjectType) => (
                 <Space size="middle">
                     <img src={record.icon} className='w-32xs md:w-32md' alt="subject icon" />
@@ -41,8 +43,9 @@ const SubjectTable: React.FC<Props> = ({ subjects, setSubjects, page, fetch, loa
             title: 'Khối lớp',
             dataIndex: 'grade',
             key: 'grade',
+            width: 120, // Fixed width for Khối lớp column
             render: (_: any, record: SubjectType) => (
-                <Space size="middle">
+                <Space size="middle" className='text-center'>
                     {record.grade === 0 || record.grade === 13 ? <>Tổng hợp</> : <>{record.grade}</>}
                 </Space>
             ),
@@ -50,6 +53,7 @@ const SubjectTable: React.FC<Props> = ({ subjects, setSubjects, page, fetch, loa
         {
             title: '',
             key: 'action',
+            width: 20, 
             render: (_: any, record: SubjectType) => (
                 <Space size="middle">
                     <UpdateNewSubject subjects={subjects} setSubjects={setSubjects} subject={record} page={page} fetch={fetch} />

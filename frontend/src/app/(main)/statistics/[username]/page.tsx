@@ -12,6 +12,8 @@ import { convertTimeString } from '@/utils/time'
 import StatisticsPane from '@/components/statistics/pane/page'
 import PerformanceIndicator from '@/components/statistics/pane/performance/page'
 import GouniPrediction from '@/components/statistics/prediction/page'
+import StatisticTarget from '@/components/target/statistics'
+import TargetStatistics from '@/components/target/statistics'
 
 const StatisticPage = ({ params }: { params: { username: string } }) => {
     const { user, loading } = useAuth();
@@ -81,6 +83,11 @@ const StatisticPage = ({ params }: { params: { username: string } }) => {
                                             </div>
                                             <div className='mt-20xs md:mt-50md border-t border-black pt-20xs md:pt-20md'>
                                                 <div className='text-21xs md:text-21md font-semibold'>THỐNG KÊ</div>
+                                                <div className='mt-10xs md:mt-16md'>
+                                                    {
+                                                        user && <TargetStatistics />
+                                                    }
+                                                </div>
                                                 <div className='mt-10xs md:mt-16md'>
                                                     {
                                                         user && <StatisticsPane user={user} />

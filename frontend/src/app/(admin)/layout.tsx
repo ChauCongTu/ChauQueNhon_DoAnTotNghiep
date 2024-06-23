@@ -1,6 +1,4 @@
 import type { Metadata } from "next";
-import Header from "@/components/header/header";
-import Footer from "@/components/footer/footer";
 import { Toaster } from "react-hot-toast";
 import AdminNav from "@/components/dashboard/nav/page";
 import AdminHeader from "@/components/dashboard/header/page";
@@ -8,9 +6,10 @@ import Link from "next/link";
 import ToTop from "@/components/footer/toTop/page";
 import { ToastContainer } from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
+import './style.scss';
 
 export const metadata: Metadata = {
-    title: "Go Uni - Luyện thi hiệu quả",
+    title: "Trang quản trị | Gouni Dashboard",
     description: "gouni.com.vn - Trang web luyện thi THPT Quốc Gia hiệu quả dành cho học sinh.",
 };
 

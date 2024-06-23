@@ -42,6 +42,7 @@ const ArenaRoomDetail: React.FC<Props> = ({ arena, setArena }) => {
     const [labels, setLabels] = useState<string[]>([]);
     const [values, setValues] = useState<number[]>([]);
     const [icons, setIcons] = useState<string[]>([]);
+    const [countdownFinished, setCountdownFinished] = useState(false);
     useEffect(() => {
         if (!loading) {
             if (!isLoggedIn) {
@@ -74,7 +75,7 @@ const ArenaRoomDetail: React.FC<Props> = ({ arena, setArena }) => {
         setIcons(userIcons);
     };
 
-    useEffect(()=> {
+    useEffect(() => {
         setLoad(false);
     }, []);
 
@@ -164,6 +165,13 @@ const ArenaRoomDetail: React.FC<Props> = ({ arena, setArena }) => {
             fetch();
         }
     }, []);
+
+    const handleCountdownComplete = (id: number) => {
+        if (countdownFinished) {
+            autoNext(id);
+            setCountdownFinished(true);
+        }
+    };
 
     const handleStart = async () => {
         if (user && user.id && !isStart && arena && arena.id) {

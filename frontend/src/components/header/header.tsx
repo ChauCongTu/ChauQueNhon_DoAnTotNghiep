@@ -52,7 +52,6 @@ const Header = () => {
     }
 
     const onFinish = (values: any) => {
-        // setHasTarget(false);
         postSetTarget(values).then((res) => {
         }).finally(() => {
             toast.success("Thiết lập mục tiêu hằng ngày thành công.");
@@ -111,68 +110,8 @@ const Header = () => {
                 onCancel={() => setHasTarget(!hasTarget)}
             >
                 <div className='flex flex-col justify-start gap-8xs md:gap-8md'>
-                    <Link href={'/'}>Click vào đây để thiết lập Target hôm nay</Link>
-
+                    <Link href={'/target'}>Click vào đây để thiết lập Target hôm nay</Link>
                     <div onClick={onIgnore} className='cursor-pointer'>Hôm nay không hiển thị lại</div>
-                    {/* <Form
-                        name="basic"
-                        layout='vertical'
-                        onFinish={onFinish}
-                    >
-                        <Form.Item
-                            label="Thời gian ôn luyện hôm nay"
-                            name="total_time"
-                            rules={[
-                                { required: true, message: "Vui lòng nhập thời gian ôn luyện hàng ngày" }
-                            ]}
-                        >
-                            <Input type="number" placeholder='Nhập tổng số phút ôn luyện hôm nay' addonAfter={'phút'} />
-                        </Form.Item>
-
-                        <Form.Item
-                            label="Số đề sẽ giải"
-                            name="total_exams"
-                        >
-                            <Input type="number" placeholder='Nhập số đề bạn muốn giải hôm nay' />
-                        </Form.Item>
-
-                        <Form.Item
-                            label="Số bài tập sẽ làm"
-                            name="total_practices"
-                        >
-                            <Input type="number" placeholder='Nhập số bài tập bạn muốn giải hôm nay' />
-                        </Form.Item>
-
-                        <Form.Item
-                            label="Số phòng thi sẽ tham gia"
-                            name="total_arenas"
-                        >
-                            <Input type="number" placeholder='Nhập số phòng thi bạn muốn tham gia hôm nay' />
-                        </Form.Item>
-
-                        <Form.Item
-                            label="Điểm thấp nhất"
-                            name="min_score"
-                        >
-                            <Input type="number" placeholder='Nhập số điểm tối thiểu mà bạn dự kiến' />
-                        </Form.Item>
-
-                        <Form.Item
-                            label="Tỉ lệ chính xác"
-                            name="accuracy"
-                        >
-                            <Input type="number" addonAfter={'%'} placeholder='Nhập tỉ lệ làm đúng' />
-                        </Form.Item>
-
-                        <Form.Item
-                            className='flex justify-end items-center'
-                        >
-                            <button className='mr-10xs md:mr-10md'>Xem mục tiêu hôm qua</button>
-                            <Button className='bg-primary text-white' htmlType="submit">
-                                Thiết lập
-                            </Button>
-                        </Form.Item>
-                    </Form> */}
                 </div>
             </Modal>
             <Notification />

@@ -1,14 +1,25 @@
 import React, { useEffect, useState } from 'react';
-import { Modal, Button } from 'antd';
+import { Modal, Button, Drawer, Form, Input, InputNumber, Select, Radio } from 'antd';
 import PerformanceIndicator from '../pane/performance/page';
 import { User } from '@/modules/users/type';
 import { getPredictionRequest, getSubjectUser } from '@/modules/predictions/services';
 import { PredictRequest } from '@/modules/predictions/type';
-import { LoadingOutlined, ReloadOutlined } from '@ant-design/icons'; // Import ReloadOutlined từ Ant Design Icons
+import { LoadingOutlined, ReloadOutlined } from '@ant-design/icons';
 import Performance10 from '../pane/performance/typeten';
 
 type Props = {
     profile: User;
+};
+
+type UserInformation = {
+    StudyTime: number;
+    OnlineCourse: string;
+    SchoolType: string;
+    ClassType: string;
+    SelfStudy: number;
+    GoingOut: number;
+    Health: number;
+    LatestScore: number;
 };
 
 const GouniPrediction: React.FC<Props> = ({ profile }) => {
@@ -17,11 +28,12 @@ const GouniPrediction: React.FC<Props> = ({ profile }) => {
     const [show, setShow] = useState(false);
     const [total, setTotal] = useState(0);
     const [predictions, setPredictions] = useState<number[]>([]);
+    const [formInfo, setFormInfo] = useState<UserInformation | null>(null);
+    const [open, setOpen] = useState(false);
     const [loadingIcon, setLoadingIcon] = useState(false);
     const [predicting, setPredicting] = useState(false);
-
-    // State cho modal
     const [modalVisible, setModalVisible] = useState(false);
+    const [saveCallback, setSaveCallback] = useState<(() => void) | null>(null);
 
     if (!profile || profile == undefined || profile.id == undefined) {
         return <>Vui lòng thiết lập thông tin cá nhân để sử dụng chức năng này</>;
@@ -45,16 +57,33 @@ const GouniPrediction: React.FC<Props> = ({ profile }) => {
     }, [predictions]);
 
     const getPredictRequest = async (subject_id: number) => {
-        const res = await getPredictionRequest({ subject_id: subject_id });
+        const res = await getPredictionRequest({ subject_id });
         if (res.status.success) {
             return res.data[0];
         }
         return null;
     };
 
+    const openFormInfo = (callback: () => void) => {
+        setOpen(true);
+        setSaveCallback(() => callback); 
+    };
+
+    const saveFormInfo = (values: UserInformation) => {
+        setFormInfo(values);
+        setOpen(false);
+        if (saveCallback) {
+            saveCallback(); 
+        }
+    };
+
     const handlePredict = async () => {
-        setLoading(true); // Bật trạng thái loading
-        setLoadingIcon(true); // Bật hiển thị icon loading
+        if (!formInfo) {
+            openFormInfo(handlePredict); 
+            return;
+        }
+        setLoading(true);
+        setLoadingIcon(true);
 
         const predictionsArray: number[] = [];
         for (let i = 0; i < subjects.length; i++) {
@@ -65,7 +94,7 @@ const GouniPrediction: React.FC<Props> = ({ profile }) => {
                 }
                 const headers = new Headers();
                 headers.append('Content-Type', 'application/json');
-                headers.append('x-api-key', process.env.NEXT_PUBLIC_API_KEY || ''); // Ensure x-api-key is not undefined
+                headers.append('x-api-key', process.env.NEXT_PUBLIC_API_KEY || '');
 
                 const response = await fetch('http://127.0.0.1:5000/api/v1/predict', {
                     method: 'POST',
@@ -114,9 +143,7 @@ const GouniPrediction: React.FC<Props> = ({ profile }) => {
                 <div className="text-center">
                     <h2 className="text-2xl font-bold mb-4 text-primary">Hiệu suất ôn tập</h2>
                     <PerformanceIndicator score={total} />
-                    <div className="mt-13md">
-                        Tổng điểm dự đoán: {total}
-                    </div>
+                    <div className="mt-13md">Tổng điểm dự đoán: {total}</div>
                     <button className='border bg-primary text-white px-4 py-2 rounded-lg hover:bg-slate-200 transition-all mt-4 ml-4' onClick={showModal}>
                         Xem dự đoán chi tiết
                     </button>
@@ -128,7 +155,7 @@ const GouniPrediction: React.FC<Props> = ({ profile }) => {
                 <button className='border bg-primary text-white px-20xs md:px-20md py-10xs md:py-10md rounded hover:bg-slate-200 transition-all' onClick={handlePredict}>
                     {loading ? (
                         <>
-                            <LoadingOutlined style={{ marginRight: 8 }} /> {/* Icon loading từ Ant Design Icons */}
+                            <LoadingOutlined style={{ marginRight: 8 }} />
                             <span className="ml-2">Đang phân tích số liệu...</span>
                         </>
                     ) : (
@@ -137,7 +164,6 @@ const GouniPrediction: React.FC<Props> = ({ profile }) => {
                 </button>
             )}
 
-            {/* Modal */}
             <Modal
                 title="Chi tiết dự đoán"
                 open={modalVisible}
@@ -146,7 +172,7 @@ const GouniPrediction: React.FC<Props> = ({ profile }) => {
                 footer={[
                     <Button key="back" onClick={handleCancel}>
                         Đóng
-                    </Button>,
+                    </Button>
                 ]}
             >
                 <div className="text-center">
@@ -160,14 +186,10 @@ const GouniPrediction: React.FC<Props> = ({ profile }) => {
                                     <li key={value.id} className="px-4 py-3 flex items-center justify-between">
                                         <div className="flex-1">
                                             <p className="text-lg font-medium text-primary">{value.name}</p>
-                                            <p className="text-sm text-gray-600">{
-                                                predictions[index] ?? <>
-                                                    <div>Chưa đủ dữ liệu để dự đoán</div>
-                                                    <span>Vui lòng làm ít nhất 1 bài kiểm tra để đánh giá về môn học này</span>
-                                                </>}</p>
+                                            <p className="text-sm text-gray-600">{predictions[index] ?? 'Chưa đủ dữ liệu để dự đoán'}</p>
                                         </div>
                                         <div className="flex items-center">
-                                            <span className="text-xs text-gray-500">Hiệu suất</span>
+                                            <span className="text-xs text-gray-500">Đánh giá hiệu suất</span>
                                             <span className="ml-2 text-gray-700">
                                                 <Performance10 score={predictions[index]} />
                                             </span>
@@ -182,6 +204,99 @@ const GouniPrediction: React.FC<Props> = ({ profile }) => {
                     </button>
                 </div>
             </Modal>
+
+            <Drawer
+                title="Vui lòng cung cấp thêm thông tin"
+                placement="right"
+                closable={true}
+                onClose={() => setOpen(false)}
+                open={open}
+            >
+                <Form layout="vertical" onFinish={saveFormInfo}>
+                    <Form.Item
+                        label="Thời gian học mỗi ngày"
+                        name="StudyTime"
+                        rules={[{ required: true, message: 'Vui lòng nhập thời gian học' }]}
+                    >
+                        <InputNumber min={0} className="w-full" placeholder="Nhập số giờ học mỗi tuần" />
+                    </Form.Item>
+                    <Form.Item
+                        label="Luyện thi online"
+                        name="OnlineCourse"
+                        rules={[{ required: true, message: 'Bạn có luyện thi online hay không' }]}
+                    >
+                        <Radio.Group>
+                            <Radio value="yes">Có</Radio>
+                            <Radio value="no">Không</Radio>
+                        </Radio.Group>
+                    </Form.Item>
+                    <Form.Item
+                        label="Loại trường"
+                        name="SchoolType"
+                        rules={[{ required: true, message: 'Vui lòng chọn loại trường' }]}
+                    >
+                        <Select placeholder="Chọn loại trường">
+                            <Select.Option value="private">Tư thục</Select.Option>
+                            <Select.Option value="public">Công lập</Select.Option>
+                            <Select.Option value="specialized">Trường chuyên</Select.Option>
+                        </Select>
+                    </Form.Item>
+                    <Form.Item
+                        label="Loại lớp học"
+                        name="ClassType"
+                        rules={[{ required: true, message: 'Vui lòng chọn loại lớp học' }]}
+                    >
+                        <Select placeholder="Chọn loại lớp học">
+                            <Select.Option value="gifted">Lớp chọn</Select.Option>
+                            <Select.Option value="normal">Lớp thường</Select.Option>
+                        </Select>
+                    </Form.Item>
+                    <Form.Item
+                        label="Tần suất tự học"
+                        name="SelfStudy"
+                        rules={[{ required: true, message: 'Vui lòng chọn tần suất tự học' }]}
+                    >
+                        <Select placeholder="Chọn tần suất tự học">
+                            <Select.Option value={1}>1 - Rất ít</Select.Option>
+                            <Select.Option value={2}>2 - Ít</Select.Option>
+                            <Select.Option value={3}>3 - Bình thường</Select.Option>
+                            <Select.Option value={4}>4 - Nhiều</Select.Option>
+                            <Select.Option value={5}>5 - Rất nhiều</Select.Option>
+                        </Select>
+                    </Form.Item>
+                    <Form.Item
+                        label="Tần suất đi chơi với bạn bè"
+                        name="GoingOut"
+                        rules={[{ required: true, message: 'Vui lòng chọn tần suất đi chơi' }]}
+                    >
+                        <Select placeholder="Chọn tần suất đi chơi">
+                            <Select.Option value={1}>1 - Rất ít</Select.Option>
+                            <Select.Option value={2}>2 - Ít</Select.Option>
+                            <Select.Option value={3}>3 - Bình thường</Select.Option>
+                            <Select.Option value={4}>4 - Nhiều</Select.Option>
+                            <Select.Option value={5}>5 - Rất nhiều</Select.Option>
+                        </Select>
+                    </Form.Item>
+                    <Form.Item
+                        label="Tình trạng sức khỏe chung"
+                        name="Health"
+                        rules={[{ required: true, message: 'Vui lòng chọn tình trạng sức khỏe' }]}
+                    >
+                        <Select placeholder="Chọn tình trạng sức khỏe">
+                            <Select.Option value={1}>1 - Rất kém</Select.Option>
+                            <Select.Option value={2}>2 - Kém</Select.Option>
+                            <Select.Option value={3}>3 - Bình thường</Select.Option>
+                            <Select.Option value={4}>4 - Tốt</Select.Option>
+                            <Select.Option value={5}>5 - Rất tốt</Select.Option>
+                        </Select>
+                    </Form.Item>
+                    <Form.Item>
+                        <Button type="primary" htmlType="submit">
+                            Lưu thông tin
+                        </Button>
+                    </Form.Item>
+                </Form>
+            </Drawer>
         </>
     );
 };
