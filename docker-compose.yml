@@ -1,0 +1,71 @@
+version: '3.8'
+
+services:
+  mysql:
+    image: mysql:8.0
+    container_name: mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: gouni
+      MYSQL_USER: gouni
+      MYSQL_PASSWORD: gouni
+    volumes:
+      - mysql_data:/var/lib/mysql
+    ports:
+      - "3306:3306"
+    networks:
+      - gouni-network
+
+  redis:
+    image: redis:latest
+    container_name: redis
+    ports:
+      - "6379:6379"
+    networks:
+      - gouni-network
+
+  backend:
+    build:
+      context: ./Backend
+      dockerfile: Dockerfile
+    container_name: backend
+    volumes:
+      - ./Backend:/var/www/app
+    ports:
+      - "9000:9000"
+    networks:
+      - gouni-network
+    depends_on:
+      - mysql
+      - redis
+
+  frontend:
+    build:
+      context: ./Frontend
+      dockerfile: Dockerfile
+    container_name: frontend
+    ports:
+      - "3000:3000"
+    networks:
+      - gouni-network
+
+  predict_model:
+    build:
+      context: ./Predict_model
+      dockerfile: Dockerfile
+    container_name: predict_model
+    ports:
+      - "5000:5000"
+    environment:
+      - API_KEY=1805QNTD1404
+    volumes:
+      - ./Predict_model:/app
+    networks:
+      - gouni-network
+
+volumes:
+  mysql_data:
+
+networks:
+  gouni-network:
+    driver: bridge
