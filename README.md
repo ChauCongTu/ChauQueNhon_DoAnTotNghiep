@@ -1,33 +1,70 @@
-# ChauQueNhon_DoAnTotNghiep
+# Intruduction
 
-## Đề tài (*): Xây dựng trang Web luyện thi đại học với mô hình ML để dự đoán điểm số, hiệu suất học tập, và đề xuất cải thiện cho người dùng.
+## System Requirements
+- Docker: Latest version
+- Docker Compose: Latest version
 
-## Công Nghệ (*):
-### Backend:
+### Step 1: Install Docker and Docker Compose
 
--   [Laravel 11.x](https://laravel.com/docs/11.x)
--   [MySQL](https://dev.mysql.com/doc/)
--   [Passport OAuth2](https://laravel.com/docs/11.x/passport)
--   [Redis](https://redis.io/documentation)
+#### Ubuntu/Debian
 
-### Frontend:
+Run command:
+```terminal
+# Install Docker
+sudo apt-get update
+sudo apt-get install \
+    ca-certificates \
+    curl \
+    gnupg \
+    lsb-release
+curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /usr/share/keyrings/docker-archive-keyring.gpg
+echo \
+  "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/docker-archive-keyring.gpg] https://download.docker.com/linux/ubuntu \
+  $(lsb_release -cs) stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+sudo apt-get update
+sudo apt-get install docker-ce docker-ce-cli containerd.io
 
--   [NextJS 14](https://nextjs.org/docs)
--   [Tailwind 3.3.0](https://tailwindcss.com/docs)
--   [Ant Design](https://ant.design/docs/react/introduce)
+# Install Docker Compose
+sudo curl -L "https://github.com/docker/compose/releases/download/$(curl -s https://api.github.com/repos/docker/compose/releases/latest | grep -Po 'tag_name": "\K[0-9.]+')" -o /usr/local/bin/docker-compose
+sudo chmod +x /usr/local/bin/docker-compose
 
-### Predict Service:
+# Verify installation
+docker --version
+docker-compose --version
+```
+#### Windows & macOS
+Download and install Docker Desktop from the Docker website: [Docker Website](https://docs.docker.com/desktop/install/windows-install/)
 
--   [Python](https://docs.python.org/3/)
--   [Scikit-learn](https://scikit-learn.org/stable/documentation.html)
--   [Django Framework](https://docs.djangoproject.com/en/4.1/)
+### Step 2: Clone the Project
 
----
-## Tiến độ (*):
-- Link Google Sheet tiến độ thực hiện đồ án: https://docs.google.com/spreadsheets/d/1cG0hCakne2OxGOjW2k_Qe98mvLorm25uFpy8I9zBBFw/edit#gid=1409424902
-- Link Google Doc báo cáo nghiên cứu lý thuyết: (chưa cập nhật)
-- Link đề cương tốt nghiệp: (chưa cập nhật)
+- Run command: `git clone https://github.com/ChauCongTu/ChauQueNhon_DoAnTotNghiep.git`
+- Run command: `code ChauQueNhon_DoAnTotNghiep`
+- Run command: `git checkout dockerize`
 
----
+### Step 3: Prepare Environment Files
 
-(*): Những mục tạm thời, nội dung có thể thay đổi trong quá trình làm đồ án
+Copy the environment file for the backend and generate the application key follow:
+
+```
+cp backend/.env.example backend/.env
+```
+
+```
+docker-compose exec backend php artisan key:generate
+```
+
+### Step 4: Run Docker Compose
+
+In the root directory of the project, run the following command to build and start the Docker services: `docker-compose up --build`
+
+## Access Services
+- Frontend: http://localhost:3000/
+- Backend: http://localhost:9000/request-docs
+- Predict Model: http://localhost:5000/api/v1/predict
+
+## Check and Debug
+
+- View container logs: `docker-compose logs`
+- Access a container for inspection or debugging: `docker-compose exec <service-name> sh`
+
+Replace <service-name> with backend, frontend, or predict_model depending on the service you want to access.
